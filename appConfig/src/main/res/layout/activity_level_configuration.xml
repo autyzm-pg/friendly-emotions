@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_level_configuration"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="pg.autyzm.przyjazneemocje.LevelConfiguration">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/label_level_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_level_name" />
+
+        <EditText
+            android:id="@+id/level_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:text="@string/level_name" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="280dip"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="450dip"
+        android:layout_marginTop="80dip"
+
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:text="@string/time_limit" />
+
+            <EditText
+                android:id="@+id/time_limit"
+                android:layout_width="50dip"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:ems="10"
+                android:inputType="number"
+                android:text="60" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/pv_per_level" />
+
+            <EditText
+                android:id="@+id/pv_per_level"
+                android:layout_width="50dip"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:ems="10"
+                android:inputType="number"
+                android:maxLength="5"
+                android:text="3" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sublevels" />
+
+            <EditText
+                android:id="@+id/sublevels"
+                android:layout_width="50dip"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:ems="10"
+                android:inputType="number"
+                android:maxLength="5"
+                android:text="3" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/correctness" />
+
+            <EditText
+                android:id="@+id/correctness"
+                android:layout_width="50dip"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:ems="10"
+                android:inputType="number"
+                android:maxLength="5"
+                android:text="3" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/levelButton"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="220dip"
+                android:layout_height="wrap_content" />
+
+            <ImageButton
+                android:id="@+id/button_choose_images"
+                android:layout_width="70dip"
+                android:layout_height="70dip"
+                android:background="@null"
+                android:scaleType="centerCrop"
+                android:src="@drawable/icon_edit" />
+
+            <ImageButton
+                android:id="@+id/button_take_photo"
+                android:layout_width="70dip"
+                android:layout_height="70dip"
+                android:background="@null"
+                android:scaleType="centerCrop"
+                android:src="@drawable/icon_camera" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/imagesCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spinner"
+            android:text="@string/default_message" />
+    </LinearLayout>
+
+    <!--<Spinner-->
+    <!--android:id="@+id/spinner2"-->
+    <!--android:layout_width="200dip"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:entries="@array/spinner" />-->
+
+    <LinearLayout
+        android:id="@+id/choose_emo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="80dip"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_emotion" />
+
+        <CheckBox
+            android:id="@+id/emotion1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <CheckBox
+            android:id="@+id/emotion2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <CheckBox
+            android:id="@+id/emotion3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <CheckBox
+            android:id="@+id/emotion4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <CheckBox
+            android:id="@+id/emotion5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <CheckBox
+            android:id="@+id/emotion6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true">
+
+        <ImageButton
+            android:id="@+id/levelButton"
+            android:layout_width="80dip"
+            android:layout_height="80dip"
+            android:background="@null"
+            android:onClick="addLevel"
+            android:scaleType="fitXY"
+            android:src="@drawable/icon_save" />
+
+        <ImageButton
+            android:id="@+id/exitButton"
+            android:layout_width="80dip"
+            android:layout_height="80dip"
+            android:background="@null"
+            android:onClick="closee"
+            android:scaleType="fitXY"
+            android:src="@drawable/icon_exit_purple" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/saveMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="@string/save_message"
+        android:textColor="@color/colorPrimary"
+        android:textSize="25sp"
+        android:visibility="invisible" />
+
+</RelativeLayout>

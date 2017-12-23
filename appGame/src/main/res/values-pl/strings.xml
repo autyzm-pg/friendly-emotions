@@ -1,0 +1,16 @@
+<resources>
+<string name="app_name">Gra Przyjazne Emocje</string>
+    <string name="label_show_emotion">Pokaż, gdzie</string>
+    <string name="label_congratulations">Gratulacje!</string>
+    <string name="label_rightAnswers">Poprawne odpowiedzi:</string>
+    <string name="label_wrongAnswers">Niepoprawne odpowiedzi:</string>
+    <string name="label_timeout">Poziomy, w których czas upłynął:</string>
+    <string name="emotion_happy">wesoły</string>
+    <string name="emotion_sad">smutny</string>
+    <string name="emotion_surprised">zdziwiony</string>
+    <string name="emotion_angry">zły</string>
+    <string name="emotion_scared">przestraszony</string>
+    <string name="emotion_bored">znudzony</string>
+
+    <string name="failed_level">Nie udało Ci się rozpoznać wszystkich emocji. Spróbuj ponownie</string>
+</resources>
