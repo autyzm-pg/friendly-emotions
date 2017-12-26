@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Przyjazne Emocje - Konfiguracja</string>
     <string name="newPhoto">Zrób nowe</string>
     <string name="label_choose_images">Wybierz</string>
     <string name="title_choose_img">Wybierz zdjęcia</string>
@@ -16,6 +15,58 @@
     <string name="correctness">Poprawność</string>
     <string name="sublevels">Podpoziomy</string>
 
+
+    <array name="spinner">
+        <item>Zdjęcia</item>
+        <item>Filmy</item>
+    </array>
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    <string name="app_name">Przyjazne Emocje - konfiguracja</string>
+    <string name="next">dalej</string>
+    <string name="back">wstecz</string>
+
+    <string name="tab1_material">Materiał</string>
+    <string name="label1_material">Liczba uczonych emocji</string>
+    <string name="label2_material">Uczone emocje</string>
+
+    <string name="tab2_learning_ways">Sposoby uczenia</string>
+    <string name="label1_learning_ways">Ustawienia próby</string>
+    <string name="label1.1_learning_ways">Liczba zdjęć wyświetlanych na ekranie</string>
+    <string name="label1.2_learning_ways">Liczba prób dla każdej emocji</string>
+    <string name="label2_learning_ways">Ustawienia kroku</string>
+    <string name="label2.1_learning_ways">Polecenie</string>
+    <string-array name="spinner_command">
+        <item>[Nazwa emocji]</item>
+        <item>Pokaż gdzie jest [Nazwa emocji]</item>
+        <item>Pokaż [Nazwa emocji]</item>
+    </string-array>
+    <string name="label2.2_learning_ways">Czytanie polecenia</string>
+    <string name="label2.3_learning_ways">Rozróżnianie płci</string>
+    <string name="label2.4_learning_ways">Pokaż podpowiedź po  </string>
+    <string name="label2.5_learning_ways">Wybierz rodzaj podpowiedzi</string>
+    <string name="prompt_type1">Obramuj poprawną</string>
+    <string name="prompt_type2">Powiększ poprawną</string>
+    <string name="prompt_type3">Porusz poprawną</string>
+    <string name="prompt_type4">Wyszarz niepoprawne</string>
+
+    <string name="tab3_consolidation">Wzmocnienie</string>
+    <string name="label1_consolidation">Pochwały słowne</string>
+    <string name="label1.1_consolidation">Wpisz nową pochwałę...</string>
+    <string name="label2_consolidation">Motywy nagrody</string>
+    <string name="button1_consolidation">Zaznacz wszystkie</string>
+
+    <string name="tab4_test">Test</string>
+    <string name="label1.1_test">Aktywne materiały</string>
+    <string name="label1.2_test">Liczba prób dla każdej emocji</string>
+    <string name="label1.3_test">Czas na udzielenie odpowiedzi</string>
+    <string name="description1_test">W trybie testu dziecko pracuje na materiałach zaznaczonych w zakładce MATERIAŁ.</string>
+    <string name="description2_test">W trybie testu nie używa się podpowiedzi i wzmocnień, a terapeuta powinien powstrzymać się od interwencji w interakcje dziecka aż do zakończenia testu.</string>
+    <string name="summary_test">Łączna liczba prób w teście:    3</string>
+
+    <string name="tab_save">Zapisz</string>
+
+
     <string name="emotion_happy">wesoły</string>
     <string name="emotion_sad">smutny</string>
     <string name="emotion_surprised">zdziwiony</string>
@@ -23,10 +74,22 @@
     <string name="emotion_scared">przestraszony</string>
     <string name="emotion_bored">znudzony</string>
 
-    <array name="spinner">
-        <item>Zdjęcia</item>
-        <item>Filmy</item>
-    </array>
+    <string-array name="emotions_array">
+        <item>wesoły</item>
+        <item>smutny</item>
+        <item>zdziwiony</item>
+        <item>zły</item>
+        <item>przestraszony</item>
+        <item>znudzony</item>
+    </string-array>
+
+    <string-array name="praise_array">
+        <item>dobrze</item>
+        <item>super</item>
+        <item>świetnie</item>
+        <item>ekstra</item>
+        <item>wspaniale</item>
+    </string-array>
 
 
 </resources>

@@ -3,11 +3,22 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:textViewStyle">@android:style/TextAppearance.Large</item>
-        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+    </style>
+
+    <style name="TitleStyle" parent="TextAppearance.AppCompat.Display4">
+        <item name="android:textSize">28dp</item>
+        <item name="android:textColor">@color/colorTextBack</item>
+    </style>
+
+    <style name="OptionStyle" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">22dp</item>
+    </style>
+    <style name="ButtonStyle">
+        <item name="android:background">@color/colorHighlight</item>
     </style>
 
 </resources>
