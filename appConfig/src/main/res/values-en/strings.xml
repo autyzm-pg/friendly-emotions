@@ -74,12 +74,12 @@
     <string name="emotion_bored">znudzony</string>
 
     <string-array name="emotions_array">
-        <item>wesoły</item>
-        <item>smutny</item>
-        <item>zdziwiony</item>
-        <item>zły</item>
-        <item>przestraszony</item>
-        <item>znudzony</item>
+        <item>happy</item>
+        <item>sad</item>
+        <item>surprised</item>
+        <item>angry</item>
+        <item>scared</item>
+        <item>bored</item>
     </string-array>
 
     <string-array name="praise_array">
