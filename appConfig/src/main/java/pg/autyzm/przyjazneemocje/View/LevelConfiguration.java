@@ -38,12 +38,54 @@ public class LevelConfiguration extends AppCompatActivity {
         setContentView(R.layout.tab_view);
 
         createTabMaterial();
+        createTabLearningWays();
+    }
+
+    private void createTabLearningWays() {
+        createSpinnerCommand();
+        activateNumberPhotos();
+        activateNumberTry();
+        activateNumberTime();
     }
 
     private void createTabMaterial() {
         createTabs();
-        activeButtonsPlusMinus();
+        activeNumberEmotionPlusMinus();
         createListOfSpinners();
+    }
+
+    private void activateNumberTime(){
+        activePlusMinus((EditText) findViewById(R.id.time), (Button) findViewById(R.id.button_minus_time),(Button) findViewById(R.id.button_plus_time));
+    }
+
+    private void activateNumberTry(){
+        activePlusMinus((EditText) findViewById(R.id.number_try), (Button) findViewById(R.id.button_minus_try),(Button) findViewById(R.id.button_plus_try));
+    }
+
+    private void activateNumberPhotos(){
+        activePlusMinus((EditText) findViewById(R.id.number_photos), (Button) findViewById(R.id.button_minus_photos),(Button) findViewById(R.id.button_plus_photos));
+    }
+
+    private void activePlusMinus(final EditText textLabel, final Button minusButton, final Button plusButton ) {
+        minusButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                textLabel.setText(Integer.toString(Integer.parseInt(textLabel.getText().toString())-1));
+            }
+        });
+
+        plusButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                textLabel.setText(Integer.toString(Integer.parseInt(textLabel.getText().toString())+1));
+            }
+        });
+    }
+
+    private void createSpinnerCommand(){
+        Spinner spinner = (Spinner) findViewById(R.id.spinner_command);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.spinner_command, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
     }
 
     private void createListOfSpinners() {
@@ -79,7 +121,7 @@ public class LevelConfiguration extends AppCompatActivity {
         listView.setAdapter(adapter);
     }
 
-    private void activeButtonsPlusMinus() {
+    private void activeNumberEmotionPlusMinus() {
         final EditText nrEmotions = (EditText) findViewById(R.id.nr_emotions);
 
         final Button minusButton = (Button) findViewById(R.id.button_minus);
