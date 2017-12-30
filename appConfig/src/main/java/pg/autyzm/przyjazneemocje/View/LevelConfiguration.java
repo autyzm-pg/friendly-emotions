@@ -16,7 +16,9 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TabHost;
+import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import pg.autyzm.przyjazneemocje.R;
@@ -31,6 +33,8 @@ import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;
 public class LevelConfiguration extends AppCompatActivity {
 
     private int emotionsNumber = 2;
+    ArrayList praiseList = new ArrayList();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,13 @@ public class LevelConfiguration extends AppCompatActivity {
 
         createTabMaterial();
         createTabLearningWays();
+        createTabConsolidation();
+    }
+
+    private void createTabConsolidation() {
+        createGridPraise();
+        activateAddPraiseButton();
+        createGridPrize();
     }
 
     private void createTabLearningWays() {
@@ -54,33 +65,71 @@ public class LevelConfiguration extends AppCompatActivity {
         createListOfSpinners();
     }
 
-    private void activateNumberTime(){
-        activePlusMinus((EditText) findViewById(R.id.time), (Button) findViewById(R.id.button_minus_time),(Button) findViewById(R.id.button_plus_time));
+    private void activateAddPraiseButton() {
+        final String newItem = ((TextView) findViewById(R.id.newPraise)).getText().toString();
+
+        Button button = (Button) findViewById(R.id.buttonAddPraise);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                praiseList.add(new CheckboxGridBean(newItem, true));
+                updateGridPraise();
+            }
+        });
     }
 
-    private void activateNumberTry(){
-        activePlusMinus((EditText) findViewById(R.id.number_try), (Button) findViewById(R.id.button_minus_try),(Button) findViewById(R.id.button_plus_try));
+    private void createGridPrize() {
+        GridCheckboxImageBean[] tabPhotos;
+        tabPhotos = new GridCheckboxImageBean[1];
+        tabPhotos[0] = new GridCheckboxImageBean("butterfly.png", 1, true, getContentResolver(), 0);
+
+        final GridView listView = (GridView) findViewById(R.id.gridPrize);
+        CheckboxImageAdapter adapter = new CheckboxImageAdapter(this, R.layout.grid_element_checkbox_image, tabPhotos);
+        listView.setAdapter(adapter);
+
     }
 
-    private void activateNumberPhotos(){
-        activePlusMinus((EditText) findViewById(R.id.number_photos), (Button) findViewById(R.id.button_minus_photos),(Button) findViewById(R.id.button_plus_photos));
+    private void createGridPraise() {
+        String[] praises = getResources().getStringArray(R.array.praise_array);
+        for (String prize : praises) {
+            praiseList.add(new CheckboxGridBean(prize, true));
+        }
+        updateGridPraise();
     }
 
-    private void activePlusMinus(final EditText textLabel, final Button minusButton, final Button plusButton ) {
+    private void updateGridPraise() {
+        GridView gridView = (GridView) findViewById(R.id.gridWordPraise);
+        CheckboxGridAdapter adapter = new CheckboxGridAdapter(praiseList, getApplicationContext());
+        gridView.setAdapter(adapter);
+    }
+
+    private void activateNumberTime() {
+        activePlusMinus((EditText) findViewById(R.id.time), (Button) findViewById(R.id.button_minus_time), (Button) findViewById(R.id.button_plus_time));
+    }
+
+    private void activateNumberTry() {
+        activePlusMinus((EditText) findViewById(R.id.number_try), (Button) findViewById(R.id.button_minus_try), (Button) findViewById(R.id.button_plus_try));
+    }
+
+    private void activateNumberPhotos() {
+        activePlusMinus((EditText) findViewById(R.id.number_photos), (Button) findViewById(R.id.button_minus_photos), (Button) findViewById(R.id.button_plus_photos));
+    }
+
+    private void activePlusMinus(final EditText textLabel, final Button minusButton, final Button plusButton) {
         minusButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                textLabel.setText(Integer.toString(Integer.parseInt(textLabel.getText().toString())-1));
+                textLabel.setText(Integer.toString(Integer.parseInt(textLabel.getText().toString()) - 1));
             }
         });
 
         plusButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                textLabel.setText(Integer.toString(Integer.parseInt(textLabel.getText().toString())+1));
+                textLabel.setText(Integer.toString(Integer.parseInt(textLabel.getText().toString()) + 1));
             }
         });
     }
 
-    private void createSpinnerCommand(){
+    private void createSpinnerCommand() {
         Spinner spinner = (Spinner) findViewById(R.id.spinner_command);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.spinner_command, android.R.layout.simple_spinner_item);
@@ -95,13 +144,13 @@ public class LevelConfiguration extends AppCompatActivity {
         selectedEmotionsList.setAdapter(adapter);
     }
 
-    private GridCheckboxImageBean[] getEmotionPhotos(String choosenEmotion){
+    private GridCheckboxImageBean[] getEmotionPhotos(String choosenEmotion) {
         SqlliteManager sqlm = getInstance(this);
         Cursor cursor = sqlm.givePhotosWithEmotion(choosenEmotion);
         int n = cursor.getCount();
         GridCheckboxImageBean tabPhotos[] = new GridCheckboxImageBean[n];
         while (cursor.moveToNext()) {
-            tabPhotos[--n] = (new GridCheckboxImageBean(cursor.getString(3),cursor.getInt(1), true, getContentResolver(), cursor.getInt(0)));
+            tabPhotos[--n] = (new GridCheckboxImageBean(cursor.getString(3), cursor.getInt(1), true, getContentResolver(), cursor.getInt(0)));
         }
         return tabPhotos;
     }
@@ -113,7 +162,7 @@ public class LevelConfiguration extends AppCompatActivity {
     }
 
     private void updateEmotionsGrid(int emotionNumber) {
-        String emotion =  getEmotionName(emotionNumber);
+        String emotion = getEmotionName(emotionNumber);
         GridCheckboxImageBean[] tabPhotos = getEmotionPhotos(emotion);
 
         final GridView listView = (GridView) findViewById(R.id.grid_photos);
