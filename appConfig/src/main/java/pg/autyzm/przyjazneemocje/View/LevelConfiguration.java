@@ -33,6 +33,7 @@ import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;
 public class LevelConfiguration extends AppCompatActivity {
 
     private int emotionsNumber = 2;
+    private String[] emotions = {"wesoły", "smutny"};
     ArrayList praiseList = new ArrayList();
 
 
@@ -44,6 +45,13 @@ public class LevelConfiguration extends AppCompatActivity {
         createTabMaterial();
         createTabLearningWays();
         createTabConsolidation();
+        createTabTest();
+    }
+
+    private void createTabTest(){
+        createGridViewActiveInTest();
+        activateNumberTryTest();
+        activateNumberTimeTest();
     }
 
     private void createTabConsolidation() {
@@ -63,6 +71,16 @@ public class LevelConfiguration extends AppCompatActivity {
         createTabs();
         activeNumberEmotionPlusMinus();
         createListOfSpinners();
+    }
+
+    private void createGridViewActiveInTest() {
+        ArrayList emotionList = new ArrayList();
+        for (String emotion : emotions) {
+            emotionList.add(new CheckboxGridBean(emotion, true));
+        }
+        GridView gridView = (GridView) findViewById(R.id.gridViewActiveInTest);
+        CheckboxGridAdapter adapter = new CheckboxGridAdapter(emotionList, getApplicationContext());
+        gridView.setAdapter(adapter);
     }
 
     private void activateAddPraiseButton() {
@@ -101,6 +119,14 @@ public class LevelConfiguration extends AppCompatActivity {
         GridView gridView = (GridView) findViewById(R.id.gridWordPraise);
         CheckboxGridAdapter adapter = new CheckboxGridAdapter(praiseList, getApplicationContext());
         gridView.setAdapter(adapter);
+    }
+
+    private void activateNumberTryTest() {
+        activePlusMinus((EditText) findViewById(R.id.number_try_test), (Button) findViewById(R.id.button_minus_try_test), (Button) findViewById(R.id.button_plus_try_test));
+    }
+
+    private void activateNumberTimeTest() {
+        activePlusMinus((EditText) findViewById(R.id.number_time_test), (Button) findViewById(R.id.button_minus_time_test), (Button) findViewById(R.id.button_plus_time_test));
     }
 
     private void activateNumberTime() {
