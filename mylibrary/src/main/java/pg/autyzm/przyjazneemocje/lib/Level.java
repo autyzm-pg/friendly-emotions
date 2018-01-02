@@ -2,8 +2,11 @@ package pg.autyzm.przyjazneemocje.lib;
 
 import android.database.Cursor;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Ann on 25.10.2016.
@@ -157,5 +160,17 @@ public class Level {
 
     public void setEmotions(List<Integer> emotions) {
         this.emotions = emotions;
+    }
+
+    public Map getInfo(){
+        Map out = new HashMap();
+        for(Field field : this.getClass().getDeclaredFields()){
+            try {
+                out.put(field.getName(), field.get(this));
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        return out;
     }
 }

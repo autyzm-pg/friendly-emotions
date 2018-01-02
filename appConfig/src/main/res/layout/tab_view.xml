@@ -53,11 +53,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"></include>
 
-                <Button
-                    android:id="@+id/tab_save"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Zapisz" />
+                <include
+                    android:id="@+id/tab5_save"
+                    layout="@layout/tab5_save"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></include>
 
             </FrameLayout>
 

@@ -20,8 +20,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Map;
 
 import pg.autyzm.przyjazneemocje.R;
+import pg.autyzm.przyjazneemocje.lib.Level;
 import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
 
 import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;
@@ -35,6 +37,7 @@ public class LevelConfiguration extends AppCompatActivity {
     private int emotionsNumber = 2;
     private String[] emotions = {"wesoły", "smutny"};
     ArrayList praiseList = new ArrayList();
+    private Level level = new Level();
 
 
     @Override
@@ -46,9 +49,15 @@ public class LevelConfiguration extends AppCompatActivity {
         createTabLearningWays();
         createTabConsolidation();
         createTabTest();
+        createTabSave();
     }
 
-    private void createTabTest(){
+    private void createTabSave() {
+        createDefaultStepName();
+        updateInfo();
+    }
+
+    private void createTabTest() {
         createGridViewActiveInTest();
         activateNumberTryTest();
         activateNumberTimeTest();
@@ -71,6 +80,22 @@ public class LevelConfiguration extends AppCompatActivity {
         createTabs();
         activeNumberEmotionPlusMinus();
         createListOfSpinners();
+    }
+
+    private void updateInfo() {
+        TextView text = (TextView) findViewById(R.id.level_info);
+        Map info = level.getInfo();
+        text.setText(info.toString());
+
+    }
+
+    private void createDefaultStepName() {
+        EditText editText = (EditText) findViewById(R.id.step_name);
+        String name = "";
+        for (String emotion : emotions) {
+            name += emotion + " ";
+        }
+        editText.setText(name);
     }
 
     private void createGridViewActiveInTest() {
@@ -222,7 +247,7 @@ public class LevelConfiguration extends AppCompatActivity {
         TabHost tab = (TabHost) findViewById(R.id.tabHost);
         tab.setup();
 
-        String[] tabsFiles = {"tab1_material", "tab2_learning_ways", "tab3_consolidation", "tab4_test", "tab_save"};
+        String[] tabsFiles = {"tab1_material", "tab2_learning_ways", "tab3_consolidation", "tab4_test", "tab5_save"};
         TabHost.TabSpec spec;
         for (String tabFile : tabsFiles) {
             spec = tab.newTabSpec(tabFile);

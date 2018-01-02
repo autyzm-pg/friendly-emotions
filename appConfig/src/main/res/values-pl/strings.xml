@@ -64,7 +64,9 @@
     <string name="description2_test">W trybie testu nie używa się podpowiedzi i wzmocnień, a terapeuta powinien powstrzymać się od interwencji w interakcje dziecka aż do zakończenia testu.</string>
     <string name="summary_test">Łączna liczba prób w teście:    3</string>
 
-    <string name="tab_save">Zapisz</string>
+    <string name="tab5_save">Zapisz</string>
+    <string name="label1.1_save">Nazwa kroku</string>
+    <string name="label1.2_save">Informacje o kroku</string>
 
 
     <string name="emotion_happy">wesoły</string>
