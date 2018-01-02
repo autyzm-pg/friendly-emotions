@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Frendly Emotions - Configuration</string>
+    <string name="newPhoto">Take a new photo</string>
+    <string name="label_choose_images">Choose</string>
+    <string name="title_choose_img">Choose photos</string>
+    <string name="default_message">No photos selected</string>
+    <string name="save_message">Level saved</string>s
+    <string name="select">select</string>
+    <string name="pv_per_level">Photos per level</string>
+    <string name="time_limit">Time Limit</string>
+    <string name="label_emotion">Learn emotions:</string>
+    <string name="level_name">New level</string>
+    <string name="label_level_name">Level name: </string>
+    <string name="label_level_list">Levels list: </string>
+    <string name="active">active </string>
+    <string name="correctness">Correctness</string>
+    <string name="sublevels">Sublevels</string>
+
+    <string name="emotion_happy">happy</string>
+    <string name="emotion_sad">sad</string>
+    <string name="emotion_surprised">surprised</string>
+    <string name="emotion_angry">angry</string>
+    <string name="emotion_scared">scared</string>
+    <string name="emotion_bored">bored</string>
+
+    <string-array name="spinner">
+        <item>Photos</item>
+        <item>Videos</item>
+    </string-array>
+
+
+</resources>

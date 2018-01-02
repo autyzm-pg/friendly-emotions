@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="pg.autyzm.graprzyjazneemocje.EndActivity">
+
+    <ImageView
+        android:id="@+id/sun_image_end"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:adjustViewBounds="true"
+        android:src="@drawable/sun" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/rightAnswers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/score" />
+
+        <TextView
+            android:id="@+id/wrongAnswers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/score" />
+
+        <TextView
+            android:id="@+id/timeout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/score" />
+
+    </LinearLayout>
+
+    <!--
+    <ImageButton
+       android:id="@+id/exitButton"
+       android:layout_width="80dp"
+       android:layout_height="80dp"
+       android:layout_alignParentEnd="true"
+       android:layout_alignParentRight="true"
+       android:layout_alignParentTop="true"
+       android:background="@null"
+       android:scaleType="centerCrop"
+       android:src="@drawable/icon_exit" />
+       -->
+
+   <TextView
+       android:id="@+id/endTextMain"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:gravity="center_horizontal"
+       android:textColor="@color/command"
+       android:textSize="40dp"
+       android:layout_alignParentLeft="true"
+       android:layout_alignParentStart="true" />
+
+   <ImageButton
+       android:id="@+id/prevButton"
+       android:layout_width="80dp"
+       android:layout_height="80dp"
+       android:background="@null"
+       android:onClick="repeatLevel"
+       android:scaleType="centerCrop"
+       android:src="@drawable/icon_prev"
+       android:layout_alignParentBottom="true"
+       android:layout_alignParentLeft="true"
+       android:layout_alignParentStart="true" />
+
+</RelativeLayout>

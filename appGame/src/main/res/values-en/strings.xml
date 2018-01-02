@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Frendly Emotions - Game</string>
+    <string name="label_show_emotion">Choose</string>
+    <string name="label_congratulations">Congratulations!</string>
+    <string name="label_rightAnswers">Right answers:</string>
+    <string name="label_wrongAnswers">Wrong answers:</string>
+    <string name="label_timeout">Timeouts:</string>
+    <string name="emotion_happy">happy</string>
+    <string name="emotion_sad">sad</string>
+    <string name="emotion_surprised">surprised</string>
+    <string name="emotion_angry">angry</string>
+    <string name="emotion_scared">scared</string>
+    <string name="emotion_bored">bored</string>
+
+    <string name="failed_level">Unfortunately, you need a better score to pass this level.</string>
+</resources>
