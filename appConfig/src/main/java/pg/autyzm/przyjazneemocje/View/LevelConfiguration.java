@@ -13,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TabHost;
@@ -245,6 +246,22 @@ public class LevelConfiguration extends AppCompatActivity {
 
     private void createTabs() {
         TabHost tab = (TabHost) findViewById(R.id.tabHost);
+        tab.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tab) {
+                if ("tab1_material".equals(tab)) {
+                    findViewById(R.id.button_prev).setVisibility(View.INVISIBLE);
+                } else {
+                    findViewById(R.id.button_prev).setVisibility(View.VISIBLE);
+                }
+                ImageButton button = (ImageButton) findViewById(R.id.button_next);
+                if ("tab5_save".equals(tab)){
+                    button.setImageResource(R.drawable.icon_save);
+                } else {
+                    button.setImageResource(R.drawable.icon_next);
+                }
+            }
+        });
         tab.setup();
 
         String[] tabsFiles = {"tab1_material", "tab2_learning_ways", "tab3_consolidation", "tab4_test", "tab5_save"};
@@ -255,6 +272,16 @@ public class LevelConfiguration extends AppCompatActivity {
             spec.setContent(getResourceId(tabFile));
             tab.addTab(spec);
         }
+    }
+
+    public void nextTab(View view) {
+        TabHost tabs = (TabHost) findViewById(R.id.tabHost);
+        tabs.setCurrentTab(tabs.getCurrentTab() + 1);
+    }
+
+    public void prevTab(View view) {
+        TabHost tabs = (TabHost) findViewById(R.id.tabHost);
+        tabs.setCurrentTab(tabs.getCurrentTab() - 1);
     }
 
     private int getResource(String variableName, String resourceName) {

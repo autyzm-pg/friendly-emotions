@@ -66,25 +66,29 @@
     </TabHost>
 
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button4"
-        android:layout_alignBottom="@+id/button4"
+    <ImageButton
+        android:id="@+id/button_next"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_alignParentEnd="true"
-        android:layout_margin="12dp"
-        android:text="@string/next"
-        android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+        android:layout_alignTop="@+id/button_prev"
+        android:layout_marginEnd="12dp"
+        android:background="@null"
+        android:scaleType="centerCrop"
+        android:onClick="nextTab"
+        android:src="@drawable/icon_next" />
 
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageButton
+        android:id="@+id/button_prev"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_margin="12dp"
-        android:text="@string/back"
-        android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="12dp"
+        android:background="@null"
+        android:scaleType="centerCrop"
+        android:onClick="prevTab"
+        android:src="@drawable/icon_prev" />
 
 </RelativeLayout>
