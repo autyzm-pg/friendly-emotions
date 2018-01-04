@@ -110,12 +110,12 @@ public class LevelConfiguration extends AppCompatActivity {
     }
 
     private void activateAddPraiseButton() {
-        final String newItem = ((TextView) findViewById(R.id.newPraise)).getText().toString();
 
         Button button = (Button) findViewById(R.id.buttonAddPraise);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final String newItem = ((TextView) findViewById(R.id.newPraise)).getText().toString();
                 praiseList.add(new CheckboxGridBean(newItem, true));
                 updateGridPraise();
             }
@@ -123,9 +123,7 @@ public class LevelConfiguration extends AppCompatActivity {
     }
 
     private void createGridPrize() {
-        GridCheckboxImageBean[] tabPhotos;
-        tabPhotos = new GridCheckboxImageBean[1];
-        tabPhotos[0] = new GridCheckboxImageBean("butterfly.png", 1, true, getContentResolver(), 0);
+        GridCheckboxImageBean[] tabPhotos = getEmotionPhotos("prize");
 
         final GridView listView = (GridView) findViewById(R.id.gridPrize);
         CheckboxImageAdapter adapter = new CheckboxImageAdapter(this, R.layout.grid_element_checkbox_image, tabPhotos);
@@ -255,7 +253,7 @@ public class LevelConfiguration extends AppCompatActivity {
                     findViewById(R.id.button_prev).setVisibility(View.VISIBLE);
                 }
                 ImageButton button = (ImageButton) findViewById(R.id.button_next);
-                if ("tab5_save".equals(tab)){
+                if ("tab5_save".equals(tab)) {
                     button.setImageResource(R.drawable.icon_save);
                 } else {
                     button.setImageResource(R.drawable.icon_next);

@@ -90,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
                         sqlm.addPhoto(resID, "scared", emotName);
                     else if (emotName.contains("sad"))
                         sqlm.addPhoto(resID, "sad", emotName);
+                    else if (emotName.contains("prize"))
+                        sqlm.addPhoto(resID, "prize", emotName);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -24,6 +24,7 @@
                 android:id="@+id/textView6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@string/label1_consolidation"
                 android:textAppearance="@style/OptionStyle" />
 
@@ -31,6 +32,7 @@
                 android:id="@+id/gridWordPraise"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:gravity="left"
                 android:numColumns="3"
                 android:padding="5dp" />
@@ -38,6 +40,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:orientation="horizontal"
                 android:paddingBottom="30dp">
 
@@ -84,13 +87,13 @@
                 android:text="@string/label2_consolidation"
                 android:textAppearance="@style/OptionStyle" />
 
-            <Button
-                android:id="@+id/button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/button1_consolidation"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small" />
+            <!--<Button-->
+                <!--android:id="@+id/button"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:text="@string/button1_consolidation"-->
+                <!--android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small" />-->
 
         </LinearLayout>
 
