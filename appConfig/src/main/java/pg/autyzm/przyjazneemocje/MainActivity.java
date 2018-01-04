@@ -15,7 +15,6 @@ import java.io.FileOutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-import pg.autyzm.przyjazneemocje.View.*;
 import pg.autyzm.przyjazneemocje.View.LevelConfiguration;
 import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
 

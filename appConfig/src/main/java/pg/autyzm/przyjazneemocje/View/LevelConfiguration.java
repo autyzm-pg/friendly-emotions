@@ -35,8 +35,6 @@ import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;
 
 public class LevelConfiguration extends AppCompatActivity {
 
-    private int emotionsNumber = 2;
-    private String[] emotions = {"wesoły", "smutny"};
     ArrayList praiseList = new ArrayList();
     private Level level = new Level();
 
@@ -46,11 +44,17 @@ public class LevelConfiguration extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tab_view);
 
+        initLevel();
         createTabMaterial();
         createTabLearningWays();
         createTabConsolidation();
         createTabTest();
         createTabSave();
+    }
+
+    private void initLevel(){
+        level.addEmotion(0);
+        level.addEmotion(1);
     }
 
     private void createTabSave() {
@@ -93,16 +97,17 @@ public class LevelConfiguration extends AppCompatActivity {
     private void createDefaultStepName() {
         EditText editText = (EditText) findViewById(R.id.step_name);
         String name = "";
-        for (String emotion : emotions) {
-            name += emotion + " ";
+        for (int emotion : level.getEmotions()) {
+            name += getEmotionNameInLocalLanguage(emotion) + " ";
         }
         editText.setText(name);
     }
 
     private void createGridViewActiveInTest() {
         ArrayList emotionList = new ArrayList();
-        for (String emotion : emotions) {
-            emotionList.add(new CheckboxGridBean(emotion, true));
+        for (int emotion : level.getEmotions()) {
+            String emotionName = getEmotionNameInLocalLanguage(emotion);
+            emotionList.add(new CheckboxGridBean(emotionName, true));
         }
         GridView gridView = (GridView) findViewById(R.id.gridViewActiveInTest);
         CheckboxGridAdapter adapter = new CheckboxGridAdapter(emotionList, getApplicationContext());
@@ -211,6 +216,11 @@ public class LevelConfiguration extends AppCompatActivity {
         return getBaseContext().createConfigurationContext(config).getResources().getStringArray(R.array.emotions_array)[emotionNumber];
     }
 
+    private String getEmotionNameInLocalLanguage(int emotionNumber) {
+        Configuration config = new Configuration(getBaseContext().getResources().getConfiguration());
+        return getBaseContext().createConfigurationContext(config).getResources().getStringArray(R.array.emotions_array)[emotionNumber];
+    }
+
     private void updateEmotionsGrid(int emotionNumber) {
         String emotion = getEmotionName(emotionNumber);
         GridCheckboxImageBean[] tabPhotos = getEmotionPhotos(emotion);
@@ -220,24 +230,30 @@ public class LevelConfiguration extends AppCompatActivity {
         listView.setAdapter(adapter);
     }
 
+    private void updateSelectedEmotions(){
+        createDefaultStepName();
+        createGridViewActiveInTest();
+        updateInfo();
+    }
+
     private void activeNumberEmotionPlusMinus() {
         final EditText nrEmotions = (EditText) findViewById(R.id.nr_emotions);
 
         final Button minusButton = (Button) findViewById(R.id.button_minus);
         minusButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                emotionsNumber = Integer.parseInt(nrEmotions.getText().toString());
-                emotionsNumber--;
-                nrEmotions.setText(Integer.toString(emotionsNumber));
+                level.deleteEmotion(0);
+                nrEmotions.setText(Integer.toString(level.getEmotions().size()));
+                updateSelectedEmotions();
             }
         });
 
         final Button plusButton = (Button) findViewById(R.id.button_plus);
         plusButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                emotionsNumber = Integer.parseInt(nrEmotions.getText().toString());
-                emotionsNumber++;
-                nrEmotions.setText(Integer.toString(emotionsNumber));
+                level.addEmotion(Integer.parseInt(nrEmotions.getText().toString()));
+                nrEmotions.setText(Integer.toString(level.getEmotions().size()));
+                updateSelectedEmotions();
             }
         });
     }
@@ -299,23 +315,21 @@ public class LevelConfiguration extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return emotionsNumber;
+            return level.getEmotions().size();
         }
 
         @Override
-        public Object getItem(int arg0) {
-            // TODO Auto-generated method stub
-            return null;
+        public Object getItem(int n) {
+            return level.getEmotions().get(n);
+    }
+
+        @Override
+        public long getItemId(int n) {
+            return level.getEmotions().get(n);
         }
 
         @Override
-        public long getItemId(int arg0) {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 
             convertView = inflater.inflate(R.layout.row_spinner, parent, false);
@@ -325,6 +339,15 @@ public class LevelConfiguration extends AppCompatActivity {
                     R.array.emotions_array, android.R.layout.simple_spinner_item);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(adapter);
+            spinner.setSelection(level.getEmotions().get(position));
+
+            ImageButton button = (ImageButton) convertView.findViewById(R.id.button_edit);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    updateEmotionsGrid(level.getEmotions().get(position));
+                }
+            });
 
             AdapterView.OnItemSelectedListener emotionSelectedListener = new AdapterView.OnItemSelectedListener() {
 
@@ -336,7 +359,6 @@ public class LevelConfiguration extends AppCompatActivity {
 
                 @Override
                 public void onNothingSelected(AdapterView<?> arg0) {
-                    // TODO Auto-generated method stub
                 }
             };
             spinner.setOnItemSelectedListener(emotionSelectedListener);

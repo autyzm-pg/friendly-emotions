@@ -40,9 +40,10 @@
                     android:id="@+id/gridViewActiveInTest"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:numColumns="3"
-                    android:padding="5dp">
+                    android:layout_margin="10dp"
+                    android:numColumns="2"
+                    android:padding="5dp"
+                    android:paddingStart="30dp">
 
                 </GridView>
             </LinearLayout>

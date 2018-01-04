@@ -162,6 +162,14 @@ public class Level {
         this.emotions = emotions;
     }
 
+    public void addEmotion(int i) {
+        this.emotions.add(i);
+    }
+
+    public void deleteEmotion(int i) {
+        this.emotions.remove(emotions.get(i));
+    }
+
     public Map getInfo(){
         Map out = new HashMap();
         for(Field field : this.getClass().getDeclaredFields()){
