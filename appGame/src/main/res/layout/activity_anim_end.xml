@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_menu"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context="pg.autyzm.graprzyjazneemocje.AnimationActivity">
+    <ImageView
+        android:id="@+id/sun_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@drawable/sun"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+    <ImageView
+        android:id="@+id/butterfly1_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@drawable/butterfly_blue_down"
+        android:layout_marginEnd="217dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+    <ImageView
+        android:id="@+id/butterfly2_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@drawable/butterfly_green_down"
+        android:layout_marginEnd="217dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+    <ImageView
+        android:id="@+id/butterfly3_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@drawable/butterfly_blue_down"
+        android:layout_marginEnd="217dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+    <ImageView
+        android:id="@+id/butterfly4_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@drawable/butterfly_green_down"
+        android:layout_marginEnd="217dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+    <ImageView
+        android:id="@+id/butterfly5_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@drawable/butterfly_blue_down"
+        android:layout_marginEnd="217dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+
+
+
+</RelativeLayout>
