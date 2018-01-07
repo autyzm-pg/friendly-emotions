@@ -80,7 +80,7 @@ public class ChooseImages extends Activity implements android.widget.CompoundBut
 
         String newFileName = "";
 
-        String[] photosNameList = new File(root + "/Emotions").list();
+        String[] photosNameList = new File(root + "/FriendlyEmotions/Photos").list();
         if(cursor.getCount() < photosNameList.length)
         {
             for(String fileName : photosNameList)

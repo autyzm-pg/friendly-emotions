@@ -50,6 +50,7 @@ public class SqlliteManager extends SQLiteOpenHelper {
                 "time_limit int, is_level_active boolean, name text, correctness int, sublevels int);" + "");
         db.execSQL("create table levels_photos(" + "id integer primary key autoincrement,"  + "levelid integer references levels(id)," + "photoid integer references photos(id));" + "");
         db.execSQL("create table levels_emotions(" + "id integer primary key autoincrement," + "levelid integer references levels(id),"  + "emotionid integer references emotions(id));" + "");
+        db.execSQL("create table videos(" + "id integer primary key autoincrement," + "path int," + "emotion text," + "name text);" + "");
 
 
         addEmotion("happy");
@@ -88,6 +89,14 @@ public class SqlliteManager extends SQLiteOpenHelper {
         db.insertOrThrow("photos", null, values);
     }
 
+    public void addVideo(int path, String emotion, String fileName)
+    {
+        ContentValues values = new ContentValues();
+        values.put("path",path);
+        values.put("emotion",emotion);
+        values.put("name",fileName);
+        db.insertOrThrow("videos", null, values);
+    }
 
     public void addLevel(Level level)
     {
@@ -185,6 +194,13 @@ public class SqlliteManager extends SQLiteOpenHelper {
     {
         String[] columns = {"id", "levelid", "photoid"};
         Cursor cursor = db.query("levels_photos", columns,"levelid like " + "'%" + levelId + "%'", null, null, null, null);
+        return cursor;
+    }
+
+    public Cursor giveAllVideos() //TODO: Change to "giveVideosInLevel(int levelId)
+    {
+        String[] columns = {"id", "emotion", "name"};
+        Cursor cursor = db.query("videos", columns, null, null, null, null, null);
         return cursor;
     }
 

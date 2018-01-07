@@ -18,8 +18,11 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.provider.MediaStore.Images.Media;
+import android.widget.Toast;
+import android.widget.VideoView;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,6 +46,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     List<String> photosToUseInSublevel;
     String goodAnswer;
     Cursor cur0;
+    Cursor videoCursor;
     SqlliteManager sqlm;
     int wrongAnswers;
     int rightAnswers;
@@ -55,6 +59,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     Level l;
     CountDownTimer timer;
     public Speaker speaker;
+    boolean videos = false; //TODO: Get from database
 
 
     @Override
@@ -65,9 +70,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setContentView(R.layout.activity_main);
-
-
+        if(!videos)
+            setContentView(R.layout.activity_main);
+        else {
+            Intent i = new Intent(this, VideoWelcomeActivity.class);
+            startActivity(i);
+            setContentView(R.layout.activity_videos);
+        }
 
         sqlm = getInstance(this);
 
@@ -77,118 +86,105 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         cur0 = sqlm.giveAllLevels();
 
+        videoCursor = sqlm.giveAllVideos(); //TODO: Change to "giveVideosInLevel(int levelId)
+        videoCursor.moveToFirst();
+
         findNextActiveLevel();
 
         generateView(photosToUseInSublevel);
 
-        //JG
+        if(!videos) {
 
-        speaker = Speaker.getInstance(MainActivity.this);
+            //JG
+            speaker = Speaker.getInstance(MainActivity.this);
 
-        final ImageButton speakerButton = (ImageButton) findViewById(R.id.matchEmotionsSpeakerButton);
-        speakerButton.setOnClickListener(new View.OnClickListener() {
+            final ImageButton speakerButton = (ImageButton) findViewById(R.id.matchEmotionsSpeakerButton);
+            speakerButton.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View v) {
-                speaker.speak(commandText);
-            }
-        });
-
-
-
+                public void onClick(View v) {
+                    speaker.speak(commandText);
+                }
+            });
+        }
     }
 
 
-        boolean findNextActiveLevel(){
+    boolean findNextActiveLevel() {
 
-            if(sublevelsLeft != 0){
-                generateSublevel(sublevelsList.get(sublevelsLeft - 1));
+        if (sublevelsLeft != 0) {
+            generateSublevel(sublevelsList.get(sublevelsLeft - 1));
+            return true;
+        }
+
+        // zaraz zostanie zaladowany nowy poziom (skonczyly sie podpoziomy. trzeba ustalic, czy dziecko odpowiedzialo wystarczajaco dobrze, by przejsc dalej
+
+        while (cur0.moveToNext()) {
+
+            if (!loadLevel()) {
+                continue;
+            } else {
                 return true;
             }
+        }
 
-            // zaraz zostanie zaladowany nowy poziom (skonczyly sie podpoziomy. trzeba ustalic, czy dziecko odpowiedzialo wystarczajaco dobrze, by przejsc dalej
+        return false;
 
-            while(cur0.moveToNext()){
+    }
 
-                if(! loadLevel()){
-                    continue;
-                }
-                else{
-                    return true;
-                }
+    boolean loadLevel() {
+
+        wrongAnswersSublevel = 0;
+        rightAnswersSublevel = 0;
+        timeoutSubLevel = 0;
+
+
+        int levelId = 0;
+        int photosPerLvL = 0;
+        l = null;
+
+        System.out.println(cur0.getCount());
+
+
+        levelId = cur0.getInt(cur0.getColumnIndex("id"));
+
+        Cursor cur2 = sqlm.giveLevel(levelId);
+        Cursor cur3 = sqlm.givePhotosInLevel(levelId);
+        Cursor cur4 = sqlm.giveEmotionsInLevel(levelId);
+
+        l = new Level(cur2, cur3, cur4);
+
+        photosPerLvL = l.getPvPerLevel();
+
+
+        if (!l.isLevelActive()) return false;
+
+        // tworzymy tablice do permutowania
+
+        sublevelsLeft = l.getEmotions().size() * l.getSublevels();
+
+        sublevelsList = new ArrayList<Integer>();
+
+        for (int i = 0; i < l.getEmotions().size(); i++) {
+
+            for (int j = 0; j < l.getSublevels(); j++) {
+
+                sublevelsList.add(l.getEmotions().get(i));
+
             }
-
-            return false;
 
         }
 
-        boolean loadLevel(){
+        java.util.Collections.shuffle(sublevelsList);
+        generateSublevel(sublevelsList.get(sublevelsLeft - 1));
 
+        // wylosuj emocje z wybranych emocji, odczytaj jej imie (bo mamy liste id)
+        //int emotionIndexInList = selectEmotionToChoose(l);
 
-            wrongAnswersSublevel = 0;
-            rightAnswersSublevel = 0;
-            timeoutSubLevel = 0;
-
-
-
-
-            int levelId = 0;
-            int photosPerLvL = 0;
-            l = null;
-
-            System.out.println(cur0.getCount());
-
-
-
-
-            levelId = cur0.getInt(cur0.getColumnIndex("id"));
-
-            Cursor cur2 = sqlm.giveLevel(levelId);
-            Cursor cur3 = sqlm.givePhotosInLevel(levelId);
-            Cursor cur4 = sqlm.giveEmotionsInLevel(levelId);
-
-            l = new Level(cur2, cur3, cur4);
-
-            photosPerLvL = l.getPvPerLevel();
-
-
-            if(!l.isLevelActive()) return false;
-
-
-            // tworzymy tablice do permutowania
-
-            sublevelsLeft = l.getEmotions().size() * l.getSublevels();
-
-            sublevelsList = new ArrayList<Integer>();
-
-            for(int i = 0; i < l.getEmotions().size(); i++){
-
-                for(int j = 0; j < l.getSublevels(); j++){
-
-                    sublevelsList.add(l.getEmotions().get(i));
-
-                }
-
-            }
-
-            java.util.Collections.shuffle(sublevelsList);
-
-
-
-             generateSublevel(sublevelsList.get(sublevelsLeft - 1));
-
-
-
-
-            // wylosuj emocje z wybranych emocji, odczytaj jej imie (bo mamy liste id)
-            //int emotionIndexInList = selectEmotionToChoose(l);
-
-
-
-            return true;
+        return true;
 
     }
 
-    void generateSublevel(int emotionIndexInList){
+    void generateSublevel(int emotionIndexInList) {
 
 
         Cursor emotionCur = sqlm.giveEmotionName(emotionIndexInList);
@@ -202,12 +198,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         photosToUseInSublevel = new ArrayList<String>();
 
 
-
-        for(int e : l.getPhotosOrVideosList()){
+        for (int e : l.getPhotosOrVideosList()) {
 
             //System.out.println("Id zdjecia: " + e);
             Cursor curEmotion = sqlm.givePhotoWithId(e);
-
 
 
             curEmotion.moveToFirst();
@@ -215,13 +209,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
             String photoName = curEmotion.getString(curEmotion.getColumnIndex("name"));
 
 
-
-            if(photoEmotionName.equals(selectedEmotionName)){
+            if (photoEmotionName.equals(selectedEmotionName)) {
                 photosWithEmotionSelected.add(photoName);
-            }
-            else{
+            } else {
                 photosWithRestOfEmotions.add(photoName);
-
             }
 
         }
@@ -242,7 +233,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
         // z tego co rozumiem w photosList powinny byc name wszystkich zdjec, jakie maja sie pojawic w lvl (czyli - 3 pozycje)
-
 
 
         StartTimer(l);
@@ -271,61 +261,85 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }, l.timeLimit * 1000);*/
 
 
-
-
-
         // /birgiel
 
     }
 
-    void generateView(List<String> photosList){
+    void generateView(List<String> photosList) {
 
+        String rightEmotion = goodAnswer.replace(".jpg", "").replaceAll("[0-9.]", "");
 
-        TextView txt = (TextView) findViewById(R.id.rightEmotion);
-       // txt.setTextSize(TypedValue.COMPLEX_UNIT_PX,100);
-        String rightEm = goodAnswer.replace(".jpg","").replaceAll("[0-9.]", "");
-        String rightEmotionLang = getResources().getString(getResources().getIdentifier("emotion_" + rightEm, "string", getPackageName()));
-        commandText = getResources().getString(R.string.label_show_emotion) + " " + rightEmotionLang;
-        txt.setText(commandText);
+        if(!videos) {
+            TextView txt = (TextView) findViewById(R.id.rightEmotion);
+            // txt.setTextSize(TypedValue.COMPLEX_UNIT_PX,100);
+            String rightEmotionLang = getResources().getString(getResources().getIdentifier("emotion_" + rightEmotion, "string", getPackageName()));
+            commandText = getResources().getString(R.string.label_show_emotion) + " " + rightEmotionLang;
+            txt.setText(commandText);
+        }
+        else
+        {
+            rightEmotion = videoCursor.getString(videoCursor.getColumnIndex("emotion"));
+            String videoName = videoCursor.getString(videoCursor.getColumnIndex("name"));
+
+            VideoView videoView =(VideoView)findViewById(R.id.videoView);
+
+            MediaController mediaController= new MediaController(this);
+            mediaController.setAnchorView(videoView);
+
+            videoView.setMediaController(mediaController);
+
+            String root = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
+            videoView.setVideoPath(root + "FriendlyEmotions/Videos" + File.separator + videoName);
+            videoView.requestFocus();
+            videoView.start();
+
+            if(!videoCursor.isAfterLast())
+                videoCursor.moveToNext();
+        }
 
         LinearLayout linearLayout1 = (LinearLayout) findViewById(R.id.imageGallery);
 
         linearLayout1.removeAllViews();
-        int listSize=photosList.size();
+        int listSize = photosList.size();
 
-        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 790/listSize, getResources().getDisplayMetrics());
-        int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50-(150/listSize), getResources().getDisplayMetrics());
+        int height;
+        int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50 - (150 / listSize), getResources().getDisplayMetrics());
+
+        if(!videos) {
+
+            height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 790 / listSize, getResources().getDisplayMetrics());
+
+        }
+        else {
+
+            height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 450 / listSize, getResources().getDisplayMetrics());
+        }
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(height, height);
-        lp.setMargins(45/listSize, 10, 45/listSize, margin);
+        lp.setMargins(45 / listSize, 10, 45 / listSize, margin);
         lp.gravity = Gravity.CENTER;
-        for(String photoName:photosList)
-        {
-            String root = Environment.getExternalStorageDirectory().getAbsolutePath()+"/";
-            File fileOut = new File(root + "Emotions" + File.separator + photoName);
+        for (String photoName : photosList) {
+            String root = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
+            File fileOut = new File(root + "FriendlyEmotions/Photos" + File.separator + photoName);
             try {
 
                 ImageView image = new ImageView(MainActivity.this);
                 image.setLayoutParams(lp);
 
-                if(photoName.equals(goodAnswer)){
+                if (photoName.contains(rightEmotion)) {
                     image.setId(1);
-                }
-                else{
+                } else {
                     image.setId(0);
                 }
-
 
                 image.setOnClickListener(this);
                 Bitmap captureBmp = Media.getBitmap(getContentResolver(), Uri.fromFile(fileOut));
                 image.setImageBitmap(captureBmp);
                 linearLayout1.addView(image);
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 System.out.println("IO Exception " + photoName);
             }
         }
-
 
 
     }
@@ -334,7 +348,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
 
 
-        if(v.getId() == 1) {
+        if (v.getId() == 1) {
             animationEnds = false;
             sublevelsLeft--;
             rightAnswers++;
@@ -343,19 +357,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
             boolean correctness = true;
 
-            if(sublevelsLeft == 0) {
+            if (sublevelsLeft == 0) {
                 correctness = checkCorrectness();
             }
 
 
-
-
-            if(correctness) {
+            if (correctness) {
                 Intent i = new Intent(this, AnimationActivity.class);
                 startActivityForResult(i, 1);
 
-            }
-            else{
+            } else {
                 startEndActivity(false);
 
 //                Intent i = new Intent(this, LevelFailedActivity.class);
@@ -365,28 +376,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
             //startActivity(i);
 
 
-
-
-
-
-
-        }
-        else //jesli nie wybrano wlasciwej
+        } else //jesli nie wybrano wlasciwej
         {
             wrongAnswers++;
             wrongAnswersSublevel++;
         }
 
 
-
-
     }
 
-    boolean checkCorrectness(){
+    boolean checkCorrectness() {
 
 
-
-        if(wrongAnswersSublevel > l.getCorrectness()){
+        if (wrongAnswersSublevel > l.getCorrectness()) {
 
             return false;
 
@@ -398,18 +400,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
 
+    /*
+        int selectEmotionToChoose(Level l){
 
-/*
-    int selectEmotionToChoose(Level l){
+            Random rand = new Random();
 
-        Random rand = new Random();
+            int emotionIndexInList = rand.nextInt(l.emotions.size());
 
-        int emotionIndexInList = rand.nextInt(l.emotions.size());
-
-        return emotionIndexInList;
-    }
-*/
-    String selectPhotoWithSelectedEmotion(){
+            return emotionIndexInList;
+        }
+    */
+    String selectPhotoWithSelectedEmotion() {
 
         Random rand = new Random();
 
@@ -420,13 +421,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
         return name;
     }
 
-    void selectPhotoWithNotSelectedEmotions(int howMany){
+    void selectPhotoWithNotSelectedEmotions(int howMany) {
 
         Random rand = new Random();
 
-        for(int i = 0; i < howMany - 1; i++) {
+        for (int i = 0; i < howMany - 1; i++) {
 
-            if(photosWithRestOfEmotions.size() > 0){
+            if (photosWithRestOfEmotions.size() > 0) {
                 int photoWithSelectedEmotionIndex = rand.nextInt(photosWithRestOfEmotions.size());
                 String name = photosWithRestOfEmotions.get(photoWithSelectedEmotionIndex);
 
@@ -439,11 +440,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch(requestCode) {
+        switch (requestCode) {
             case 1:
                 animationEnds = true;
 
-                if(! findNextActiveLevel()){
+                if (!findNextActiveLevel()) {
 
                     startEndActivity(true);
                 }
@@ -467,7 +468,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
         }
     }
-    private void startEndActivity(boolean pass){
+
+    private void startEndActivity(boolean pass) {
         Intent in = new Intent(this, EndActivity.class);
         in.putExtra("PASS", pass);
         in.putExtra("WRONG", wrongAnswers);
@@ -480,35 +482,30 @@ public class MainActivity extends Activity implements View.OnClickListener {
         //startActivity(in);
     }
 
-    private void StartTimer(Level l)
-    {
+    private void StartTimer(Level l) {
         //timer! seconds * 1000
-        if(l.getTimeLimit() != 0)
-        {
+        if (l.getTimeLimit() != 0) {
             timer = new CountDownTimer(l.getTimeLimit() * 1000, 1000) {
 
                 public void onTick(long millisUntilFinished) {
 
 
                 }
+
                 public void onFinish() {
-                    LinearLayout imagesLinear = (LinearLayout)findViewById(R.id.imageGallery);
+                    LinearLayout imagesLinear = (LinearLayout) findViewById(R.id.imageGallery);
 
                     ColorMatrix matrix = new ColorMatrix();
-                    matrix.setSaturation((float)0.1);
+                    matrix.setSaturation((float) 0.1);
                     ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
 
                     final int childcount = imagesLinear.getChildCount();
-                    for (int i = 0; i < childcount; i++)
-                    {
+                    for (int i = 0; i < childcount; i++) {
                         ImageView image = (ImageView) imagesLinear.getChildAt(i);
-                        if(image.getId() != 1)
-                        {
+                        if (image.getId() != 1) {
                             image.setColorFilter(filter);
-                        }
-                        else
-                        {
-                            image.setPadding(40,40,40,40);
+                        } else {
+                            image.setPadding(40, 40, 40, 40);
                             image.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                             /*
                             image.buildDrawingCache();
@@ -526,7 +523,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         }
 
                     }
-                    timeout ++;
+                    timeout++;
                     timeoutSubLevel++;
                 }
             }.start();
