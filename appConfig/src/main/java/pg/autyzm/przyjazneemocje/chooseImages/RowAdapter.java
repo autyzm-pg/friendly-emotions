@@ -65,7 +65,7 @@ public class RowAdapter extends ArrayAdapter<RowBean> {
         holder.checkBox.setChecked(object.selected);
         try {
             String root = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
-            File fileOut = new File(root + "Emotions" + File.separator + object.photoName);
+            File fileOut = new File(root + "FriendlyEmotions/Photos" + File.separator + object.photoName);
             Bitmap captureBmp = MediaStore.Images.Media.getBitmap(object.cr, Uri.fromFile(fileOut));
             holder.imgIcon.setImageBitmap(captureBmp);
         } catch (Exception e) {
