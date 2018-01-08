@@ -34,7 +34,7 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
     private SqlliteManager (final Context context)
     {
-        super(new DatabaseContext(context), DATABASE_NAME, null, 2);
+        super(new DatabaseContext(context), DATABASE_NAME, null, 5);
         db = getWritableDatabase();
     }
 

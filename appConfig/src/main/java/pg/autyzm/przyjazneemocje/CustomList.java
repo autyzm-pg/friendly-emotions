@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import pg.autyzm.przyjazneemocje.View.LevelConfiguration;
 import pg.autyzm.przyjazneemocje.lib.Level;
 import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
 

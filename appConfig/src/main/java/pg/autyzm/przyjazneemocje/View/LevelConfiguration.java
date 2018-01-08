@@ -289,8 +289,19 @@ public class LevelConfiguration extends AppCompatActivity {
     }
 
     public void nextTab(View view) {
+
         TabHost tabs = (TabHost) findViewById(R.id.tabHost);
-        tabs.setCurrentTab(tabs.getCurrentTab() + 1);
+
+        if(tabs.getCurrentTab() == 4){
+            save();
+        }else{
+            tabs.setCurrentTab(tabs.getCurrentTab() + 1);
+        }
+
+    }
+
+    void save(){
+
     }
 
     public void prevTab(View view) {
@@ -307,7 +318,7 @@ public class LevelConfiguration extends AppCompatActivity {
     }
 
     private String getResourceString(String resourceName) {
-        return getString(getResource(resourceName, "string"));
+        return getResource(resourceName, "string") + "";
     }
 
 
