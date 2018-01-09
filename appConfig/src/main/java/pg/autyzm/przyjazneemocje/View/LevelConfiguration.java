@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -24,7 +25,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import pg.autyzm.przyjazneemocje.R;
-import pg.autyzm.przyjazneemocje.lib.Level;
+import pg.autyzm.przyjazneemocje.lib.entities.Level;
 import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
 
 import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;
@@ -35,8 +36,10 @@ import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;
 
 public class LevelConfiguration extends AppCompatActivity {
 
+    Integer editedLevelId = 0;
     ArrayList praiseList = new ArrayList();
     private Level level = new Level();
+    String currentEmotionName;
 
 
     @Override
@@ -205,6 +208,7 @@ public class LevelConfiguration extends AppCompatActivity {
         int n = cursor.getCount();
         GridCheckboxImageBean tabPhotos[] = new GridCheckboxImageBean[n];
         while (cursor.moveToNext()) {
+
             tabPhotos[--n] = (new GridCheckboxImageBean(cursor.getString(3), cursor.getInt(1), true, getContentResolver(), cursor.getInt(0)));
         }
         return tabPhotos;
@@ -223,6 +227,10 @@ public class LevelConfiguration extends AppCompatActivity {
 
     private void updateEmotionsGrid(int emotionNumber) {
         String emotion = getEmotionName(emotionNumber);
+
+        // Birgiel 09.01.17
+        currentEmotionName = emotion;
+
         GridCheckboxImageBean[] tabPhotos = getEmotionPhotos(emotion);
 
         final GridView listView = (GridView) findViewById(R.id.grid_photos);
@@ -302,6 +310,127 @@ public class LevelConfiguration extends AppCompatActivity {
 
     void save(){
 
+        gatherInfoFromGUI();
+        saveLevelToDatabaseAndShowLevelSavedText();
+
+    }
+
+
+    void saveLevelToDatabaseAndShowLevelSavedText(){
+
+        SqlliteManager sqlm = getInstance(this);
+
+
+        sqlm.saveLevelToDatabase(level);
+
+        /* TODO: Null Pointer Exception for msg
+        final TextView msg = (TextView) findViewById(R.id.saveMessage);
+        msg.setVisibility(View.VISIBLE);
+        msg.postDelayed(new Runnable() {
+            public void run() {
+                msg.setVisibility(View.INVISIBLE);
+            }
+        }, 2000);
+        */
+    }
+
+
+
+    void gatherInfoFromGUI(){
+
+        if (editedLevelId > 0) {
+            level.setId(editedLevelId);
+
+            // po przekazaniu informacji, ze mamy juz jakies id (czyli jest to edycja i jakis rekord ma byc nadpisany), zerujemy id, na wypadek,
+            // gdyby user jeszcze raz wlaczyl zapisz - wtedy z braku id-ka uzna, ze to tworzenie nowego poziomu i stworzy nowy rekord
+            editedLevelId = 0;
+        }
+
+        // 1 panel
+
+        // save selected photos
+
+        GridView listView = (GridView) findViewById(R.id.grid_photos);
+        int size = listView.getChildCount();
+
+        for(int i = 0; i < size; i++){
+
+            listView.getChildAt(i);
+
+        }
+
+
+        // 2 panel
+
+        TextView pvPerLevel = (TextView) findViewById(R.id.number_photos);
+        level.setPvPerLevel(Integer.parseInt(pvPerLevel.getText() + ""));
+
+        TextView sublevels = (TextView) findViewById(R.id.number_try);
+        level.setSublevelsPerEachEmotion(Integer.parseInt(sublevels.getText() + ""));
+
+        // question type
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinner_command);
+        int spinnerPosition = spinner.getSelectedItemPosition();
+
+        switch(spinnerPosition){
+            case 0:
+                level.setQuestionType(Level.Question.EMOTION_NAME);
+                break;
+            case 1:
+                level.setQuestionType(Level.Question.SHOW_WHERE_IS_EMOTION_NAME);
+                break;
+            case 2:
+                level.setQuestionType(Level.Question.SHOW_EMOTION_NAME);
+                break;
+        }
+
+        // should questin be read aloud checkbox
+        CheckBox checkBox = (CheckBox)findViewById(R.id.checkBox);
+        level.setShouldQuestionBeReadAloud(checkBox.isChecked());
+
+        TextView secondsToHint = (TextView) findViewById(R.id.time);
+        level.setSecondsToHint(Integer.parseInt(secondsToHint.getText() + ""));
+
+        // hint types
+
+        checkBox = (CheckBox)findViewById(R.id.checkBox3);
+        if(checkBox.isChecked()){
+            level.addHintType(Level.Hint.FRAME_CORRECT);
+        }
+
+        checkBox = (CheckBox)findViewById(R.id.checkBox5);
+        if(checkBox.isChecked()){
+            level.addHintType(Level.Hint.ENLARGE_CORRECT);
+        }
+
+        checkBox = (CheckBox)findViewById(R.id.checkBox6);
+        if(checkBox.isChecked()){
+            level.addHintType(Level.Hint.MOVE_CORRECT);
+        }
+
+        checkBox = (CheckBox)findViewById(R.id.checkBox4);
+        if(checkBox.isChecked()){
+            level.addHintType(Level.Hint.GREY_OUT_INCORRECT);
+        }
+
+        // 3 panel
+
+
+
+        // 4 panel
+
+        EditText correctness = (EditText) findViewById(R.id.number_try_test);
+        level.setCorrectness(Integer.parseInt(correctness.getText() + ""));
+
+        EditText timeLimit = (EditText) findViewById(R.id.number_time_test);
+        level.setTimeLimit(Integer.parseInt(timeLimit.getText() + ""));
+
+        // panel 5
+
+        EditText levelName = (EditText) findViewById(R.id.step_name);
+        level.setName(levelName.getText() + "");
+
     }
 
     public void prevTab(View view) {
@@ -377,4 +506,34 @@ public class LevelConfiguration extends AppCompatActivity {
             return convertView;
         }
     }
+
+    // klikniety checkbox przy zdjeciu emocji listener
+    public void pictureClicked(View view){
+
+        SqlliteManager sqlm = getInstance(this);
+
+        //TODO: To slabo dziala. Jesli klikniesz w chechboxa ze zdjeciem (niewazne, czy zaznaczysz, czy odznaczysz,
+        // to zostanie ono dodane do poziomu. Ale np. domyslnie zaznaczone nie zostana dodane, jesli ich nie klikniemy.
+        /*
+
+
+        GridView listView = (GridView) findViewById(R.id.grid_photos);
+        int position = listView.getPositionForView(view);
+
+        int photoId = sqlm.getPhotoIdByName(currentEmotionName + "" + (position + 1) + ".jpg");
+        level.addPhoto(photoId);
+        */
+
+        // rozwiazanie tymczasowe: dodaj wszystkie zdjecia z danej emocji do poziomu
+
+        Cursor cursor = sqlm.givePhotosWithEmotion(currentEmotionName);
+
+        while (cursor.moveToNext()) {
+            level.addPhoto(cursor.getInt(0));
+        }
+
+
+    }
+
+
 }

@@ -16,7 +16,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import pg.autyzm.przyjazneemocje.View.LevelConfiguration;
-import pg.autyzm.przyjazneemocje.lib.Level;
+import pg.autyzm.przyjazneemocje.lib.entities.Level;
 import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
 
 import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;
@@ -146,7 +146,7 @@ public class CustomList extends BaseAdapter implements ListAdapter {
 
                 //
 
-                sqlm.addLevel(l);
+                sqlm.saveLevelToDatabase(l);
 
                 notifyDataSetChanged();
             }
