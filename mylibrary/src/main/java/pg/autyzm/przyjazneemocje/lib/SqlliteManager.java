@@ -36,7 +36,7 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
     private SqlliteManager (final Context context)
     {
-        super(new DatabaseContext(context), DATABASE_NAME, null, 10);
+        super(new DatabaseContext(context), DATABASE_NAME, null, 11);
         db = getWritableDatabase();
     }
 
@@ -87,10 +87,10 @@ public class SqlliteManager extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put("photos_or_videos", level.getPhotosOrVideosFlag());
         values.put("name", level.getName());
-        values.put("photos_or_videos_per_level", level.getPvPerLevel());
+        values.put("photos_or_videos_per_level", level.getPhotosOrVideosShowedForOneQuestion());
         values.put("time_limit", level.getTimeLimit());
         values.put("is_level_active", level.isLevelActive());
-        values.put("correctness", level.getCorrectness());
+        values.put("correctness", level.getAmountOfAllowedTriesForEachEmotion());
         values.put("sublevels_per_each_emotion", level.getSublevelsPerEachEmotion());
         values.put("is_for_tests", level.isForTests());
 
@@ -125,7 +125,7 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
             values = new ContentValues();
             values.put("levelid", level.getId());
-            values.put("emotionid",emotion);
+            values.put("emotionid",emotion + 1);
 
             db.insertOrThrow("levels_emotions", null, values);
         }

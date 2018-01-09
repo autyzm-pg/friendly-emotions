@@ -36,7 +36,6 @@ import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;
 
 public class LevelConfiguration extends AppCompatActivity {
 
-    Integer editedLevelId = 0;
     ArrayList praiseList = new ArrayList();
     private Level level = new Level();
     String currentEmotionName;
@@ -53,7 +52,72 @@ public class LevelConfiguration extends AppCompatActivity {
         createTabConsolidation();
         createTabTest();
         createTabSave();
+        loadLevelIfItIsEditionMode();
+
     }
+
+
+    private void loadLevelIfItIsEditionMode(){
+
+        // Loaded level id retrieval
+
+        Bundle b = getIntent().getExtras();
+        int loadedLevelId = -1; // or other values
+        if(b != null)
+            loadedLevelId = b.getInt("key");
+
+
+        if(loadedLevelId > 0){
+            loadLevelFromDatabaseAndInjectDataToGUI(loadedLevelId);
+        }
+
+    }
+
+
+    private void loadLevelFromDatabaseAndInjectDataToGUI(int loadedLevelId){
+
+        SqlliteManager sqlm = getInstance(this);
+
+
+        Cursor cur2 = sqlm.giveLevel(loadedLevelId);
+        Cursor cur3 = sqlm.givePhotosInLevel(loadedLevelId);
+        Cursor cur4 = sqlm.giveEmotionsInLevel(loadedLevelId);
+
+        level = new Level(cur2, cur3, cur4);
+
+
+
+
+        // 2 panel
+
+        TextView pvPerLevel = (TextView) findViewById(R.id.number_photos);
+        pvPerLevel.setText(level.getPhotosOrVideosShowedForOneQuestion() + "");
+
+        TextView sublevels = (TextView) findViewById(R.id.number_try);
+        sublevels.setText(level.getSublevelsPerEachEmotion() + "");
+
+        // 3 panel
+
+
+
+        // 4 panel
+
+        EditText correctness = (EditText) findViewById(R.id.number_try_test);
+        correctness.setText(level.getAmountOfAllowedTriesForEachEmotion() + "");
+
+        EditText timeLimit = (EditText) findViewById(R.id.number_time_test);
+        timeLimit.setText(level.getTimeLimit() + "");
+
+        // panel 5
+
+        EditText levelName = (EditText) findViewById(R.id.step_name);
+        levelName.setText(level.getName());
+
+
+    }
+
+
+
 
     private void initLevel(){
         level.addEmotion(0);
@@ -312,6 +376,7 @@ public class LevelConfiguration extends AppCompatActivity {
 
         gatherInfoFromGUI();
         saveLevelToDatabaseAndShowLevelSavedText();
+        level.setId(0);
 
     }
 
@@ -338,13 +403,6 @@ public class LevelConfiguration extends AppCompatActivity {
 
     void gatherInfoFromGUI(){
 
-        if (editedLevelId > 0) {
-            level.setId(editedLevelId);
-
-            // po przekazaniu informacji, ze mamy juz jakies id (czyli jest to edycja i jakis rekord ma byc nadpisany), zerujemy id, na wypadek,
-            // gdyby user jeszcze raz wlaczyl zapisz - wtedy z braku id-ka uzna, ze to tworzenie nowego poziomu i stworzy nowy rekord
-            editedLevelId = 0;
-        }
 
         // 1 panel
 
@@ -363,7 +421,7 @@ public class LevelConfiguration extends AppCompatActivity {
         // 2 panel
 
         TextView pvPerLevel = (TextView) findViewById(R.id.number_photos);
-        level.setPvPerLevel(Integer.parseInt(pvPerLevel.getText() + ""));
+        level.setPhotosOrVideosShowedForOneQuestion(Integer.parseInt(pvPerLevel.getText() + ""));
 
         TextView sublevels = (TextView) findViewById(R.id.number_try);
         level.setSublevelsPerEachEmotion(Integer.parseInt(sublevels.getText() + ""));
@@ -421,7 +479,7 @@ public class LevelConfiguration extends AppCompatActivity {
         // 4 panel
 
         EditText correctness = (EditText) findViewById(R.id.number_try_test);
-        level.setCorrectness(Integer.parseInt(correctness.getText() + ""));
+        level.setAmountOfAllowedTriesForEachEmotion(Integer.parseInt(correctness.getText() + ""));
 
         EditText timeLimit = (EditText) findViewById(R.id.number_time_test);
         level.setTimeLimit(Integer.parseInt(timeLimit.getText() + ""));

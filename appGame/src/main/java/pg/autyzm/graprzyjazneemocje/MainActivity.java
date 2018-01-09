@@ -39,10 +39,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
     List<LevelInGame> levelsInGame = new ArrayList<>();
     List<Level> levels = new ArrayList<>();
     LevelInGame currentLevelInGame;
-
-
-
-
     List<String> photosWithEmotionSelected;
     List<String> photosWithRestOfEmotions;
     List<String> photosToUseInSublevel;
@@ -70,13 +66,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         setContentView(R.layout.activity_main);
 
-
-
         sqlm = getInstance(this);
         loadLevelsFromDatabase();
         prepareLevelsInGame();
-
-
 
         generateNextSublevel();
 
@@ -111,19 +103,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     }
 
+    void prepareImagesForNextSublevel(int emotionId){
 
 
-
-
-
-
-    void prepareImagesForNextSublevel(int emotionIndexInList){
-
-
-        Cursor emotionCur = sqlm.giveEmotionName(emotionIndexInList);
+        Cursor emotionCur = sqlm.giveEmotionName(emotionId);
 
         emotionCur.moveToFirst();
-        String selectedEmotionName = emotionCur.getString(emotionCur.getColumnIndex("emotion"));
+        int columnIndex = emotionCur.getColumnIndex("emotion");
+        String selectedEmotionName = emotionCur.getString(columnIndex);
         // po kolei czytaj nazwy emocji wybranych zdjec, jesli ich emocja = wybranej emocji, idzie do listy a, jesli nie, lista b
 
         photosWithEmotionSelected = new ArrayList<String>();
@@ -156,7 +143,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         // z listy b wybieramy zdjecia nieprawidlowe
 
-        selectPhotoWithNotSelectedEmotions(currentLevelInGame.getLevelFromDatabase().getPvPerLevel());
+        selectPhotoWithNotSelectedEmotions(currentLevelInGame.getLevelFromDatabase().getPhotosOrVideosShowedForOneQuestion());
 
         // laczymy dobra odpowiedz z reszta wybranych zdjec i przekazujemy to dalej
 
@@ -248,7 +235,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     boolean checkCorrectness(){
 
-        return currentLevelInGame.getWrongAnswersSublevel() > currentLevelInGame.getLevelFromDatabase().getCorrectness() ? false : true;
+        return currentLevelInGame.getWrongAnswersSublevel() > currentLevelInGame.getLevelFromDatabase().getAmountOfAllowedTriesForEachEmotion() ? false : true;
 
     }
 
@@ -303,7 +290,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private void generateNextSublevel(){
 
-        getNextLevel();
+        getCurrentLevelInGame();
 
         if(currentLevelInGame == null) {
             startEndActivity(true);
@@ -316,7 +303,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     }
 
-    boolean getNextLevel(){
+    boolean getCurrentLevelInGame(){
 
         currentLevelInGame = null;
         for(LevelInGame levelInGame : levelsInGame){

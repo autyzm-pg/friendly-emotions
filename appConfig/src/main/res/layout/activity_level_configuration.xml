@@ -114,10 +114,10 @@
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/correctness" />
+                android:text="@string/amountOfAllowedTriesForEachEmotion" />
 
             <EditText
-                android:id="@+id/correctness"
+                android:id="@+id/amountOfAllowedTriesForEachEmotion"
                 android:layout_width="50dip"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"

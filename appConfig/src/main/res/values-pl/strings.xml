@@ -12,7 +12,7 @@
     <string name="label_level_name">Nazwa poziomu: </string>
     <string name="label_level_list">Lista poziomów: </string>
     <string name="active">aktywny </string>
-    <string name="correctness">Poprawność</string>
+    <string name="amountOfAllowedTriesForEachEmotion">Poprawność</string>
     <string name="sublevelsPerEachEmotion">Podpoziomy</string>
 
 

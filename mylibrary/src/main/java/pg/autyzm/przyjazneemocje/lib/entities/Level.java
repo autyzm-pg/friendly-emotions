@@ -17,10 +17,10 @@ public class Level {
 
     private String photosOrVideosFlag;
     private int timeLimit;
-    private int pvPerLevel;
+    private int photosOrVideosShowedForOneQuestion;
     private boolean isLevelActive;
     private int sublevelsPerEachEmotion;
-    private int correctness;
+    private int amountOfAllowedTriesForEachEmotion;
     private boolean isForTests;
     private String name;
 
@@ -84,10 +84,10 @@ public class Level {
             setId(cur.getInt(cur.getColumnIndex("id")));
             setPhotosOrVideosFlag(cur.getString(cur.getColumnIndex("photos_or_videos")));
             setTimeLimit(cur.getInt(cur.getColumnIndex("time_limit")));
-            setPvPerLevel(cur.getInt(cur.getColumnIndex("photos_or_videos_per_level")));
+            setPhotosOrVideosShowedForOneQuestion(cur.getInt(cur.getColumnIndex("photos_or_videos_per_level")));
             int active = cur.getInt(cur.getColumnIndex("is_level_active"));
 
-            setCorrectness(cur.getInt(cur.getColumnIndex("correctness")));
+            setAmountOfAllowedTriesForEachEmotion(cur.getInt(cur.getColumnIndex("correctness")));
             setSublevelsPerEachEmotion(cur.getInt(cur.getColumnIndex("sublevels_per_each_emotion")));
 
             setLevelActive((active != 0));
@@ -150,12 +150,12 @@ public class Level {
         this.timeLimit = timeLimit;
     }
 
-    public int getPvPerLevel() {
-        return pvPerLevel;
+    public int getPhotosOrVideosShowedForOneQuestion() {
+        return photosOrVideosShowedForOneQuestion;
     }
 
-    public void setPvPerLevel(int pvPerLevel) {
-        this.pvPerLevel = pvPerLevel;
+    public void setPhotosOrVideosShowedForOneQuestion(int photosOrVideosShowedForOneQuestion) {
+        this.photosOrVideosShowedForOneQuestion = photosOrVideosShowedForOneQuestion;
     }
 
     public boolean isLevelActive() {
@@ -174,12 +174,12 @@ public class Level {
         this.sublevelsPerEachEmotion = sublevelsPerEachEmotion;
     }
 
-    public int getCorrectness() {
-        return correctness;
+    public int getAmountOfAllowedTriesForEachEmotion() {
+        return amountOfAllowedTriesForEachEmotion;
     }
 
-    public void setCorrectness(int correctness) {
-        this.correctness = correctness;
+    public void setAmountOfAllowedTriesForEachEmotion(int amountOfAllowedTriesForEachEmotion) {
+        this.amountOfAllowedTriesForEachEmotion = amountOfAllowedTriesForEachEmotion;
     }
 
     public String getName() {
