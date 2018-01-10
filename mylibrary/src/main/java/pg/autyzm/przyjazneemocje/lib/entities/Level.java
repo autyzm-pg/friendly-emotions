@@ -24,6 +24,8 @@ public class Level {
     private boolean isForTests;
     private String name;
 
+    private int hintTypesAsNumber = 0;
+
     private List<Integer> photosOrVideosIdList;
     private List<Integer> emotions = new ArrayList<>();
     private List<Integer> praises;
@@ -62,6 +64,14 @@ public class Level {
         this.praises.add(praiseId);
     }
 
+    public int getHintTypesAsNumber() {
+        return hintTypesAsNumber;
+    }
+
+    public void setHintTypesAsNumber(int hintTypesAsNumber) {
+        this.hintTypesAsNumber = hintTypesAsNumber;
+    }
+
     public enum Question {
         EMOTION_NAME, SHOW_WHERE_IS_EMOTION_NAME, SHOW_EMOTION_NAME
     }
@@ -92,6 +102,8 @@ public class Level {
 
             setLevelActive((active != 0));
             setName(cur.getString(cur.getColumnIndex("name")));
+            setQuestionType(Question.valueOf(cur.getString(cur.getColumnIndex("question_type"))));
+            setHintTypesAsNumber(cur.getInt(cur.getColumnIndex("hint_types_as_number")));
         }
 
         if(cur2 != null){
@@ -272,6 +284,14 @@ public class Level {
 
     public void setForTests(boolean forTests) {
         isForTests = forTests;
+    }
+
+    public void addHintTypeAsNumber(int newType){
+        setHintTypesAsNumber(getHintTypesAsNumber() + newType);
+    }
+
+    public void removeHintTypeAsNumber(int newType){
+        setHintTypesAsNumber(getHintTypesAsNumber() - newType);
     }
 
 

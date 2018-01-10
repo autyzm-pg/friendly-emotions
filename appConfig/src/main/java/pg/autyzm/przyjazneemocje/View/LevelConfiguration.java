@@ -96,6 +96,64 @@ public class LevelConfiguration extends AppCompatActivity {
         TextView sublevels = (TextView) findViewById(R.id.number_try);
         sublevels.setText(level.getSublevelsPerEachEmotion() + "");
 
+        // question type
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinner_command);
+        int spinnerPosition = 0;
+
+        switch(level.getQuestionType()){
+            case EMOTION_NAME:
+                spinnerPosition = 0;
+                break;
+            case SHOW_WHERE_IS_EMOTION_NAME:
+                spinnerPosition = 1;
+                break;
+            case SHOW_EMOTION_NAME:
+                spinnerPosition = 2;
+                break;
+        }
+
+        spinner.setSelection(spinnerPosition);
+
+        // hint types
+
+        CheckBox checkBox;
+
+        checkBox = (CheckBox)findViewById(R.id.checkBox3);
+        if((1 & level.getHintTypesAsNumber()) != 0){
+            checkBox.setChecked(true);
+        }
+        else{
+            checkBox.setChecked(false);
+        }
+
+        checkBox = (CheckBox)findViewById(R.id.checkBox5);
+        if((1 << 1 & level.getHintTypesAsNumber()) != 0){
+            checkBox.setChecked(true);
+        }
+        else{
+            checkBox.setChecked(false);
+        }
+
+        checkBox = (CheckBox)findViewById(R.id.checkBox6);
+        if((1 << 2 & level.getHintTypesAsNumber()) != 0){
+            checkBox.setChecked(true);
+        }
+        else{
+            checkBox.setChecked(false);
+        }
+
+        checkBox = (CheckBox)findViewById(R.id.checkBox4);
+        if((1 << 3 & level.getHintTypesAsNumber()) != 0){
+            checkBox.setChecked(true);
+        }
+        else{
+            checkBox.setChecked(false);
+        }
+
+
+
+
         // 3 panel
 
 
@@ -454,22 +512,22 @@ public class LevelConfiguration extends AppCompatActivity {
 
         checkBox = (CheckBox)findViewById(R.id.checkBox3);
         if(checkBox.isChecked()){
-            level.addHintType(Level.Hint.FRAME_CORRECT);
+            level.addHintTypeAsNumber(1);
         }
 
         checkBox = (CheckBox)findViewById(R.id.checkBox5);
         if(checkBox.isChecked()){
-            level.addHintType(Level.Hint.ENLARGE_CORRECT);
+            level.addHintTypeAsNumber(2);
         }
 
         checkBox = (CheckBox)findViewById(R.id.checkBox6);
         if(checkBox.isChecked()){
-            level.addHintType(Level.Hint.MOVE_CORRECT);
+            level.addHintTypeAsNumber(4);
         }
 
         checkBox = (CheckBox)findViewById(R.id.checkBox4);
         if(checkBox.isChecked()){
-            level.addHintType(Level.Hint.GREY_OUT_INCORRECT);
+            level.addHintTypeAsNumber(8);
         }
 
         // 3 panel
