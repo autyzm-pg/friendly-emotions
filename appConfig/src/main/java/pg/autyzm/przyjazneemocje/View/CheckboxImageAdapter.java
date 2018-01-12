@@ -62,7 +62,7 @@ public class CheckboxImageAdapter extends ArrayAdapter<GridCheckboxImageBean> {
         final GridCheckboxImageBean object = data[position];
 
 
-        if(isPhotoInLevelYet(object.getId())){
+        if(isPrizeInLevelYet(object.getId()) || isPhotoInLevelYet(object.getId())){
             holder.checkBox.setChecked(true);
         }
         else{
@@ -91,7 +91,11 @@ public class CheckboxImageAdapter extends ArrayAdapter<GridCheckboxImageBean> {
                 if(isChecked) {
                     Integer photoId = object.getId();
                     Level configuredLevel = ((LevelConfiguration) context).getLevel();
-                    configuredLevel.addPhoto(photoId);
+                    if(! object.photoName.contains("prize")) {
+                        configuredLevel.addPhoto(photoId);
+                    }else{
+                        configuredLevel.addPrize(photoId.toString());
+                    }
                 }
             }
         });
@@ -111,6 +115,22 @@ public class CheckboxImageAdapter extends ArrayAdapter<GridCheckboxImageBean> {
         }
 
         return false;
+    }
+
+    boolean isPrizeInLevelYet(Integer photoId){
+
+        Level configuredLevel = ((LevelConfiguration) context).getLevel();
+        String[] prizesArray = configuredLevel.getPrizes().split(";");
+
+        for(int i = 0; i < prizesArray.length; i++){
+            if(photoId.toString().equals(prizesArray[i])){
+                return true;
+            }
+        }
+
+        return false;
+
+
     }
 
     static class RowBeanHolder {

@@ -26,9 +26,9 @@ import java.util.Map;
 
 import pg.autyzm.przyjazneemocje.R;
 import pg.autyzm.przyjazneemocje.lib.entities.Level;
-import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
+import pg.autyzm.przyjazneemocje.lib.SqliteManager;
 
-import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;
+import static pg.autyzm.przyjazneemocje.lib.SqliteManager.getInstance;
 
 /**
  * Created by joagi on 26.12.2017.
@@ -76,7 +76,7 @@ public class LevelConfiguration extends AppCompatActivity {
 
     private void loadLevelFromDatabaseAndInjectDataToGUI(int loadedLevelId){
 
-        SqlliteManager sqlm = getInstance(this);
+        SqliteManager sqlm = getInstance(this);
 
 
         Cursor cur2 = sqlm.giveLevel(loadedLevelId);
@@ -156,6 +156,8 @@ public class LevelConfiguration extends AppCompatActivity {
 
         // 3 panel
 
+        // praises
+
         String[] praisesArray = level.getPraises().split(";");
 
 
@@ -182,6 +184,12 @@ public class LevelConfiguration extends AppCompatActivity {
         }
 
         updateGridPraise();
+
+        // prizes
+
+       // String[] prizesArray = level.getPrizes().split(";");
+
+
 
         // 4 panel
 
@@ -350,7 +358,7 @@ public class LevelConfiguration extends AppCompatActivity {
     }
 
     private GridCheckboxImageBean[] getEmotionPhotos(String choosenEmotion) {
-        SqlliteManager sqlm = getInstance(this);
+        SqliteManager sqlm = getInstance(this);
         Cursor cursor = sqlm.givePhotosWithEmotion(choosenEmotion);
         int n = cursor.getCount();
         GridCheckboxImageBean tabPhotos[] = new GridCheckboxImageBean[n];
@@ -466,7 +474,7 @@ public class LevelConfiguration extends AppCompatActivity {
 
     void saveLevelToDatabaseAndShowLevelSavedText(){
 
-        SqlliteManager sqlm = getInstance(this);
+        SqliteManager sqlm = getInstance(this);
 
 
         sqlm.saveLevelToDatabase(getLevel());
@@ -666,7 +674,7 @@ public class LevelConfiguration extends AppCompatActivity {
     // klikniety checkbox przy zdjeciu emocji listener
     public void pictureClicked(View view){
 
-        SqlliteManager sqlm = getInstance(this);
+        SqliteManager sqlm = getInstance(this);
 
         //TODO: To slabo dziala. Jesli klikniesz w chechboxa ze zdjeciem (niewazne, czy zaznaczysz, czy odznaczysz,
         // to zostanie ono dodane do poziomu. Ale np. domyslnie zaznaczone nie zostana dodane, jesli ich nie klikniemy.

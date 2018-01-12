@@ -11,9 +11,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import pg.autyzm.przyjazneemocje.lib.entities.Level;
 
-public class SqlliteManager extends SQLiteOpenHelper {
+public class SqliteManager extends SQLiteOpenHelper {
 
-    private static SqlliteManager sInstance;
+    private static SqliteManager sInstance;
 
     private static final String DATABASE_NAME = "przyjazneemocje";
 
@@ -22,21 +22,21 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
 
 
-    public static synchronized SqlliteManager getInstance(Context context) {
+    public static synchronized SqliteManager getInstance(Context context) {
 
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.
         // See this article for more information: http://bit.ly/6LRzfx
         if (sInstance == null) {
-            sInstance = new SqlliteManager(context.getApplicationContext());
+            sInstance = new SqliteManager(context.getApplicationContext());
         }
         return sInstance;
     }
 
 
-    private SqlliteManager (final Context context)
+    private SqliteManager(final Context context)
     {
-        super(new DatabaseContext(context), DATABASE_NAME, null, 14);
+        super(new DatabaseContext(context), DATABASE_NAME, null, 16);
         db = getWritableDatabase();
     }
 
@@ -104,6 +104,7 @@ public class SqlliteManager extends SQLiteOpenHelper {
         values.put("question_type", level.getQuestionType().toString());
         values.put("hint_types_as_number", level.getHintTypesAsNumber());
         values.put("praises", level.getPraises());
+        values.put("prizes", level.getPrizes());
 
 
         if(level.getId() != 0) {
@@ -254,10 +255,10 @@ public class SqlliteManager extends SQLiteOpenHelper {
         db.execSQL("create table photos(" + "id integer primary key autoincrement," + "path int," + "emotion text," + "name text);" + "");
         db.execSQL("create table emotions(" + "id integer primary key autoincrement," + "emotion text);" + "");
         db.execSQL("create table levels(" + "id integer primary key autoincrement, photos_or_videos text, photos_or_videos_per_level int, " +
-                "time_limit int, is_level_active int, name text, correctness int, sublevels_per_each_emotion int, is_for_tests int, question_type text, hint_types_as_number int, praises text);" + "");
+                "time_limit int, is_level_active int, name text, correctness int, sublevels_per_each_emotion int, is_for_tests int, question_type text, hint_types_as_number int, praises text, prizes text);" + "");
         db.execSQL("create table levels_photos(" + "id integer primary key autoincrement,"  + "levelid integer references levels(id)," + "photoid integer references photos(id));" + "");
         db.execSQL("create table levels_emotions(" + "id integer primary key autoincrement," + "levelid integer references levels(id),"  + "emotionid integer references emotions(id));" + "");
-
+        db.execSQL("create table videos(" + "id integer primary key autoincrement," + "path int," + "emotion text," + "name text);" + "");
 
     }
 
@@ -268,6 +269,7 @@ public class SqlliteManager extends SQLiteOpenHelper {
         db.execSQL("drop table levels");
         db.execSQL("drop table emotions");
         db.execSQL("drop table photos");
+        db.execSQL("drop table videos");
     }
 
     private void addEmotionsToDatabase(){

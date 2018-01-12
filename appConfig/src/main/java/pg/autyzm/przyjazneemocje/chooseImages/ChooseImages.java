@@ -16,9 +16,9 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import pg.autyzm.przyjazneemocje.R;
-import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
+import pg.autyzm.przyjazneemocje.lib.SqliteManager;
 
-import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;
+import static pg.autyzm.przyjazneemocje.lib.SqliteManager.getInstance;
 
 
 /**
@@ -55,7 +55,7 @@ public class ChooseImages extends Activity implements android.widget.CompoundBut
 
         setContentView(R.layout.choose_images);
 
-        SqlliteManager sqlm = getInstance(this);
+        SqliteManager sqlm = getInstance(this);
 
         Bundle bundle = getIntent().getExtras();
         emoInLanguage = bundle.getString("SpinnerValue");

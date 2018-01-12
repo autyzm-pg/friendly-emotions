@@ -21,7 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.provider.MediaStore.Images.Media;
-import android.widget.Toast;
 import android.widget.VideoView;
 
 import java.io.File;
@@ -30,10 +29,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import pg.autyzm.przyjazneemocje.lib.Level;
-import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
+import pg.autyzm.przyjazneemocje.lib.SqliteManager;
+import pg.autyzm.przyjazneemocje.lib.entities.Level;
 
-import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;
+import static pg.autyzm.przyjazneemocje.lib.SqliteManager.getInstance;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -47,7 +46,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     String goodAnswer;
     Cursor cur0;
     Cursor videoCursor;
-    SqlliteManager sqlm;
+    SqliteManager sqlm;
     int wrongAnswers;
     int rightAnswers;
     int wrongAnswersSublevel;
@@ -152,21 +151,22 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Cursor cur4 = sqlm.giveEmotionsInLevel(levelId);
 
         l = new Level(cur2, cur3, cur4);
+        l.incrementEmotionIdsForGame();
 
-        photosPerLvL = l.getPvPerLevel();
+        photosPerLvL = l.getPhotosOrVideosShowedForOneQuestion();
 
 
         if (!l.isLevelActive()) return false;
 
         // tworzymy tablice do permutowania
 
-        sublevelsLeft = l.getEmotions().size() * l.getSublevels();
+        sublevelsLeft = l.getEmotions().size() * l.getSublevelsPerEachEmotion();
 
         sublevelsList = new ArrayList<Integer>();
 
         for (int i = 0; i < l.getEmotions().size(); i++) {
 
-            for (int j = 0; j < l.getSublevels(); j++) {
+            for (int j = 0; j < l.getSublevelsPerEachEmotion(); j++) {
 
                 sublevelsList.add(l.getEmotions().get(i));
 
@@ -198,7 +198,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         photosToUseInSublevel = new ArrayList<String>();
 
 
-        for (int e : l.getPhotosOrVideosList()) {
+        for (int e : l.getPhotosOrVideosIdList()) {
 
             //System.out.println("Id zdjecia: " + e);
             Cursor curEmotion = sqlm.givePhotoWithId(e);
@@ -223,7 +223,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         // z listy b wybieramy zdjecia nieprawidlowe
 
-        selectPhotoWithNotSelectedEmotions(l.getPvPerLevel());
+        selectPhotoWithNotSelectedEmotions(l.getPhotosOrVideosShowedForOneQuestion());
 
         // laczymy dobra odpowiedz z reszta wybranych zdjec i przekazujemy to dalej
 
@@ -388,7 +388,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     boolean checkCorrectness() {
 
 
-        if (wrongAnswersSublevel > l.getCorrectness()) {
+        if (wrongAnswersSublevel > l.getAmountOfAllowedTriesForEachEmotion()) {
 
             return false;
 
@@ -457,7 +457,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
                 java.util.Collections.shuffle(sublevelsList);
-                sublevelsLeft = l.getEmotions().size() * l.getSublevels();
+                sublevelsLeft = l.getEmotions().size() * l.getSublevelsPerEachEmotion();
 
                 wrongAnswersSublevel = 0;
                 rightAnswersSublevel = 0;
