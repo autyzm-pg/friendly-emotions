@@ -96,6 +96,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             Cursor cursorEmotions = sqlm.giveEmotionsInLevel(levelId);
 
             Level newLevel = new Level(cursorLevelTemp, cursorPhotos, cursorEmotions);
+            newLevel.incrementEmotionIdsForGame();
 
             if(newLevel.isLevelActive())
                 levels.add(newLevel);

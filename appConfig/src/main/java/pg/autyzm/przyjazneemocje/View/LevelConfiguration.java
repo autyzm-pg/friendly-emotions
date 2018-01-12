@@ -83,7 +83,7 @@ public class LevelConfiguration extends AppCompatActivity {
         Cursor cur3 = sqlm.givePhotosInLevel(loadedLevelId);
         Cursor cur4 = sqlm.giveEmotionsInLevel(loadedLevelId);
 
-        level = new Level(cur2, cur3, cur4);
+        setLevel(new Level(cur2, cur3, cur4));
 
 
 
@@ -91,17 +91,17 @@ public class LevelConfiguration extends AppCompatActivity {
         // 2 panel
 
         TextView pvPerLevel = (TextView) findViewById(R.id.number_photos);
-        pvPerLevel.setText(level.getPhotosOrVideosShowedForOneQuestion() + "");
+        pvPerLevel.setText(getLevel().getPhotosOrVideosShowedForOneQuestion() + "");
 
         TextView sublevels = (TextView) findViewById(R.id.number_try);
-        sublevels.setText(level.getSublevelsPerEachEmotion() + "");
+        sublevels.setText(getLevel().getSublevelsPerEachEmotion() + "");
 
         // question type
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner_command);
         int spinnerPosition = 0;
 
-        switch(level.getQuestionType()){
+        switch(getLevel().getQuestionType()){
             case EMOTION_NAME:
                 spinnerPosition = 0;
                 break;
@@ -120,7 +120,7 @@ public class LevelConfiguration extends AppCompatActivity {
         CheckBox checkBox;
 
         checkBox = (CheckBox)findViewById(R.id.checkBox3);
-        if((1 & level.getHintTypesAsNumber()) != 0){
+        if((1 & getLevel().getHintTypesAsNumber()) != 0){
             checkBox.setChecked(true);
         }
         else{
@@ -128,7 +128,7 @@ public class LevelConfiguration extends AppCompatActivity {
         }
 
         checkBox = (CheckBox)findViewById(R.id.checkBox5);
-        if((1 << 1 & level.getHintTypesAsNumber()) != 0){
+        if((1 << 1 & getLevel().getHintTypesAsNumber()) != 0){
             checkBox.setChecked(true);
         }
         else{
@@ -136,7 +136,7 @@ public class LevelConfiguration extends AppCompatActivity {
         }
 
         checkBox = (CheckBox)findViewById(R.id.checkBox6);
-        if((1 << 2 & level.getHintTypesAsNumber()) != 0){
+        if((1 << 2 & getLevel().getHintTypesAsNumber()) != 0){
             checkBox.setChecked(true);
         }
         else{
@@ -144,7 +144,7 @@ public class LevelConfiguration extends AppCompatActivity {
         }
 
         checkBox = (CheckBox)findViewById(R.id.checkBox4);
-        if((1 << 3 & level.getHintTypesAsNumber()) != 0){
+        if((1 << 3 & getLevel().getHintTypesAsNumber()) != 0){
             checkBox.setChecked(true);
         }
         else{
@@ -161,15 +161,15 @@ public class LevelConfiguration extends AppCompatActivity {
         // 4 panel
 
         EditText correctness = (EditText) findViewById(R.id.number_try_test);
-        correctness.setText(level.getAmountOfAllowedTriesForEachEmotion() + "");
+        correctness.setText(getLevel().getAmountOfAllowedTriesForEachEmotion() + "");
 
         EditText timeLimit = (EditText) findViewById(R.id.number_time_test);
-        timeLimit.setText(level.getTimeLimit() + "");
+        timeLimit.setText(getLevel().getTimeLimit() + "");
 
         // panel 5
 
         EditText levelName = (EditText) findViewById(R.id.step_name);
-        levelName.setText(level.getName());
+        levelName.setText(getLevel().getName());
 
 
     }
@@ -178,8 +178,8 @@ public class LevelConfiguration extends AppCompatActivity {
 
 
     private void initLevel(){
-        level.addEmotion(0);
-        level.addEmotion(1);
+        getLevel().addEmotion(0);
+        getLevel().addEmotion(1);
     }
 
     private void createTabSave() {
@@ -214,7 +214,7 @@ public class LevelConfiguration extends AppCompatActivity {
 
     private void updateInfo() {
         TextView text = (TextView) findViewById(R.id.level_info);
-        Map info = level.getInfo();
+        Map info = getLevel().getInfo();
         text.setText(info.toString());
 
     }
@@ -222,7 +222,7 @@ public class LevelConfiguration extends AppCompatActivity {
     private void createDefaultStepName() {
         EditText editText = (EditText) findViewById(R.id.step_name);
         String name = "";
-        for (int emotion : level.getEmotions()) {
+        for (int emotion : getLevel().getEmotions()) {
             name += getEmotionNameInLocalLanguage(emotion) + " ";
         }
         editText.setText(name);
@@ -230,7 +230,7 @@ public class LevelConfiguration extends AppCompatActivity {
 
     private void createGridViewActiveInTest() {
         ArrayList emotionList = new ArrayList();
-        for (int emotion : level.getEmotions()) {
+        for (int emotion : getLevel().getEmotions()) {
             String emotionName = getEmotionNameInLocalLanguage(emotion);
             emotionList.add(new CheckboxGridBean(emotionName, true));
         }
@@ -372,8 +372,8 @@ public class LevelConfiguration extends AppCompatActivity {
         final Button minusButton = (Button) findViewById(R.id.button_minus);
         minusButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                level.deleteEmotion(0);
-                nrEmotions.setText(Integer.toString(level.getEmotions().size()));
+                getLevel().deleteEmotion(0);
+                nrEmotions.setText(Integer.toString(getLevel().getEmotions().size()));
                 updateSelectedEmotions();
             }
         });
@@ -381,8 +381,8 @@ public class LevelConfiguration extends AppCompatActivity {
         final Button plusButton = (Button) findViewById(R.id.button_plus);
         plusButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                level.addEmotion(Integer.parseInt(nrEmotions.getText().toString()));
-                nrEmotions.setText(Integer.toString(level.getEmotions().size()));
+                getLevel().addEmotion(Integer.parseInt(nrEmotions.getText().toString()));
+                nrEmotions.setText(Integer.toString(getLevel().getEmotions().size()));
                 updateSelectedEmotions();
             }
         });
@@ -434,7 +434,7 @@ public class LevelConfiguration extends AppCompatActivity {
 
         gatherInfoFromGUI();
         saveLevelToDatabaseAndShowLevelSavedText();
-        level.setId(0);
+        getLevel().setId(0);
 
     }
 
@@ -444,7 +444,7 @@ public class LevelConfiguration extends AppCompatActivity {
         SqlliteManager sqlm = getInstance(this);
 
 
-        sqlm.saveLevelToDatabase(level);
+        sqlm.saveLevelToDatabase(getLevel());
 
         /* TODO: Null Pointer Exception for msg
         final TextView msg = (TextView) findViewById(R.id.saveMessage);
@@ -479,10 +479,10 @@ public class LevelConfiguration extends AppCompatActivity {
         // 2 panel
 
         TextView pvPerLevel = (TextView) findViewById(R.id.number_photos);
-        level.setPhotosOrVideosShowedForOneQuestion(Integer.parseInt(pvPerLevel.getText() + ""));
+        getLevel().setPhotosOrVideosShowedForOneQuestion(Integer.parseInt(pvPerLevel.getText() + ""));
 
         TextView sublevels = (TextView) findViewById(R.id.number_try);
-        level.setSublevelsPerEachEmotion(Integer.parseInt(sublevels.getText() + ""));
+        getLevel().setSublevelsPerEachEmotion(Integer.parseInt(sublevels.getText() + ""));
 
         // question type
 
@@ -491,43 +491,43 @@ public class LevelConfiguration extends AppCompatActivity {
 
         switch(spinnerPosition){
             case 0:
-                level.setQuestionType(Level.Question.EMOTION_NAME);
+                getLevel().setQuestionType(Level.Question.EMOTION_NAME);
                 break;
             case 1:
-                level.setQuestionType(Level.Question.SHOW_WHERE_IS_EMOTION_NAME);
+                getLevel().setQuestionType(Level.Question.SHOW_WHERE_IS_EMOTION_NAME);
                 break;
             case 2:
-                level.setQuestionType(Level.Question.SHOW_EMOTION_NAME);
+                getLevel().setQuestionType(Level.Question.SHOW_EMOTION_NAME);
                 break;
         }
 
         // should questin be read aloud checkbox
         CheckBox checkBox = (CheckBox)findViewById(R.id.checkBox);
-        level.setShouldQuestionBeReadAloud(checkBox.isChecked());
+        getLevel().setShouldQuestionBeReadAloud(checkBox.isChecked());
 
         TextView secondsToHint = (TextView) findViewById(R.id.time);
-        level.setSecondsToHint(Integer.parseInt(secondsToHint.getText() + ""));
+        getLevel().setSecondsToHint(Integer.parseInt(secondsToHint.getText() + ""));
 
         // hint types
 
         checkBox = (CheckBox)findViewById(R.id.checkBox3);
         if(checkBox.isChecked()){
-            level.addHintTypeAsNumber(1);
+            getLevel().addHintTypeAsNumber(1);
         }
 
         checkBox = (CheckBox)findViewById(R.id.checkBox5);
         if(checkBox.isChecked()){
-            level.addHintTypeAsNumber(2);
+            getLevel().addHintTypeAsNumber(2);
         }
 
         checkBox = (CheckBox)findViewById(R.id.checkBox6);
         if(checkBox.isChecked()){
-            level.addHintTypeAsNumber(4);
+            getLevel().addHintTypeAsNumber(4);
         }
 
         checkBox = (CheckBox)findViewById(R.id.checkBox4);
         if(checkBox.isChecked()){
-            level.addHintTypeAsNumber(8);
+            getLevel().addHintTypeAsNumber(8);
         }
 
         // 3 panel
@@ -537,15 +537,15 @@ public class LevelConfiguration extends AppCompatActivity {
         // 4 panel
 
         EditText correctness = (EditText) findViewById(R.id.number_try_test);
-        level.setAmountOfAllowedTriesForEachEmotion(Integer.parseInt(correctness.getText() + ""));
+        getLevel().setAmountOfAllowedTriesForEachEmotion(Integer.parseInt(correctness.getText() + ""));
 
         EditText timeLimit = (EditText) findViewById(R.id.number_time_test);
-        level.setTimeLimit(Integer.parseInt(timeLimit.getText() + ""));
+        getLevel().setTimeLimit(Integer.parseInt(timeLimit.getText() + ""));
 
         // panel 5
 
         EditText levelName = (EditText) findViewById(R.id.step_name);
-        level.setName(levelName.getText() + "");
+        getLevel().setName(levelName.getText() + "");
 
     }
 
@@ -566,22 +566,30 @@ public class LevelConfiguration extends AppCompatActivity {
         return getResource(resourceName, "string") + "";
     }
 
+    public Level getLevel() {
+        return level;
+    }
+
+    public void setLevel(Level level) {
+        this.level = level;
+    }
+
 
     class CustomAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
-            return level.getEmotions().size();
+            return getLevel().getEmotions().size();
         }
 
         @Override
         public Object getItem(int n) {
-            return level.getEmotions().get(n);
+            return getLevel().getEmotions().get(n);
     }
 
         @Override
         public long getItemId(int n) {
-            return level.getEmotions().get(n);
+            return getLevel().getEmotions().get(n);
         }
 
         @Override
@@ -595,13 +603,13 @@ public class LevelConfiguration extends AppCompatActivity {
                     R.array.emotions_array, android.R.layout.simple_spinner_item);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(adapter);
-            spinner.setSelection(level.getEmotions().get(position));
+            spinner.setSelection(getLevel().getEmotions().get(position));
 
             ImageButton button = (ImageButton) convertView.findViewById(R.id.button_edit);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    updateEmotionsGrid(level.getEmotions().get(position));
+                    updateEmotionsGrid(getLevel().getEmotions().get(position));
                 }
             });
 
@@ -645,7 +653,7 @@ public class LevelConfiguration extends AppCompatActivity {
         Cursor cursor = sqlm.givePhotosWithEmotion(currentEmotionName);
 
         while (cursor.moveToNext()) {
-            level.addPhoto(cursor.getInt(0));
+            getLevel().addPhoto(cursor.getInt(0));
         }
 
 

@@ -119,7 +119,7 @@ public class Level {
 
             while(cur3.moveToNext()){
 
-                getEmotions().add(cur3.getInt(cur3.getColumnIndex("emotionid")));
+                getEmotions().add(cur3.getInt(cur3.getColumnIndex("emotionid")) - 1);
 
             }
         }
@@ -293,6 +293,19 @@ public class Level {
     public void removeHintTypeAsNumber(int newType){
         setHintTypesAsNumber(getHintTypesAsNumber() - newType);
     }
+
+    public void incrementEmotionIdsForGame(){
+
+        List<Integer> newEmotions = new ArrayList<>();
+
+        for(Integer emotionId : emotions){
+            newEmotions.add(emotionId + 1);
+        }
+
+        emotions = newEmotions;
+
+    }
+
 
 
 }
