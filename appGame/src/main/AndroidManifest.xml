@@ -4,6 +4,7 @@
     android:sharedUserId="autyzm.pg">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL"/>
 
     <application
         android:allowBackup="true"
@@ -32,6 +33,9 @@
         <activity
             android:name=".LevelFailedActivity"
             android:label="@string/title_activity_level_failed"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".VideoWelcomeActivity"
             android:screenOrientation="landscape" />
     </application>
 

@@ -44,7 +44,7 @@ public class CameraActivity extends Activity {
 
     private File getTempFile() {
         String root = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
-        final File path = new File(root + "Emotions" + File.separator);
+        final File path = new File(root + "FriendlyEmotions/Photos" + File.separator);
         if (!path.exists()) {
             path.mkdir();
         }
@@ -84,7 +84,7 @@ public class CameraActivity extends Activity {
             switch (requestCode) {
                 case TAKE_PHOTO_CODE:
                     String root = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
-                    final File path = new File(root + "Emotions" + File.separator);
+                    final File path = new File(root + "FriendlyEmotions/Photos" + File.separator);
                     File largeFile = new File(path, fileName + "tmp.jpg");
                     Bitmap largeBitmap = BitmapFactory.decodeFile(largeFile.getAbsolutePath());
 
