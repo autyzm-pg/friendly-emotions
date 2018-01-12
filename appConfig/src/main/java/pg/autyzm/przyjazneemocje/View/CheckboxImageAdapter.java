@@ -71,7 +71,13 @@ public class CheckboxImageAdapter extends ArrayAdapter<GridCheckboxImageBean> {
 
         try {
             String root = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
-            File fileOut = new File(root + "Emotions" + File.separator + object.photoName);
+
+            File fileOut;
+            //if(object.photoName.contains("prize"))
+            //    fileOut = new File(root + "FriendlyEmotions/Prize" + File.separator + object.photoName);
+            //else
+                fileOut = new File(root + "FriendlyEmotions/Photos" + File.separator + object.photoName);
+
             Bitmap captureBmp = MediaStore.Images.Media.getBitmap(object.cr, Uri.fromFile(fileOut));
             holder.imgIcon.setImageBitmap(captureBmp);
         } catch (Exception e) {

@@ -81,6 +81,14 @@ public class SqlliteManager extends SQLiteOpenHelper {
         db.insertOrThrow("photos", null, values);
     }
 
+    public void addVideo(int path, String emotion, String fileName)
+    {
+        ContentValues values = new ContentValues();
+        values.put("path",path);
+        values.put("emotion",emotion);
+        values.put("name",fileName);
+        db.insertOrThrow("videos", null, values);
+    }
 
     public void saveLevelToDatabase(Level level)
     {
@@ -173,6 +181,13 @@ public class SqlliteManager extends SQLiteOpenHelper {
     {
         String[] columns = {"id", "levelid", "photoid"};
         Cursor cursor = db.query("levels_photos", columns,"levelid like " + "'%" + levelId + "%'", null, null, null, null);
+        return cursor;
+    }
+
+    public Cursor giveAllVideos() //TODO: Change to "giveVideosInLevel(int levelId)
+    {
+        String[] columns = {"id", "emotion", "name"};
+        Cursor cursor = db.query("videos", columns, null, null, null, null, null);
         return cursor;
     }
 
