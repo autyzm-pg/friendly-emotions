@@ -18,14 +18,14 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import pg.autyzm.przyjazneemocje.View.LevelConfiguration;
-import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
+import pg.autyzm.przyjazneemocje.lib.SqliteManager;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
-import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;
+import static pg.autyzm.przyjazneemocje.lib.SqliteManager.getInstance;
 
 public class MainActivity extends AppCompatActivity {
 
-    public SqlliteManager sqlm;
+    public SqliteManager sqlm;
     ArrayList<String> list;
     ArrayList<Boolean> active_list;
     String root = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         File createDirV = new File(root + "FriendlyEmotions/Videos" + File.separator);
-        if (!createDirV.exists()) {
+        /*if (!createDirV.exists()) {
             createDirV.mkdir();
 
             Field[] raw = pg.autyzm.przyjazneemocje.R.raw.class.getFields();
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }
+        }*/
 
         if(new File(root + "FriendlyEmotions/Photos").list() != null) {
 

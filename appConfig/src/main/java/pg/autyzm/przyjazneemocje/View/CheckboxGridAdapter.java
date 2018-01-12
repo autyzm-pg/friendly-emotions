@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import pg.autyzm.przyjazneemocje.R;
+import pg.autyzm.przyjazneemocje.lib.entities.Level;
 
 /**
  * Created by joagi on 30.12.2017.
@@ -61,10 +62,18 @@ public class CheckboxGridAdapter extends ArrayAdapter{
             result=convertView;
         }
 
-        CheckboxGridBean item = getItem(position);
+        final CheckboxGridBean item = getItem(position);
 
         viewHolder.txtName.setText(item.name);
         viewHolder.checkbox.setChecked(item.checked);
+
+        viewHolder.checkbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                boolean isChecked = ((CheckBox)arg0).isChecked();
+                item.checked = isChecked;
+            }
+        });
 
         return result;
     }

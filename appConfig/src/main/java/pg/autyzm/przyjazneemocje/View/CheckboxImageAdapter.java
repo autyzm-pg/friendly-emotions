@@ -17,6 +17,7 @@ import java.io.File;
 import java.util.List;
 
 import pg.autyzm.przyjazneemocje.R;
+import pg.autyzm.przyjazneemocje.lib.entities.Level;
 
 
 /**
@@ -39,9 +40,10 @@ public class CheckboxImageAdapter extends ArrayAdapter<GridCheckboxImageBean> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View row = convertView;
         RowBeanHolder holder = null;
+
 
         if (row == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
@@ -57,8 +59,16 @@ public class CheckboxImageAdapter extends ArrayAdapter<GridCheckboxImageBean> {
         }
 
 
-        GridCheckboxImageBean object = data[position];
-        holder.checkBox.setChecked(object.selected);
+        final GridCheckboxImageBean object = data[position];
+
+
+        if(isPrizeInLevelYet(object.getId()) || isPhotoInLevelYet(object.getId())){
+            holder.checkBox.setChecked(true);
+        }
+        else{
+            holder.checkBox.setChecked(false);
+        }
+
         try {
             String root = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
 
@@ -74,7 +84,53 @@ public class CheckboxImageAdapter extends ArrayAdapter<GridCheckboxImageBean> {
             System.out.println(e);
         }
 
+        holder.checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                boolean isChecked = ((CheckBox)arg0).isChecked();
+                if(isChecked) {
+                    Integer photoId = object.getId();
+                    Level configuredLevel = ((LevelConfiguration) context).getLevel();
+                    if(! object.photoName.contains("prize")) {
+                        configuredLevel.addPhoto(photoId);
+                    }else{
+                        configuredLevel.addPrize(photoId.toString());
+                    }
+                }
+            }
+        });
+
         return row;
+    }
+
+    boolean isPhotoInLevelYet(Integer photoId){
+
+        Level configuredLevel = ((LevelConfiguration) context).getLevel();
+        if(configuredLevel == null) return false;
+
+        for(Integer photoInLevelId : configuredLevel.getPhotosOrVideosIdList()){
+            if(photoInLevelId.equals(photoId)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    boolean isPrizeInLevelYet(Integer photoId){
+
+        Level configuredLevel = ((LevelConfiguration) context).getLevel();
+        String[] prizesArray = configuredLevel.getPrizes().split(";");
+
+        for(int i = 0; i < prizesArray.length; i++){
+            if(photoId.toString().equals(prizesArray[i])){
+                return true;
+            }
+        }
+
+        return false;
+
+
     }
 
     static class RowBeanHolder {
