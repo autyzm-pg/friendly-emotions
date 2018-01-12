@@ -12,8 +12,8 @@
     <string name="label_level_name">Level name: </string>
     <string name="label_level_list">Levels list: </string>
     <string name="active">active </string>
-    <string name="correctness">Correctness</string>
-    <string name="sublevels">Sublevels</string>
+    <string name="amountOfAllowedTriesForEachEmotion">Correctness</string>
+    <string name="sublevelsPerEachEmotion">Sublevels</string>
 
 
     <string-array name="spinner">

@@ -9,9 +9,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class SqlliteManager extends SQLiteOpenHelper {
+import pg.autyzm.przyjazneemocje.lib.entities.Level;
 
-    private static SqlliteManager sInstance;
+public class SqliteManager extends SQLiteOpenHelper {
+
+    private static SqliteManager sInstance;
 
     private static final String DATABASE_NAME = "przyjazneemocje";
 
@@ -20,21 +22,21 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
 
 
-    public static synchronized SqlliteManager getInstance(Context context) {
+    public static synchronized SqliteManager getInstance(Context context) {
 
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.
         // See this article for more information: http://bit.ly/6LRzfx
         if (sInstance == null) {
-            sInstance = new SqlliteManager(context.getApplicationContext());
+            sInstance = new SqliteManager(context.getApplicationContext());
         }
         return sInstance;
     }
 
 
-    private SqlliteManager (final Context context)
+    private SqliteManager(final Context context)
     {
-        super(new DatabaseContext(context), DATABASE_NAME, null, 2);
+        super(new DatabaseContext(context), DATABASE_NAME, null, 16);
         db = getWritableDatabase();
     }
 
@@ -43,22 +45,8 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
         this.db = db;
 
-        System.out.println("Tworze tablee");
-        db.execSQL("create table photos(" + "id integer primary key autoincrement," + "path int," + "emotion text," + "name text);" + "");
-        db.execSQL("create table emotions(" + "id integer primary key autoincrement," + "emotion text);" + "");
-        db.execSQL("create table levels(" + "id integer primary key autoincrement, photos_or_videos text, photos_or_videos_per_level int, " +
-                "time_limit int, is_level_active boolean, name text, correctness int, sublevels int);" + "");
-        db.execSQL("create table levels_photos(" + "id integer primary key autoincrement,"  + "levelid integer references levels(id)," + "photoid integer references photos(id));" + "");
-        db.execSQL("create table levels_emotions(" + "id integer primary key autoincrement," + "levelid integer references levels(id),"  + "emotionid integer references emotions(id));" + "");
-        db.execSQL("create table videos(" + "id integer primary key autoincrement," + "path int," + "emotion text," + "name text);" + "");
-
-
-        addEmotion("happy");
-        addEmotion("sad");
-        addEmotion("angry");
-        addEmotion("scared");
-        addEmotion("surprised");
-        addEmotion("bored");
+        createTablesInDatabase();
+        addEmotionsToDatabase();
 
     }
 
@@ -70,7 +58,11 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
+        this.db = db;
 
+        deleteTablesFromDatabase();
+        createTablesInDatabase();
+        addEmotionsToDatabase();
     }
 
     public void addEmotion(String emotion)
@@ -98,27 +90,29 @@ public class SqlliteManager extends SQLiteOpenHelper {
         db.insertOrThrow("videos", null, values);
     }
 
-    public void addLevel(Level level)
+    public void saveLevelToDatabase(Level level)
     {
         ContentValues values = new ContentValues();
-        values.put("photos_or_videos", level.getPhotosOrVideos());
+        values.put("photos_or_videos", level.getPhotosOrVideosFlag());
         values.put("name", level.getName());
-        values.put("photos_or_videos_per_level", level.getPvPerLevel());
+        values.put("photos_or_videos_per_level", level.getPhotosOrVideosShowedForOneQuestion());
         values.put("time_limit", level.getTimeLimit());
         values.put("is_level_active", level.isLevelActive());
-        values.put("correctness", level.getCorrectness());
-        values.put("sublevels", level.getSublevels());
+        values.put("correctness", level.getAmountOfAllowedTriesForEachEmotion());
+        values.put("sublevels_per_each_emotion", level.getSublevelsPerEachEmotion());
+        values.put("is_for_tests", level.isForTests());
+        values.put("question_type", level.getQuestionType().toString());
+        values.put("hint_types_as_number", level.getHintTypesAsNumber());
+        values.put("praises", level.getPraises());
+        values.put("prizes", level.getPrizes());
 
 
         if(level.getId() != 0) {
             //values.put("id", level.id);
             db.update("levels", values, "id=" + level.getId(), null);
 
-            /*
-                usunac wszystkie rekordy polaczone z tym poziomem.
 
-            */
-
+            //usunac wszystkie rekordy polaczone z tym poziomem.
             delete("levels_photos", "levelid", String.valueOf(level.getId()));
             delete("levels_emotions", "levelid", String.valueOf(level.getId()));
 
@@ -130,10 +124,7 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
         // Dodaj rekordy wiele do wielu ze zdjeciami/video
 
-        for(Integer photoOrVideo : level.getPhotosOrVideosList()){
-
-
-            System.out.println("Photo id " + photoOrVideo);
+        for(Integer photoOrVideo : level.getPhotosOrVideosIdList()){
 
             values = new ContentValues();
             values.put("levelid", level.getId());
@@ -144,12 +135,9 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
         for(Integer emotion : level.getEmotions()){
 
-
-            System.out.println("Emotion id " + emotion);
-
             values = new ContentValues();
             values.put("levelid", level.getId());
-            values.put("emotionid",emotion);
+            values.put("emotionid",emotion + 1);
 
             db.insertOrThrow("levels_emotions", null, values);
         }
@@ -231,28 +219,19 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
     public Cursor giveAllEmotions()
     {
-        String[] columns = {"id","emotion"};//"photos_or_videos", "photos_or_videos_per", "time_limit"
-        Cursor cursor = db.query("emotions", columns,null, null, null, null, null);
+        Cursor cursor =  db.rawQuery("select * from emotions", null);
         return cursor;
     }
 
     public Cursor giveAllLevels()
     {
-        String[] columns = {"id", "photos_or_videos", "is_level_active", "name"};
-        Cursor cursor = db.query("levels", columns,null, null, null, null, null);
-
+        Cursor cursor =  db.rawQuery("select * from levels", null);
         return cursor;
     }
 
     public Cursor giveLevel(int id)
     {
-        String[] columns = {"id", "photos_or_videos"};
-        Cursor cursor = db.query("levels", columns,null, null, null, null, null);
-
-
-        cursor =  db.rawQuery("select * from levels where id='" + id + "'" , null);
-
-
+        Cursor cursor =  db.rawQuery("select * from levels where id='" + id + "'" , null);
         return cursor;
     }
 
@@ -268,4 +247,49 @@ public class SqlliteManager extends SQLiteOpenHelper {
         }
         return "Fail";
     }
+
+
+    private void createTablesInDatabase(){
+
+        System.out.println("Tworze tablee");
+        db.execSQL("create table photos(" + "id integer primary key autoincrement," + "path int," + "emotion text," + "name text);" + "");
+        db.execSQL("create table emotions(" + "id integer primary key autoincrement," + "emotion text);" + "");
+        db.execSQL("create table levels(" + "id integer primary key autoincrement, photos_or_videos text, photos_or_videos_per_level int, " +
+                "time_limit int, is_level_active int, name text, correctness int, sublevels_per_each_emotion int, is_for_tests int, question_type text, hint_types_as_number int, praises text, prizes text);" + "");
+        db.execSQL("create table levels_photos(" + "id integer primary key autoincrement,"  + "levelid integer references levels(id)," + "photoid integer references photos(id));" + "");
+        db.execSQL("create table levels_emotions(" + "id integer primary key autoincrement," + "levelid integer references levels(id),"  + "emotionid integer references emotions(id));" + "");
+        db.execSQL("create table videos(" + "id integer primary key autoincrement," + "path int," + "emotion text," + "name text);" + "");
+
+    }
+
+    private void deleteTablesFromDatabase(){
+
+        db.execSQL("drop table levels_emotions");
+        db.execSQL("drop table levels_photos");
+        db.execSQL("drop table levels");
+        db.execSQL("drop table emotions");
+        db.execSQL("drop table photos");
+        db.execSQL("drop table videos");
+    }
+
+    private void addEmotionsToDatabase(){
+
+        addEmotion("happy");
+        addEmotion("sad");
+        addEmotion("angry");
+        addEmotion("scared");
+        addEmotion("surprised");
+        addEmotion("bored");
+    }
+
+    public int getPhotoIdByName(String name){
+
+        String[] columns = {"id", "path", "emotion", "name"};
+        Cursor cursor = db.query("photos", columns,"name like " + "'%" + name + "%'", null, null, null, null);
+        cursor.moveToNext();
+
+
+        return cursor.getInt(0);
+    }
+
 }
