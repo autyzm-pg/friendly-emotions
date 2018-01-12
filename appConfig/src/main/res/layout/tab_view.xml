@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TabHost
+        android:id="@+id/tabHost"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="65dp">
+
+        <LinearLayout
+            android:id="@+id/tabs_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </TabWidget>
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <include
+                    android:id="@+id/tab1_material"
+                    layout="@layout/tab1_material"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></include>
+
+                <include
+                    android:id="@+id/tab2_learning_ways"
+                    layout="@layout/tab2_learning_ways"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></include>
+
+                <include
+                    android:id="@+id/tab3_consolidation"
+                    layout="@layout/tab3_consolidation"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></include>
+
+                <include
+                    android:id="@+id/tab4_test"
+                    layout="@layout/tab4_test"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></include>
+
+                <include
+                    android:id="@+id/tab5_save"
+                    layout="@layout/tab5_save"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></include>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </TabHost>
+
+
+    <ImageButton
+        android:id="@+id/button_next"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/button_prev"
+        android:layout_marginEnd="12dp"
+        android:background="@null"
+        android:scaleType="centerCrop"
+        android:onClick="nextTab"
+        android:src="@drawable/icon_next" />
+
+    <ImageButton
+        android:id="@+id/button_prev"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="12dp"
+        android:background="@null"
+        android:scaleType="centerCrop"
+        android:onClick="prevTab"
+        android:src="@drawable/icon_prev" />
+
+</RelativeLayout>

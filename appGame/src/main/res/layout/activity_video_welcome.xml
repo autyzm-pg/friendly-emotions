@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="pg.autyzm.graprzyjazneemocje.VideoWelcomeActivity">
+
+    <ImageButton
+        android:layout_marginTop="18dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:id="@+id/speakerButton"
+        android:src="@drawable/icon_speaker"
+        android:scaleType="centerCrop"
+        android:background="@null"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/question"
+        android:layout_marginTop="46dp"
+        android:textSize="60dp"
+        android:textColor="@color/command"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_below="@+id/speakerButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/button" />
+
+    <ImageButton
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/icon_next"
+        android:id="@+id/button"
+        android:background="@null"
+        android:scaleType="centerCrop"
+        android:onClick="goToGame"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

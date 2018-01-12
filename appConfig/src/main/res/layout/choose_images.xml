@@ -1,0 +1,51 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".chooseImages.ChooseImages" >
+
+    <TextView
+        android:id="@+id/TextViewChoose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:textColor="#FFF"
+        android:textAlignment="viewStart"
+        android:textSize="20sp" />
+
+    <ListView
+        android:id="@+id/image_list"
+        android:layout_marginTop="50dp"
+        android:background="#FFF"
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+    </ListView>
+
+    <ImageButton
+        android:src="@drawable/icon_exit_red"
+        android:scaleType="fitXY"
+        android:background="@null"
+        android:layout_width="80dip"
+        android:layout_height="80dip"
+        android:onClick="close"
+        android:id="@+id/button_exit"
+        android:layout_marginTop="60dip"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <ImageButton
+        android:src="@drawable/icon_accept"
+        android:scaleType="fitXY"
+        android:background="@null"
+        android:layout_width="80dip"
+        android:layout_height="80dip"
+        android:onClick="saveImagesToList"
+        android:id="@+id/button_save_img"
+        android:layout_marginTop="60dip"
+        android:layout_toLeftOf="@+id/button_exit"
+        android:layout_toStartOf="@+id/button_exit" />
+</RelativeLayout>
