@@ -156,7 +156,32 @@ public class LevelConfiguration extends AppCompatActivity {
 
         // 3 panel
 
+        String[] praisesArray = level.getPraises().split(";");
 
+
+        for (Object objectItem : praiseList) {
+
+            CheckboxGridBean checkboxGridBean = (CheckboxGridBean) objectItem;
+
+            boolean isInTheLevel = false;
+
+            for(int i = 0; i < praisesArray.length; i++) {
+
+                if (praisesArray[i].equals(checkboxGridBean.name)) {
+                    isInTheLevel = true;
+                    break;
+                }
+            }
+
+            if(isInTheLevel) {
+                checkboxGridBean.checked = true;
+            }
+            else{
+                checkboxGridBean.checked = false;
+            }
+        }
+
+        updateGridPraise();
 
         // 4 panel
 
@@ -532,7 +557,14 @@ public class LevelConfiguration extends AppCompatActivity {
 
         // 3 panel
 
+        for(Object objectItem : praiseList){
+            CheckboxGridBean checkboxGridBean = (CheckboxGridBean) objectItem;
 
+            if(checkboxGridBean.checked){
+                level.addPraise(checkboxGridBean.name);
+            }
+
+        }
 
         // 4 panel
 

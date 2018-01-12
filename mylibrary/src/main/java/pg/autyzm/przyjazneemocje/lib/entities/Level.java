@@ -28,7 +28,7 @@ public class Level {
 
     private List<Integer> photosOrVideosIdList;
     private List<Integer> emotions = new ArrayList<>();
-    private List<Integer> praises;
+    private String praises = "";
 
     private int secondsToHint;
     private boolean shouldQuestionBeReadAloud;
@@ -52,16 +52,16 @@ public class Level {
         this.hintTypes = hintTypes;
     }
 
-    public List<Integer> getPraises() {
+    public String getPraises() {
         return praises;
     }
 
-    public void setPraises(List<Integer> praises) {
+    public void setPraises(String praises) {
         this.praises = praises;
     }
 
-    public void addPraise(Integer praiseId){
-        this.praises.add(praiseId);
+    public void addPraise(String newPraise) {
+        this.praises += ";" + newPraise;
     }
 
     public int getHintTypesAsNumber() {
@@ -96,6 +96,7 @@ public class Level {
             setTimeLimit(cur.getInt(cur.getColumnIndex("time_limit")));
             setPhotosOrVideosShowedForOneQuestion(cur.getInt(cur.getColumnIndex("photos_or_videos_per_level")));
             int active = cur.getInt(cur.getColumnIndex("is_level_active"));
+            setPraises(cur.getString(cur.getColumnIndex("praises")));
 
             setAmountOfAllowedTriesForEachEmotion(cur.getInt(cur.getColumnIndex("correctness")));
             setSublevelsPerEachEmotion(cur.getInt(cur.getColumnIndex("sublevels_per_each_emotion")));
