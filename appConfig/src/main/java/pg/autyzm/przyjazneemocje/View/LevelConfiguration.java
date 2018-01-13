@@ -539,7 +539,7 @@ public class LevelConfiguration extends AppCompatActivity {
         getLevel().setShouldQuestionBeReadAloud(checkBox.isChecked());
 
         TextView secondsToHint = (TextView) findViewById(R.id.time);
-        getLevel().setSecondsToHint(Integer.parseInt(secondsToHint.getText() + ""));
+        getLevel().setTimeLimit(Integer.parseInt(secondsToHint.getText() + ""));
 
         // hint types
 
@@ -580,7 +580,7 @@ public class LevelConfiguration extends AppCompatActivity {
         getLevel().setAmountOfAllowedTriesForEachEmotion(Integer.parseInt(correctness.getText() + ""));
 
         EditText timeLimit = (EditText) findViewById(R.id.number_time_test);
-        getLevel().setTimeLimit(Integer.parseInt(timeLimit.getText() + ""));
+        getLevel().setSecondsToHint(Integer.parseInt(timeLimit.getText() + ""));
 
         // panel 5
 
@@ -603,7 +603,7 @@ public class LevelConfiguration extends AppCompatActivity {
     }
 
     private String getResourceString(String resourceName) {
-        return getResource(resourceName, "string") + "";
+        return getString(getResource(resourceName, "string"));//return getResource(resourceName, "string") + "";
     }
 
     public Level getLevel() {
