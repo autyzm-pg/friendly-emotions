@@ -1,6 +1,7 @@
 package pg.autyzm.graprzyjazneemocje;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -15,6 +16,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -92,7 +95,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         generateView(photosToUseInSublevel);
 
-        if(!videos) {
+        if(!l.isShouldQuestionBeReadAloud())
+        {
+            findViewById(R.id.matchEmotionsSpeakerButton).setVisibility(View.GONE);
+        }
+
+        if(!videos && l.isShouldQuestionBeReadAloud()) {
 
             //JG
             speaker = Speaker.getInstance(MainActivity.this);
@@ -485,14 +493,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private void StartTimer(Level l) {
         //timer! seconds * 1000
         if (l.getTimeLimit() != 0) {
+            final int hintTypes = l.getHintTypesAsNumber();
+            final Context currentContext = this;
             timer = new CountDownTimer(l.getTimeLimit() * 1000, 1000) {
 
                 public void onTick(long millisUntilFinished) {
-
-
                 }
 
                 public void onFinish() {
+
                     LinearLayout imagesLinear = (LinearLayout) findViewById(R.id.imageGallery);
 
                     ColorMatrix matrix = new ColorMatrix();
@@ -503,25 +512,24 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     for (int i = 0; i < childcount; i++) {
                         ImageView image = (ImageView) imagesLinear.getChildAt(i);
                         if (image.getId() != 1) {
-                            image.setColorFilter(filter);
+                            if(hintTypes == 8 || hintTypes == 9 || hintTypes == 10 || hintTypes == 11 || hintTypes == 12 || hintTypes == 13 || hintTypes == 15) {
+                                image.setColorFilter(filter);
+                            }
                         } else {
-                            image.setPadding(40, 40, 40, 40);
-                            image.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-                            /*
-                            image.buildDrawingCache();
-                            Bitmap bmap = image.getDrawingCache();
-                            Bitmap paddedBitmap = Bitmap.createBitmap(
-                                    bmap.getWidth() + 40,
-                                    bmap.getHeight() + 36,
-                                    Bitmap.Config.ARGB_8888);
 
-                            Canvas canvas = new Canvas(paddedBitmap);
-                            canvas.drawARGB(0xFF, 0xFF, 0xFF, 0xFF); // this represents white color
-                            canvas.drawBitmap(bmap,20,20,new Paint(Paint.FILTER_BITMAP_FLAG));
-                            image.setImageBitmap(paddedBitmap);
-                            */
+                            if(hintTypes == 1 || hintTypes == 3 || hintTypes == 5 || hintTypes == 9 || hintTypes == 11 || hintTypes == 13 || hintTypes == 15) {
+                                image.setPadding(40, 40, 40, 40);
+                                image.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                            }
+                            if(hintTypes == 4 || hintTypes == 5 || hintTypes == 6 || hintTypes == 7 || hintTypes == 12 || hintTypes == 13 || hintTypes == 15) {
+                                Animation shake = AnimationUtils.loadAnimation(currentContext, R.anim.shake);
+                                image.startAnimation(shake);
+                            }
+                            if(hintTypes == 2 || hintTypes == 3 || hintTypes == 6 || hintTypes == 7 || hintTypes == 11 || hintTypes == 14 || hintTypes == 15) {
+                                Animation zooming = AnimationUtils.loadAnimation(currentContext, R.anim.zoom);
+                                image.startAnimation(zooming);
+                            }
                         }
-
                     }
                     timeout++;
                     timeoutSubLevel++;
