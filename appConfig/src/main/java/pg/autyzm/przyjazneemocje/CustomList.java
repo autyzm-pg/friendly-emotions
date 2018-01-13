@@ -15,16 +15,17 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import pg.autyzm.przyjazneemocje.lib.Level;
-import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
+import pg.autyzm.przyjazneemocje.View.LevelConfiguration;
+import pg.autyzm.przyjazneemocje.lib.entities.Level;
+import pg.autyzm.przyjazneemocje.lib.SqliteManager;
 
-import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;
+import static pg.autyzm.przyjazneemocje.lib.SqliteManager.getInstance;
 
 public class CustomList extends BaseAdapter implements ListAdapter {
     private ArrayList<String> list = new ArrayList<String>();
     private ArrayList<Boolean> active_list = new ArrayList<Boolean>();
     private Context context;
-    public SqlliteManager sqlm;
+    public SqliteManager sqlm;
 
 
     public CustomList(ArrayList<String> list, ArrayList<Boolean> active_list, Context context) {
@@ -145,7 +146,7 @@ public class CustomList extends BaseAdapter implements ListAdapter {
 
                 //
 
-                sqlm.addLevel(l);
+                sqlm.saveLevelToDatabase(l);
 
                 notifyDataSetChanged();
             }
