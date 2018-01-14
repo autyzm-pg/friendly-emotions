@@ -73,13 +73,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        if(!videos)
-            setContentView(R.layout.activity_main);
-        else {
-            Intent i = new Intent(this, VideoWelcomeActivity.class);
-            startActivity(i);
-            setContentView(R.layout.activity_videos);
-        }
 
         sqlm = getInstance(this);
 
@@ -94,9 +87,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         findNextActiveLevel();
 
+        if(!videos)
+            setContentView(R.layout.activity_main);
+
+        else {
+            Intent i = new Intent(this, VideoWelcomeActivity.class);
+            startActivity(i);
+            setContentView(R.layout.activity_videos);
+        }
+
         generateView(photosToUseInSublevel);
 
-        if(!l.isShouldQuestionBeReadAloud())
+        if(!videos && !l.isShouldQuestionBeReadAloud())
         {
             findViewById(R.id.matchEmotionsSpeakerButton).setVisibility(View.GONE);
         }
@@ -160,6 +162,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Cursor cur4 = sqlm.giveEmotionsInLevel(levelId);
 
         l = new Level(cur2, cur3, cur4);
+
+        if(l.getPhotosOrVideosFlag().equals("videos")) {
+            videos = true;
+        }
+        else {
+            videos = false;
+        }
+
         l.incrementEmotionIdsForGame();
 
         photosPerLvL = l.getPhotosOrVideosShowedForOneQuestion();
@@ -169,7 +179,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         // tworzymy tablice do permutowania
 
-        sublevelsLeft = l.getEmotions().size() * l.getSublevelsPerEachEmotion();
+        if(!videos)
+            sublevelsLeft = l.getEmotions().size() * l.getSublevelsPerEachEmotion();
+        else
+            sublevelsLeft = videoCursor.getCount();
 
         sublevelsList = new ArrayList<Integer>();
 
@@ -280,9 +293,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         if(!videos) {
             TextView txt = (TextView) findViewById(R.id.rightEmotion);
-            // txt.setTextSize(TypedValue.COMPLEX_UNIT_PX,100);
             String rightEmotionLang = getResources().getString(getResources().getIdentifier("emotion_" + rightEmotion, "string", getPackageName()));
-            commandText = getResources().getString(R.string.label_show_emotion) + " " + rightEmotionLang;
+
+            if(l.getQuestionType().equals(Level.Question.SHOW_WHERE_IS_EMOTION_NAME))
+                commandText = getResources().getString(R.string.label_show_emotion) + " " + rightEmotionLang;
+            else if(l.getQuestionType().equals(Level.Question.SHOW_EMOTION_NAME))
+                commandText = getResources().getString(R.string.label_show_emotion_short) + " " + rightEmotionLang;
+            else if(l.getQuestionType().equals(Level.Question.EMOTION_NAME))
+                commandText = rightEmotionLang;
+
             txt.setText(commandText);
         }
         else
@@ -457,16 +476,22 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                     startEndActivity(true);
                 }
+                else
+                {
+                    generateView(photosToUseInSublevel);
+                    System.out.println("Wygenerowano view");
+                }
 
-                generateView(photosToUseInSublevel);
-                System.out.println("Wygenerowano view");
 
                 break;
             case 2:
 
 
                 java.util.Collections.shuffle(sublevelsList);
-                sublevelsLeft = l.getEmotions().size() * l.getSublevelsPerEachEmotion();
+                if(!videos)
+                    sublevelsLeft = l.getEmotions().size() * l.getSublevelsPerEachEmotion();
+                else
+                    sublevelsLeft = videoCursor.getCount();
 
                 wrongAnswersSublevel = 0;
                 rightAnswersSublevel = 0;
