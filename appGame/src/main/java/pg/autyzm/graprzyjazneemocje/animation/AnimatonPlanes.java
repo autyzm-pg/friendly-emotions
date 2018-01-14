@@ -26,10 +26,4 @@ public class AnimatonPlanes extends AnimationBase {
                 break;
         }
     }
-
-    @Override
-    int getBackground(){
-        return R.drawable.background_sky_gradient;
-    }
-
 }

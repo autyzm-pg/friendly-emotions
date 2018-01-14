@@ -18,28 +18,14 @@ public class AnimationBalls extends AnimationBase {
         Random rand = new Random();
         switch (rand.nextInt(numberAnimations)) {
             case 0:
-                spiral(context, balls);
+                straightFlyUpDown(context, balls);
                 break;
             case 1:
                 goLeftToRight(context, balls);
                 break;
             case 2:
-                straightFlyUp(context, balls);
+                spiral(context, balls);
                 break;
         }
     }
-
-    @Override
-    int getBackground() {
-        switch (rand.nextInt(3)) {
-            case 0:
-                return R.drawable.background_car_gradient;
-            case 1:
-                return R.drawable.background_sky_gradient;
-            default:
-                return R.drawable.background_main_gradient;
-        }
-    }
-
-
 }
