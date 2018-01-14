@@ -10,7 +10,7 @@ import pg.autyzm.graprzyjazneemocje.R;
 
 public class AnimationButterflies extends AnimationBase {
 
-    static int numberAnimations = 2;
+    static int numberAnimations = 3;
 
     int butterfliesUpImages[] = {R.drawable.butterfly_green, R.drawable.butterfly_red, R.drawable.butterfly_blue, R.drawable.butterfly_color};
 
@@ -19,11 +19,15 @@ public class AnimationButterflies extends AnimationBase {
         Random rand = new Random();
         switch (rand.nextInt(numberAnimations)) {
             case 0:
-                straightFlyUp(context, butterfliesUpImages);
+                straightFlyUpDown(context, butterfliesUpImages);
                 break;
             case 1:
                 spiral(context, butterfliesUpImages);
                 break;
+            case 2:
+                goLeftToRight(context, butterfliesUpImages);
+                break;
+
         }
     }
 

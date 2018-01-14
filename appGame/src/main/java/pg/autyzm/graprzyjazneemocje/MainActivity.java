@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import pg.autyzm.graprzyjazneemocje.animation.*;
+import pg.autyzm.graprzyjazneemocje.animation.AnimationActivity;
 import pg.autyzm.przyjazneemocje.lib.SqliteManager;
 import pg.autyzm.przyjazneemocje.lib.entities.Level;
 
@@ -374,8 +374,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
     public void onClick(View v) {
-
-
         if (v.getId() == 1) {
             animationEnds = false;
             sublevelsLeft--;
@@ -389,42 +387,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 correctness = checkCorrectness();
             }
 
-
             if (correctness) {
-                Intent i = new Intent(this, pg.autyzm.graprzyjazneemocje.animation.AnimationActivity.class);
-                startActivityForResult(i, 1);
-
+                startAnimationActivity();
             } else {
                 startEndActivity(false);
-
-//                Intent i = new Intent(this, LevelFailedActivity.class);
-//                startActivityForResult(i, 2);
-
             }
-            //startActivity(i);
 
-
-        } else //jesli nie wybrano wlasciwej
-        {
+        } else { //jesli nie wybrano wlasciwej
             wrongAnswers++;
             wrongAnswersSublevel++;
         }
-
-
     }
 
     boolean checkCorrectness() {
-
-
         if (wrongAnswersSublevel > l.getAmountOfAllowedTriesForEachEmotion()) {
-
             return false;
-
         }
-
-
         return true;
-
     }
 
 
@@ -503,17 +482,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    private void startAnimationActivity() {
+        if(speaker == null) {
+            speaker = Speaker.getInstance(MainActivity.this);
+        }
+        Intent i = new Intent(MainActivity.this, AnimationActivity.class);
+        i.putExtra("praises", l.getPraises());
+        i.putExtra("prizes", l.getPrizes());
+        startActivityForResult(i, 1);
+    }
+
     private void startEndActivity(boolean pass) {
         Intent in = new Intent(this, EndActivity.class);
         in.putExtra("PASS", pass);
         in.putExtra("WRONG", wrongAnswers);
         in.putExtra("RIGHT", rightAnswers);
         in.putExtra("TIMEOUT", timeout);
-
-
         startActivityForResult(in, 2);
-
-        //startActivity(in);
     }
 
     private void StartTimer(Level l) {

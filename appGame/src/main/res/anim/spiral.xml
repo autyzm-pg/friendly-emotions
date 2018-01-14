@@ -14,8 +14,6 @@
         android:duration="5000"
         />
     <rotate
-        android:pivotY="100"
-        android:pivotX="500"
         android:toDegrees="-700"
         android:duration="5000"
 
