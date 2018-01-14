@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         //generate list
 
         sqlm.cleanTable("photos"); //TODO not clean and add, but only update
+        sqlm.cleanTable("videos");
 
         File createDir = new File(root + "FriendlyEmotions/Photos" + File.separator);
         if (!createDir.exists()) {
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         File createDirV = new File(root + "FriendlyEmotions/Videos" + File.separator);
-        /*if (!createDirV.exists()) {
+        if (!createDirV.exists()) {
             createDirV.mkdir();
 
             Field[] raw = pg.autyzm.przyjazneemocje.R.raw.class.getFields();
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }*/
+        }
 
         if(new File(root + "FriendlyEmotions/Photos").list() != null) {
 

@@ -361,11 +361,20 @@ public class LevelConfiguration extends AppCompatActivity {
         SqliteManager sqlm = getInstance(this);
         Cursor cursor = sqlm.givePhotosWithEmotion(choosenEmotion);
         int n = cursor.getCount();
+        Cursor cursorVid = sqlm.giveVideosWithEmotion(choosenEmotion);
+        n = n + cursorVid.getCount();
         GridCheckboxImageBean tabPhotos[] = new GridCheckboxImageBean[n];
+
+        while (cursorVid.moveToNext()) {
+
+            tabPhotos[--n] = (new GridCheckboxImageBean(cursorVid.getString(3), cursorVid.getInt(1), true, getContentResolver(), cursorVid.getInt(0)));
+        }
+
         while (cursor.moveToNext()) {
 
             tabPhotos[--n] = (new GridCheckboxImageBean(cursor.getString(3), cursor.getInt(1), true, getContentResolver(), cursor.getInt(0)));
         }
+
         return tabPhotos;
     }
 
@@ -603,7 +612,7 @@ public class LevelConfiguration extends AppCompatActivity {
     }
 
     private String getResourceString(String resourceName) {
-        return getString(getResource(resourceName, "string"));//return getResource(resourceName, "string") + "";
+        return getResource(resourceName, "string") + "";
     }
 
     public Level getLevel() {
