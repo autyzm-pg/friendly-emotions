@@ -488,7 +488,6 @@ public class LevelConfiguration extends AppCompatActivity {
 
         sqlm.saveLevelToDatabase(getLevel());
 
-        /* TODO: Null Pointer Exception for msg
         final TextView msg = (TextView) findViewById(R.id.saveMessage);
         msg.setVisibility(View.VISIBLE);
         msg.postDelayed(new Runnable() {
@@ -496,7 +495,6 @@ public class LevelConfiguration extends AppCompatActivity {
                 msg.setVisibility(View.INVISIBLE);
             }
         }, 2000);
-        */
     }
 
 
@@ -612,7 +610,7 @@ public class LevelConfiguration extends AppCompatActivity {
     }
 
     private String getResourceString(String resourceName) {
-        return getResource(resourceName, "string") + "";
+        return getString(getResource(resourceName, "string"));//return getResource(resourceName, "string") + "";
     }
 
     public Level getLevel() {

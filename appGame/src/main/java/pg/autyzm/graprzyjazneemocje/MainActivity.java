@@ -293,9 +293,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         if(!videos) {
             TextView txt = (TextView) findViewById(R.id.rightEmotion);
-            // txt.setTextSize(TypedValue.COMPLEX_UNIT_PX,100);
             String rightEmotionLang = getResources().getString(getResources().getIdentifier("emotion_" + rightEmotion, "string", getPackageName()));
-            commandText = getResources().getString(R.string.label_show_emotion) + " " + rightEmotionLang;
+
+            if(l.getQuestionType().equals(Level.Question.SHOW_WHERE_IS_EMOTION_NAME))
+                commandText = getResources().getString(R.string.label_show_emotion) + " " + rightEmotionLang;
+            else if(l.getQuestionType().equals(Level.Question.SHOW_EMOTION_NAME))
+                commandText = getResources().getString(R.string.label_show_emotion_short) + " " + rightEmotionLang;
+            else if(l.getQuestionType().equals(Level.Question.EMOTION_NAME))
+                commandText = rightEmotionLang;
+
             txt.setText(commandText);
         }
         else
