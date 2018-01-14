@@ -36,7 +36,7 @@ public class SqliteManager extends SQLiteOpenHelper {
 
     private SqliteManager(final Context context)
     {
-        super(new DatabaseContext(context), DATABASE_NAME, null, 16);
+        super(new DatabaseContext(context), DATABASE_NAME, null, 17);
         db = getWritableDatabase();
     }
 
@@ -276,9 +276,9 @@ public class SqliteManager extends SQLiteOpenHelper {
 
         addEmotion("happy");
         addEmotion("sad");
+        addEmotion("surprised");
         addEmotion("angry");
         addEmotion("scared");
-        addEmotion("surprised");
         addEmotion("bored");
     }
 

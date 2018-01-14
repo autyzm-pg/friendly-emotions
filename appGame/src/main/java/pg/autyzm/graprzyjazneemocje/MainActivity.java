@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import pg.autyzm.graprzyjazneemocje.animation.*;
 import pg.autyzm.przyjazneemocje.lib.SqliteManager;
 import pg.autyzm.przyjazneemocje.lib.entities.Level;
 
@@ -371,7 +372,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
             if (correctness) {
-                Intent i = new Intent(this, AnimationActivity.class);
+                Intent i = new Intent(this, pg.autyzm.graprzyjazneemocje.animation.AnimationActivity.class);
                 startActivityForResult(i, 1);
 
             } else {
