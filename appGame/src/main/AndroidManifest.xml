@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AnimationActivity"
+            android:name=".animation.AnimationActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name=".AnimationEndActivity"
