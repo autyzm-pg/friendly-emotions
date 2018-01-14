@@ -15,7 +15,7 @@ public class Level {
 
     private int id;
 
-    private String photosOrVideosFlag;
+    private String photosOrVideosFlag = "photos";
     private int timeLimit;
     private int photosOrVideosShowedForOneQuestion;
     private boolean isLevelActive;

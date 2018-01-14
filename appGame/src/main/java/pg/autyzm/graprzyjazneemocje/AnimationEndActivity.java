@@ -16,7 +16,7 @@ public class AnimationEndActivity extends AnimationActivity {
         setContentView(R.layout.activity_anim_end);
 
         int offset = -300;
-        int butterflyimages[] = {R.id.butterfly1_image, R.id.butterfly2_image, R.id.butterfly3_image, R.id.butterfly4_image, R.id.butterfly5_image};
+        int butterflyimages[] = {R.id.butterfly1_image, R.id.image2, R.id.image3, R.id.image4, R.id.butterfly5_image};
 
         for (int image : butterflyimages) {
             animImage = (ImageView) findViewById(image);
