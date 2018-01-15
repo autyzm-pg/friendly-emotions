@@ -194,8 +194,8 @@ public class LevelConfiguration extends AppCompatActivity {
 
         // 4 panel
 
-        EditText correctness = (EditText) findViewById(R.id.number_try_test);
-        correctness.setText(getLevel().getAmountOfAllowedTriesForEachEmotion() + "");
+       // EditText correctness = (EditText) findViewById(R.id.number_try_test);
+       // correctness.setText(getLevel().getAmountOfAllowedTriesForEachEmotion() + "");
 
         EditText timeLimit = (EditText) findViewById(R.id.number_time_test);
         timeLimit.setText(getLevel().getTimeLimit() + "");
@@ -225,7 +225,6 @@ public class LevelConfiguration extends AppCompatActivity {
 
     private void createTabTest() {
         createGridViewActiveInTest();
-        activateNumberTryTest();
         activateNumberTimeTest();
     }
 
@@ -311,9 +310,7 @@ public class LevelConfiguration extends AppCompatActivity {
         gridView.setAdapter(adapter);
     }
 
-    private void activateNumberTryTest() {
-        activePlusMinus((EditText) findViewById(R.id.number_try_test), (Button) findViewById(R.id.button_minus_try_test), (Button) findViewById(R.id.button_plus_try_test));
-    }
+
 
     private void activateNumberTimeTest() {
         activePlusMinus((EditText) findViewById(R.id.number_time_test), (Button) findViewById(R.id.button_minus_time_test), (Button) findViewById(R.id.button_plus_time_test));
@@ -586,8 +583,8 @@ public class LevelConfiguration extends AppCompatActivity {
 
         // 4 panel
 
-        EditText correctness = (EditText) findViewById(R.id.number_try_test);
-        getLevel().setAmountOfAllowedTriesForEachEmotion(Integer.parseInt(correctness.getText() + ""));
+        //EditText correctness = (EditText) findViewById(R.id.number_try_test);
+        //getLevel().setAmountOfAllowedTriesForEachEmotion(Integer.parseInt(correctness.getText() + ""));
 
         EditText timeLimit = (EditText) findViewById(R.id.number_time_test);
         getLevel().setSecondsToHint(Integer.parseInt(timeLimit.getText() + ""));

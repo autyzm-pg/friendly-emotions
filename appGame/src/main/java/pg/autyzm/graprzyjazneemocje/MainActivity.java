@@ -98,7 +98,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         generateView(photosToUseInSublevel);
 
-        if(!videos && !l.isShouldQuestionBeReadAloud())
+        if(!videos && l.isShouldQuestionBeReadAloud())
         {
             findViewById(R.id.matchEmotionsSpeakerButton).setVisibility(View.GONE);
         }
@@ -400,9 +400,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     boolean checkCorrectness() {
-        if (wrongAnswersSublevel > l.getAmountOfAllowedTriesForEachEmotion()) {
-            return false;
-        }
+        //if (wrongAnswersSublevel > l.getAmountOfAllowedTriesForEachEmotion()) {
+        //    return false;
+        //}
         return true;
     }
 
