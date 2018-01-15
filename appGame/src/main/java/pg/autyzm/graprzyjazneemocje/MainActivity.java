@@ -29,6 +29,7 @@ import android.widget.VideoView;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -171,6 +172,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
 
         l.incrementEmotionIdsForGame();
+        removeEmotionsWithoutPhotos();
 
         photosPerLvL = l.getPhotosOrVideosShowedForOneQuestion();
 
@@ -206,10 +208,43 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     }
 
-    void generateSublevel(int emotionIndexInList) {
+    void removeEmotionsWithoutPhotos(){
+
+        Iterator<Integer> iterator = l.getEmotions().iterator();
+        while (iterator.hasNext()) {
+
+            int counter = 0;
+
+            Cursor emotionCur = sqlm.giveEmotionName(iterator.next());
+
+            emotionCur.moveToFirst();
+            String selectedEmotionName = emotionCur.getString(emotionCur.getColumnIndex("emotion"));
 
 
-        Cursor emotionCur = sqlm.giveEmotionName(emotionIndexInList);
+            for (int e : l.getPhotosOrVideosIdList()) {
+
+                //System.out.println("Id zdjecia: " + e);
+                Cursor curPhoto = sqlm.givePhotoWithId(e);
+
+
+                curPhoto.moveToFirst();
+                String photoEmotionName = curPhoto.getString(curPhoto.getColumnIndex("emotion"));
+
+                if (photoEmotionName.equals(selectedEmotionName))
+                    counter++;
+
+            }
+
+            if(counter == 0){
+                iterator.remove();
+            }
+        }
+    }
+
+    void generateSublevel(int emotionId) {
+
+
+        Cursor emotionCur = sqlm.giveEmotionName(emotionId);
 
         emotionCur.moveToFirst();
         String selectedEmotionName = emotionCur.getString(emotionCur.getColumnIndex("emotion"));
@@ -223,12 +258,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
         for (int e : l.getPhotosOrVideosIdList()) {
 
             //System.out.println("Id zdjecia: " + e);
-            Cursor curEmotion = sqlm.givePhotoWithId(e);
+            Cursor curPhoto = sqlm.givePhotoWithId(e);
 
 
-            curEmotion.moveToFirst();
-            String photoEmotionName = curEmotion.getString(curEmotion.getColumnIndex("emotion"));
-            String photoName = curEmotion.getString(curEmotion.getColumnIndex("name"));
+            curPhoto.moveToFirst();
+            String photoEmotionName = curPhoto.getString(curPhoto.getColumnIndex("emotion"));
+            String photoName = curPhoto.getString(curPhoto.getColumnIndex("name"));
 
 
             if (photoEmotionName.equals(selectedEmotionName)) {

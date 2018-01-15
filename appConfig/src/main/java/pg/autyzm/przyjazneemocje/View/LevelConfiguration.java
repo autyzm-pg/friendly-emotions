@@ -506,14 +506,7 @@ public class LevelConfiguration extends AppCompatActivity {
 
         // save selected photos
 
-        GridView listView = (GridView) findViewById(R.id.grid_photos);
-        int size = listView.getChildCount();
 
-        for(int i = 0; i < size; i++){
-
-            listView.getChildAt(i);
-
-        }
 
 
         // 2 panel
@@ -614,8 +607,8 @@ public class LevelConfiguration extends AppCompatActivity {
     }
 
     private String getResourceString(String resourceName) {
-       // return getString(getResource(resourceName, "string"));
-        return getResource(resourceName, "string") + "";
+       return getString(getResource(resourceName, "string"));
+       //return getResource(resourceName, "string") + "";
     }
 
     public Level getLevel() {
