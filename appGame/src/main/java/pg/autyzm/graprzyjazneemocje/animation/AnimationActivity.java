@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 
 import java.util.Random;
 
+
 /**
  * Created by joagi on 13.01.2018.
  */
@@ -45,6 +46,7 @@ public class AnimationActivity extends Activity implements Animation.AnimationLi
                 animation = new AnimatonPlanes();
                 break;
         }
+        animation.setActivity(this);
         return animation;
     }
 
@@ -52,7 +54,6 @@ public class AnimationActivity extends Activity implements Animation.AnimationLi
         animationView = randomAward();
         RelativeLayout layout = animationView.getLayout(getApplicationContext());
         anim = animationView.getAnim();
-        setContentView(layout);
     }
 
     @Override

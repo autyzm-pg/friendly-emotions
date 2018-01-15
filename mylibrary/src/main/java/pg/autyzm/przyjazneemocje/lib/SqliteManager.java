@@ -164,6 +164,13 @@ public class SqliteManager extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Cursor giveVideosWithEmotion(String emotion)
+    {
+        String[] columns = {"id", "path", "emotion", "name"};
+        Cursor cursor = db.query("videos", columns,"emotion like " + "'%" + emotion + "%'", null, null, null, null);
+        return cursor;
+    }
+
     public Cursor givePhotoWithPath(String path)
     {
         String[] columns = {"id", "path", "emotion", "name"};

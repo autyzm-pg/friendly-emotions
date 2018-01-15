@@ -1,5 +1,6 @@
 package pg.autyzm.graprzyjazneemocje.animation;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -21,68 +22,81 @@ abstract public class AnimationBase {
     Random rand = new Random();
     Animation anim;
 
+
+    Activity activity;
+
     public Animation getAnim() {
         return anim;
     }
 
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
+
     abstract void createAnimation();
+
 
     public RelativeLayout getLayout(Context context) {
         this.context=context;
-        layout = new RelativeLayout(context);
         createAnimation();
-        layout.setBackgroundResource(getBackground());
         return layout;
     }
 
     void goLeftToRight(Context context, int images[]) {
-        ImageView image;
 
-        for (int i = 0; i < 3; i++) {
-            image = initImage(images[rand.nextInt(images.length)]);
+        ImageView animImage;
 
-            image.setY(160 * i + 15);
+        activity.setContentView(R.layout.activity_anim_right_left);
+
+        int imagesNr[] = {R.id.image1, R.id.image2, R.id.image3};
+        for (int image : imagesNr) {
+
+            animImage = (ImageView) activity.findViewById(image);
+            animImage.setImageResource(images[rand.nextInt(images.length)]);
             anim = AnimationUtils.loadAnimation(context, R.anim.right);
             anim.setStartOffset(rand.nextInt(1500));
-            anim.setDuration(rand.nextInt(1000)+1500);
-            image.startAnimation(anim);
+            anim.setDuration(rand.nextInt(1000) + 1500);
+            animImage.startAnimation(anim);
         }
     }
 
-    void straightFlyUp(Context context, int images[]) {
-        ImageView image;
+    void straightFlyUpDown(Context context, int images[]) {
+        ImageView animImage;
 
-        for (int i = 0; i < 4; i++) {
+        activity.setContentView(R.layout.activity_anim_straight);
 
-            image = initImage(images[rand.nextInt(images.length)]);
-            image.setRotation(270);
-            image.setY(650);
-            image.setX(i*230);
+        int imagesNr[] = {R.id.image1, R.id.image2, R.id.image3, R.id.image4};
+        int n = 0;
+        for (int image : imagesNr) {
 
-            anim = AnimationUtils.loadAnimation(context, R.anim.up);
-            anim.setStartOffset(rand.nextInt(1500));
-            anim.setDuration(rand.nextInt(1000)+1500);
-            image.startAnimation(anim);
+            animImage = (ImageView) activity.findViewById(image);
+            animImage.setImageResource(images[rand.nextInt(images.length)]);
+            if((n++)%2==0) {
+                animImage.setRotation(270);
+                anim = AnimationUtils.loadAnimation(context, R.anim.up);
+            } else {
+                animImage.setRotation(90);
+                anim = AnimationUtils.loadAnimation(context, R.anim.down);
+            }
+            animImage.startAnimation(anim);
         }
     }
 
-    void spiral(Context context, int images_up[]) {
-        ImageView image;
+    void spiral(Context context, int images[]) {
+        ImageView animImage;
 
-        image = initImage(images_up[rand.nextInt(images_up.length)]);
-        image.setRotation(270);
-        image.setY(270);
-        image.setX(630);
-        image.setAdjustViewBounds(true);
+        activity.setContentView(R.layout.activity_anim_spiral);
+
+        animImage = (ImageView) activity.findViewById(R.id.image1);
+        animImage.setImageResource(images[rand.nextInt(images.length)]);
         anim = AnimationUtils.loadAnimation(context, R.anim.spiral);
-        image.startAnimation(anim);
+        animImage.startAnimation(anim);
 
-        image = initImage(images_up[rand.nextInt(images_up.length)]);
-        image.setRotation(270);
-        image.setY(270);
-        image.setX(0);
+        animImage = (ImageView) activity.findViewById(R.id.image2);
+        animImage.setImageResource(images[rand.nextInt(images.length)]);
         anim = AnimationUtils.loadAnimation(context, R.anim.spirall);
-        image.startAnimation(anim);
+        animImage.startAnimation(anim);
+
     }
 
     private ImageView initImage(int imageNumber) {

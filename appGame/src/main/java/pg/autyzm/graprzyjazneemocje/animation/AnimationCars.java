@@ -10,7 +10,7 @@ import pg.autyzm.graprzyjazneemocje.R;
 
 public class AnimationCars extends AnimationBase {
 
-    static int numberAnimations = 5;
+    static int numberAnimations = 4;
 
     int carsRightImages[] = {R.drawable.car_red, R.drawable.monster_truck, R.drawable.race_car};
     int carsOverhandRightImages[] = {R.drawable.car_red_overhand, R.drawable.car_purple_overhand, R.drawable.car_turquoise_overhand, R.drawable.car_green_overhand, R.drawable.car_orange_overhand};
@@ -30,9 +30,6 @@ public class AnimationCars extends AnimationBase {
                 break;
             case 3:
                 spiral(context, carsOverhandRightImages);
-                break;
-            case 4:
-                straightFlyUp(context, carsOverhandRightImages);
                 break;
         }
     }

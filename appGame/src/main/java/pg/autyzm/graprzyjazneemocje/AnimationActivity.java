@@ -48,48 +48,48 @@ public class AnimationActivity extends Activity implements Animation.AnimationLi
 
     private void awardSpiral() {
         setContentView(R.layout.activity_anim_spiral);
-        animImage = (ImageView) findViewById(R.id.butterfly_image);
+//        animImage = (ImageView) findViewById(R.id.butterfly_image);
         anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.spiral);
         animImage.startAnimation(anim);
-        animImage = (ImageView) findViewById(R.id.butterfly2_image);
+        animImage = (ImageView) findViewById(R.id.image2);
         anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.spirall);
     }
 
     private void awardStraight() {
         setContentView(R.layout.activity_anim_straight);
 
-        int butterflyimages[] = {R.id.butterfly_image, R.id.butterfly2_image, R.id.butterfly3_image, R.id.butterfly4_image};
+//        int butterflyimages[] = {R.id.butterfly_image, R.id.butterfly2_image, R.id.butterfly3_image, R.id.butterfly4_image};
         int n = 0;
-        for (int image : butterflyimages) {
-
-            animImage = (ImageView) findViewById(image);
-            if((n++)%2==0) {
-                anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.up);
-            } else {
-                anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.down);
-            }
-            animImage.startAnimation(anim);
-        }
+//        for (int image : butterflyimages) {
+//
+//            animImage = (ImageView) findViewById(image);
+//            if((n++)%2==0) {
+//                anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.up);
+//            } else {
+//                anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.down);
+//            }
+//            animImage.startAnimation(anim);
+//        }
     }
 
     private void awardUp() {
         setContentView(R.layout.activity_anim_straight);
-        animImage = (ImageView) findViewById(R.id.butterfly_image);
+//        animImage = (ImageView) findViewById(R.id.butterfly_image);
         anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.up);
         animImage.startAnimation(anim);
 
-        animImage = (ImageView) findViewById(R.id.butterfly2_image);
+        animImage = (ImageView) findViewById(R.id.image2);
         animImage.setImageResource(R.drawable.butterfly_red_up);
         anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.up);
         anim.setStartOffset(500);
         animImage.startAnimation(anim);
 
-        animImage = (ImageView) findViewById(R.id.butterfly3_image);
+        animImage = (ImageView) findViewById(R.id.image3);
         anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.up);
         anim.setStartOffset(1000);
         animImage.startAnimation(anim);
 
-        animImage = (ImageView) findViewById(R.id.butterfly4_image);
+        animImage = (ImageView) findViewById(R.id.image4);
         animImage.setImageResource(R.drawable.butterfly_green_up);
         anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.up);
         anim.setStartOffset(1500);

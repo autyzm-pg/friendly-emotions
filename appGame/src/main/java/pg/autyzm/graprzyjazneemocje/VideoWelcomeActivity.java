@@ -19,7 +19,7 @@ public class VideoWelcomeActivity extends Activity {
         setContentView(R.layout.activity_video_welcome);
 
         TextView txt = (TextView) findViewById(R.id.question);
-        final String commandText = "Jakie jest dziecko"; //getResources().getString(R.string.command_label); TODO: Change to generic
+        final String commandText = getResources().getString(R.string.label_video_question);
         txt.setText(commandText);
         final Speaker speaker = Speaker.getInstance(VideoWelcomeActivity.this);
 

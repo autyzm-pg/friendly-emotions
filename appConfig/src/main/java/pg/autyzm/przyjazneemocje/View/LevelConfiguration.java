@@ -361,11 +361,20 @@ public class LevelConfiguration extends AppCompatActivity {
         SqliteManager sqlm = getInstance(this);
         Cursor cursor = sqlm.givePhotosWithEmotion(choosenEmotion);
         int n = cursor.getCount();
+        Cursor cursorVid = sqlm.giveVideosWithEmotion(choosenEmotion);
+        n = n + cursorVid.getCount();
         GridCheckboxImageBean tabPhotos[] = new GridCheckboxImageBean[n];
+
+        while (cursorVid.moveToNext()) {
+
+            tabPhotos[--n] = (new GridCheckboxImageBean(cursorVid.getString(3), cursorVid.getInt(1), true, getContentResolver(), cursorVid.getInt(0)));
+        }
+
         while (cursor.moveToNext()) {
 
             tabPhotos[--n] = (new GridCheckboxImageBean(cursor.getString(3), cursor.getInt(1), true, getContentResolver(), cursor.getInt(0)));
         }
+
         return tabPhotos;
     }
 
@@ -479,7 +488,6 @@ public class LevelConfiguration extends AppCompatActivity {
 
         sqlm.saveLevelToDatabase(getLevel());
 
-        /* TODO: Null Pointer Exception for msg
         final TextView msg = (TextView) findViewById(R.id.saveMessage);
         msg.setVisibility(View.VISIBLE);
         msg.postDelayed(new Runnable() {
@@ -487,7 +495,6 @@ public class LevelConfiguration extends AppCompatActivity {
                 msg.setVisibility(View.INVISIBLE);
             }
         }, 2000);
-        */
     }
 
 

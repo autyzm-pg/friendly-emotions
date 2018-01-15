@@ -15,6 +15,10 @@
         android:duration="4000"
         />
     <rotate
+        android:fromDegrees="270"
+        android:toDegrees="270"
+        />
+    <rotate
         android:pivotY="100"
         android:pivotX="500"
         android:toDegrees="700"

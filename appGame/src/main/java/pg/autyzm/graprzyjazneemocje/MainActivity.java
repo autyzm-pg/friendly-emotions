@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import pg.autyzm.graprzyjazneemocje.animation.*;
+import pg.autyzm.graprzyjazneemocje.animation.AnimationActivity;
 import pg.autyzm.przyjazneemocje.lib.SqliteManager;
 import pg.autyzm.przyjazneemocje.lib.entities.Level;
 
@@ -73,13 +73,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        if(!videos)
-            setContentView(R.layout.activity_main);
-        else {
-            Intent i = new Intent(this, VideoWelcomeActivity.class);
-            startActivity(i);
-            setContentView(R.layout.activity_videos);
-        }
 
         sqlm = getInstance(this);
 
@@ -94,9 +87,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         findNextActiveLevel();
 
+        if(!videos)
+            setContentView(R.layout.activity_main);
+
+        else {
+            Intent i = new Intent(this, VideoWelcomeActivity.class);
+            startActivity(i);
+            setContentView(R.layout.activity_videos);
+        }
+
         generateView(photosToUseInSublevel);
 
-        if(!l.isShouldQuestionBeReadAloud())
+        if(!videos && !l.isShouldQuestionBeReadAloud())
         {
             findViewById(R.id.matchEmotionsSpeakerButton).setVisibility(View.GONE);
         }
@@ -160,6 +162,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Cursor cur4 = sqlm.giveEmotionsInLevel(levelId);
 
         l = new Level(cur2, cur3, cur4);
+
+        if(l.getPhotosOrVideosFlag().equals("videos")) {
+            videos = true;
+        }
+        else {
+            videos = false;
+        }
+
         l.incrementEmotionIdsForGame();
 
         photosPerLvL = l.getPhotosOrVideosShowedForOneQuestion();
@@ -169,7 +179,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         // tworzymy tablice do permutowania
 
-        sublevelsLeft = l.getEmotions().size() * l.getSublevelsPerEachEmotion();
+        if(!videos)
+            sublevelsLeft = l.getEmotions().size() * l.getSublevelsPerEachEmotion();
+        else
+            sublevelsLeft = videoCursor.getCount();
 
         sublevelsList = new ArrayList<Integer>();
 
@@ -280,9 +293,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         if(!videos) {
             TextView txt = (TextView) findViewById(R.id.rightEmotion);
-            // txt.setTextSize(TypedValue.COMPLEX_UNIT_PX,100);
             String rightEmotionLang = getResources().getString(getResources().getIdentifier("emotion_" + rightEmotion, "string", getPackageName()));
-            commandText = getResources().getString(R.string.label_show_emotion) + " " + rightEmotionLang;
+
+            if(l.getQuestionType().equals(Level.Question.SHOW_WHERE_IS_EMOTION_NAME))
+                commandText = getResources().getString(R.string.label_show_emotion) + " " + rightEmotionLang;
+            else if(l.getQuestionType().equals(Level.Question.SHOW_EMOTION_NAME))
+                commandText = getResources().getString(R.string.label_show_emotion_short) + " " + rightEmotionLang;
+            else if(l.getQuestionType().equals(Level.Question.EMOTION_NAME))
+                commandText = rightEmotionLang;
+
             txt.setText(commandText);
         }
         else
@@ -355,8 +374,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
     public void onClick(View v) {
-
-
         if (v.getId() == 1) {
             animationEnds = false;
             sublevelsLeft--;
@@ -370,42 +387,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 correctness = checkCorrectness();
             }
 
-
             if (correctness) {
-                Intent i = new Intent(this, pg.autyzm.graprzyjazneemocje.animation.AnimationActivity.class);
-                startActivityForResult(i, 1);
-
+                startAnimationActivity();
             } else {
                 startEndActivity(false);
-
-//                Intent i = new Intent(this, LevelFailedActivity.class);
-//                startActivityForResult(i, 2);
-
             }
-            //startActivity(i);
 
-
-        } else //jesli nie wybrano wlasciwej
-        {
+        } else { //jesli nie wybrano wlasciwej
             wrongAnswers++;
             wrongAnswersSublevel++;
         }
-
-
     }
 
     boolean checkCorrectness() {
-
-
         if (wrongAnswersSublevel > l.getAmountOfAllowedTriesForEachEmotion()) {
-
             return false;
-
         }
-
-
         return true;
-
     }
 
 
@@ -457,16 +455,22 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                     startEndActivity(true);
                 }
+                else
+                {
+                    generateView(photosToUseInSublevel);
+                    System.out.println("Wygenerowano view");
+                }
 
-                generateView(photosToUseInSublevel);
-                System.out.println("Wygenerowano view");
 
                 break;
             case 2:
 
 
                 java.util.Collections.shuffle(sublevelsList);
-                sublevelsLeft = l.getEmotions().size() * l.getSublevelsPerEachEmotion();
+                if(!videos)
+                    sublevelsLeft = l.getEmotions().size() * l.getSublevelsPerEachEmotion();
+                else
+                    sublevelsLeft = videoCursor.getCount();
 
                 wrongAnswersSublevel = 0;
                 rightAnswersSublevel = 0;
@@ -478,17 +482,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    private void startAnimationActivity() {
+        if(speaker == null) {
+            speaker = Speaker.getInstance(MainActivity.this);
+        }
+        Intent i = new Intent(MainActivity.this, AnimationActivity.class);
+        i.putExtra("praises", l.getPraises());
+        i.putExtra("prizes", l.getPrizes());
+        startActivityForResult(i, 1);
+    }
+
     private void startEndActivity(boolean pass) {
         Intent in = new Intent(this, EndActivity.class);
         in.putExtra("PASS", pass);
         in.putExtra("WRONG", wrongAnswers);
         in.putExtra("RIGHT", rightAnswers);
         in.putExtra("TIMEOUT", timeout);
-
-
         startActivityForResult(in, 2);
-
-        //startActivity(in);
     }
 
     private void StartTimer(Level l) {
