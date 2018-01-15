@@ -115,6 +115,9 @@ public class Level {
             setPraises(cur.getString(cur.getColumnIndex("praises")));
             setPrizes(cur.getString(cur.getColumnIndex("prizes")));
 
+            int isLevelForTests = cur.getInt(cur.getColumnIndex("is_for_tests"));
+            setForTests(isLevelForTests != 0);
+
             setAmountOfAllowedTriesForEachEmotion(cur.getInt(cur.getColumnIndex("correctness")));
             setSublevelsPerEachEmotion(cur.getInt(cur.getColumnIndex("sublevels_per_each_emotion")));
 

@@ -17,6 +17,7 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -204,6 +205,8 @@ public class LevelConfiguration extends AppCompatActivity {
         EditText levelName = (EditText) findViewById(R.id.step_name);
         levelName.setText(getLevel().getName());
 
+        Switch switchIsForTests = (Switch) findViewById(R.id.is_for_tests);
+        switchIsForTests.setChecked(getLevel().isForTests());
 
     }
 
@@ -594,6 +597,10 @@ public class LevelConfiguration extends AppCompatActivity {
         EditText levelName = (EditText) findViewById(R.id.step_name);
         getLevel().setName(levelName.getText() + "");
 
+        Switch switchIsForTests = (Switch) findViewById(R.id.is_for_tests);
+        getLevel().setForTests(switchIsForTests.isChecked());
+
+
     }
 
     public void prevTab(View view) {
@@ -610,7 +617,8 @@ public class LevelConfiguration extends AppCompatActivity {
     }
 
     private String getResourceString(String resourceName) {
-        return getString(getResource(resourceName, "string"));//return getResource(resourceName, "string") + "";
+       // return getString(getResource(resourceName, "string"));
+        return getResource(resourceName, "string") + "";
     }
 
     public Level getLevel() {

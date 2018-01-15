@@ -504,7 +504,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private void StartTimer(Level l) {
         //timer! seconds * 1000
         if (l.getTimeLimit() != 0) {
-            final int hintTypes = l.getHintTypesAsNumber();
+            final int hintTypesFromLevel = l.getHintTypesAsNumber();
+            final boolean isForTests = l.isForTests();
+
             final Context currentContext = this;
             timer = new CountDownTimer(l.getTimeLimit() * 1000, 1000) {
 
@@ -514,6 +516,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 public void onFinish() {
 
                     LinearLayout imagesLinear = (LinearLayout) findViewById(R.id.imageGallery);
+
+                    int hintTypes = hintTypesFromLevel;
+                    if(isForTests){
+                        hintTypes = 0;
+                    }
+
+
+
 
                     ColorMatrix matrix = new ColorMatrix();
                     matrix.setSaturation((float) 0.1);

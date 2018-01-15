@@ -29,6 +29,14 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName" />
+
+        <Switch
+            android:id="@+id/is_for_tests"
+            android:layout_width="232dp"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Test"
+            tools:checked="false" />
     </LinearLayout>
 
     <LinearLayout
