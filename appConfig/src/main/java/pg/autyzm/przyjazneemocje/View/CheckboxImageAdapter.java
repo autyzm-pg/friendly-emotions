@@ -3,6 +3,7 @@ package pg.autyzm.przyjazneemocje.View;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -75,10 +76,18 @@ public class CheckboxImageAdapter extends ArrayAdapter<GridCheckboxImageBean> {
             File fileOut;
             //if(object.photoName.contains("prize"))
             //    fileOut = new File(root + "FriendlyEmotions/Prize" + File.separator + object.photoName);
-            //else
+            Bitmap captureBmp;
+            if(object.photoName.contains(".mp4"))
+            {
+                fileOut = new File(root + "FriendlyEmotions/Videos" + File.separator + object.photoName);
+                captureBmp = ThumbnailUtils.createVideoThumbnail(fileOut.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
+            }
+            else
+            {
                 fileOut = new File(root + "FriendlyEmotions/Photos" + File.separator + object.photoName);
+                captureBmp = MediaStore.Images.Media.getBitmap(object.cr, Uri.fromFile(fileOut));
+            }
 
-            Bitmap captureBmp = MediaStore.Images.Media.getBitmap(object.cr, Uri.fromFile(fileOut));
             holder.imgIcon.setImageBitmap(captureBmp);
         } catch (Exception e) {
             System.out.println(e);
@@ -91,10 +100,15 @@ public class CheckboxImageAdapter extends ArrayAdapter<GridCheckboxImageBean> {
                 if(isChecked) {
                     Integer photoId = object.getId();
                     Level configuredLevel = ((LevelConfiguration) context).getLevel();
-                    if(! object.photoName.contains("prize")) {
-                        configuredLevel.addPhoto(photoId);
-                    }else{
+                    if(object.photoName.contains("prize")) {
                         configuredLevel.addPrize(photoId.toString());
+                    }else{
+                        if(object.photoName.contains(".mp4"))
+                        {
+                            configuredLevel.setPhotosOrVideosFlag("videos");
+                        }
+                        else
+                            configuredLevel.addPhoto(photoId);
                     }
                 }
             }

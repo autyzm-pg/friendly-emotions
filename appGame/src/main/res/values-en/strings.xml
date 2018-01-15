@@ -1,10 +1,12 @@
 <resources>
     <string name="app_name">Frendly Emotions - Game</string>
-    <string name="label_show_emotion">Choose</string>
+    <string name="label_show_emotion">Choose which is</string>
+    <string name="label_show_emotion_short">Choose</string>
     <string name="label_congratulations">Congratulations!</string>
     <string name="label_rightAnswers">Right answers:</string>
     <string name="label_wrongAnswers">Wrong answers:</string>
     <string name="label_timeout">Timeouts:</string>
+    <string name="label_video_question">How is the child?</string>
     <string name="emotion_happy">happy</string>
     <string name="emotion_sad">sad</string>
     <string name="emotion_surprised">surprised</string>
