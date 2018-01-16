@@ -62,7 +62,11 @@ public class Level {
     }
 
     public void addPraise(String newPraise) {
-        this.praises += ";" + newPraise;
+        if(this.praises.equals("")){
+            this.praises = newPraise;
+        }else {
+            this.praises += ";" + newPraise;
+        }
     }
 
 
@@ -74,8 +78,13 @@ public class Level {
         this.prizes = praises;
     }
 
-    public void addPrize(String newPraise) {
-        this.prizes += ";" + newPraise;
+    public void addPrize(String newPrize) {
+
+        if(this.prizes.equals("")){
+            this.prizes = newPrize;
+        }else {
+            this.prizes += ";" + newPrize;
+        }
     }
 
 

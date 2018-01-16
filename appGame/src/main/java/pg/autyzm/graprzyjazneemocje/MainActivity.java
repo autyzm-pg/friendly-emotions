@@ -407,9 +407,36 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     }
 
+    void showPraise(){
+
+        String[] prizesArray = l.getPraises().split(";");
+
+        Random rand = new Random();
+        int prizeDrawn = rand.nextInt(prizesArray.length);
+
+        final TextView textViewExistingOnlyForSettingPrizeText = (TextView) findViewById(R.id.saveMessage);
+        textViewExistingOnlyForSettingPrizeText.setText(prizesArray[prizeDrawn]);
+
+
+        final TextView msg = (TextView) findViewById(R.id.saveMessage);
+        msg.setVisibility(View.VISIBLE);
+        msg.postDelayed(new Runnable() {
+            public void run() {
+                msg.setVisibility(View.INVISIBLE);
+            }
+        }, 2000);
+
+    }
+
 
     public void onClick(View v) {
         if (v.getId() == 1) {
+
+
+
+            showPraise();
+
+
             animationEnds = false;
             sublevelsLeft--;
             rightAnswers++;

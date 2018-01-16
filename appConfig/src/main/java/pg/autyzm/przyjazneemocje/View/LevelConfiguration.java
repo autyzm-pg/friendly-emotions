@@ -165,22 +165,24 @@ public class LevelConfiguration extends AppCompatActivity {
         for (Object objectItem : praiseList) {
 
             CheckboxGridBean checkboxGridBean = (CheckboxGridBean) objectItem;
-
-            boolean isInTheLevel = false;
+            checkboxGridBean.checked = false;
 
             for(int i = 0; i < praisesArray.length; i++) {
 
                 if (praisesArray[i].equals(checkboxGridBean.name)) {
-                    isInTheLevel = true;
+                    checkboxGridBean.checked = true;
+                    praisesArray[i] = "default_praise";
                     break;
                 }
             }
+        }
 
-            if(isInTheLevel) {
-                checkboxGridBean.checked = true;
-            }
-            else{
-                checkboxGridBean.checked = false;
+        // find and add custom praises saved in level
+
+        for(int i = 0; i < praisesArray.length; i++) {
+
+            if(! praisesArray[i].equals("default_praise")){
+                praiseList.add(new CheckboxGridBean(praisesArray[i], true));
             }
         }
 
