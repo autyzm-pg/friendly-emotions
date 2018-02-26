@@ -29,7 +29,7 @@ public class AnimationActivity extends Activity implements Animation.AnimationLi
     private AnimationBase randomAward() {
         AnimationBase animation;
         Random random = new Random();
-        switch (random.nextInt(5)) {
+        switch (random.nextInt(6)) {
             case 0:
                 animation = new AnimationBalls();
                 break;
@@ -41,6 +41,9 @@ public class AnimationActivity extends Activity implements Animation.AnimationLi
                 break;
             case 3:
                 animation = new AnimatonShips();
+                break;
+            case 4:
+                animation = new AnimatonTrains();
                 break;
             default:
                 animation = new AnimatonPlanes();
