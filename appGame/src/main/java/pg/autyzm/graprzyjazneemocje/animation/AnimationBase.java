@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -16,12 +15,13 @@ import java.util.Random;
 
 import pg.autyzm.graprzyjazneemocje.R;
 import pg.autyzm.graprzyjazneemocje.api.entities.Picture;
+import pg.autyzm.graprzyjazneemocje.api.entities.PicturesContainer;
 
 /**
  * Created by joagi on 13.01.2018.
  */
 
-abstract public class AnimationBase {
+public class AnimationBase {
 
     RelativeLayout layout;
     Context context;
@@ -30,6 +30,13 @@ abstract public class AnimationBase {
 
 
     Activity activity;
+    PicturesContainer picturesContainer;
+
+
+    public AnimationBase(PicturesContainer picturesContainer){
+        this.picturesContainer = picturesContainer;
+    }
+
 
     public Animation getAnim() {
         return anim;
@@ -39,11 +46,8 @@ abstract public class AnimationBase {
         this.activity = activity;
     }
 
-    abstract void createAnimation();
+    public void createAnimation(List<Picture> pictureList, AnimationType[] animationTypes){
 
-
-
-    public void makeAnimation(List<Picture> pictureList, AnimationType[] animationTypes){
 
         Random rand = new Random();
         AnimationType animationType = animationTypes[rand.nextInt(animationTypes.length)];
@@ -64,7 +68,18 @@ abstract public class AnimationBase {
 
     public RelativeLayout getLayout(Context context) {
         this.context=context;
-        createAnimation();
+
+        if(picturesContainer.getCategoryName().equals("planes") || picturesContainer.getCategoryName().equals("ships")){
+            createAnimation(picturesContainer.getPicturesInCategory(),
+                    new AnimationType[]{AnimationType.SPIRAL, AnimationType.GO_LEFT_TO_RIGHT});
+        }
+        else if(picturesContainer.getCategoryName().equals("trains")){
+            createAnimation(picturesContainer.getPicturesInCategory(), new AnimationType[]{AnimationType.GO_LEFT_TO_RIGHT});
+        }
+        else{
+            createAnimation(picturesContainer.getPicturesInCategory(), AnimationType.values());
+        }
+
         return layout;
     }
 
@@ -91,6 +106,7 @@ abstract public class AnimationBase {
 
     private void loadPictureToAnimation(ImageView imageView, Picture picture){
 
+        //TODO: Adding path to entity, using path (name + category?) here, exclude sun directory
         File imgFile = new  File("/sdcard/Images/test_image.jpg");
 
         if(imgFile.exists()){

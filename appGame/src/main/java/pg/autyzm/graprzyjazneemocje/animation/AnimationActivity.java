@@ -6,7 +6,11 @@ import android.os.Bundle;
 import android.view.animation.Animation;
 import android.widget.RelativeLayout;
 
+import java.util.List;
 import java.util.Random;
+
+import pg.autyzm.graprzyjazneemocje.api.entities.PicturesContainer;
+import pg.autyzm.graprzyjazneemocje.api.managers.ExternalAnimationManager;
 
 
 /**
@@ -27,30 +31,14 @@ public class AnimationActivity extends Activity implements Animation.AnimationLi
     }
 
     private AnimationBase randomAward() {
-        AnimationBase animation;
-        Random random = new Random();
-        switch (random.nextInt(6)) {
-            case 0:
-                animation = new AnimationBalls();
-                break;
-            case 1:
-                animation = new AnimationButterflies();
-                break;
-            case 2:
-                animation = new AnimationCars();
-                break;
-            case 3:
-                animation = new AnimatonShips();
-                break;
-            case 4:
-                animation = new AnimatonTrains();
-                break;
-            default:
-                animation = new AnimatonPlanes();
-                break;
-        }
+
+        List<PicturesContainer> picturesContainers = ExternalAnimationManager.getInstance().getPicturesFromExternalStorage();
+        int pictureCategoriesAmount = picturesContainers.size();
+        int pictureCategoriesIndexDrawn = new Random().nextInt(pictureCategoriesAmount);
+        AnimationBase animation = new AnimationBase(picturesContainers.get(pictureCategoriesIndexDrawn));
         animation.setActivity(this);
         return animation;
+
     }
 
     private void createView() {

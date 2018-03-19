@@ -11,44 +11,63 @@ import java.util.List;
 
 import pg.autyzm.graprzyjazneemocje.api.entities.Picture;
 import pg.autyzm.graprzyjazneemocje.api.entities.PictureMovementType;
+import pg.autyzm.graprzyjazneemocje.api.entities.PicturesContainer;
 import pg.autyzm.graprzyjazneemocje.api.exceptions.EmptyInternalStorageException;
 
 
 public class ExternalAnimationManager implements AnimationManagement {
 
-    private File friendlyAppsDirectoryInExternalStorage;
-    private List<Picture> picturesFromExternalStorage;
 
+    // singleton
 
-    public ExternalAnimationManager(){
+    private static ExternalAnimationManager instance = null;
+
+    protected ExternalAnimationManager() {
 
         openAnimationsDirectoryInExternalStorage();
+        setPicturesFromExternalStorage(getAllAnimationsFromStorage());
 
     }
 
+    public static ExternalAnimationManager getInstance() {
+        if(instance == null) {
+            instance = new ExternalAnimationManager();
+        }
+        return instance;
+    }
+
+    //
+
+    private File friendlyAppsDirectoryInExternalStorage;
+    private List<PicturesContainer> picturesFromExternalStorage;
 
 
     @Override
-    public List<Picture> getAllAnimationsFromStorage() {
+    public List<PicturesContainer> getAllAnimationsFromStorage() {
 
-        if(picturesFromExternalStorage == null) {
+        List<PicturesContainer> externalStorageAssets = new ArrayList<>();
 
-            File directoryWithAnimations = new File(friendlyAppsDirectoryInExternalStorage, picturesDirectoryName);
+        File picturesDirectory = new File(friendlyAppsDirectoryInExternalStorage, picturesDirectoryName);
 
-            picturesFromExternalStorage = new ArrayList<>();
-            File[] files = directoryWithAnimations.listFiles();
+        File[] directoriesWithPictures = picturesDirectory.listFiles();
 
-            // could use stream here one day
-            for (File file : files) {
-                if (!file.getName().endsWith(".png")) {
-                    continue;
+        for (File directoryWithPictures : directoriesWithPictures) {
+            if (!directoryWithPictures.getName().contains(".")) {
+
+                PicturesContainer picturesContainer = new PicturesContainer((directoryWithPictures.getName()));
+                File[] pictureFilesInDirectory = directoryWithPictures.listFiles();
+
+                for(File pictureFile : pictureFilesInDirectory){
+                    picturesContainer.addPicture(new Picture(pictureFile.getName()));
                 }
-                picturesFromExternalStorage.add(new Picture(file.getName()));
-            }
 
+                externalStorageAssets.add(picturesContainer);
+
+            }
         }
 
-        return picturesFromExternalStorage;
+
+        return externalStorageAssets;
     }
 
     @Override
@@ -75,13 +94,13 @@ public class ExternalAnimationManager implements AnimationManagement {
     }
 
     @Override
-    public List<Picture> giveAllAnimationsFromStorageWithNameLike(String namePattern) {
+    public PicturesContainer giveAllAnimationsFromStorageWithNameLike(String namePattern) {
 
-        List<Picture> picturesWithNamePattern = new ArrayList<>();
+        PicturesContainer picturesWithNamePattern = null;
 
-        for(Picture p : picturesFromExternalStorage){
-            if(p.getName().contains(namePattern)){
-                picturesWithNamePattern.add(p);
+        for(PicturesContainer p : getPicturesFromExternalStorage()){
+            if(p.getCategoryName().equals(namePattern)){
+                picturesWithNamePattern = p;
             }
         }
 
@@ -113,5 +132,11 @@ public class ExternalAnimationManager implements AnimationManagement {
     }
 
 
+    public List<PicturesContainer> getPicturesFromExternalStorage() {
+        return picturesFromExternalStorage;
+    }
 
+    public void setPicturesFromExternalStorage(List<PicturesContainer> picturesFromExternalStorage) {
+        this.picturesFromExternalStorage = picturesFromExternalStorage;
+    }
 }
