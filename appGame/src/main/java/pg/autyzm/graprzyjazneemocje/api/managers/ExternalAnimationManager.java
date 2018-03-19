@@ -4,13 +4,14 @@ package pg.autyzm.graprzyjazneemocje.api.managers;
 import android.os.Environment;
 import android.util.Log;
 
-import com.example.pbirg.animationsmanagement.api.entities.Picture;
-import com.example.pbirg.animationsmanagement.api.entities.PictureMovementType;
-import com.example.pbirg.animationsmanagement.api.exceptions.EmptyInternalStorageException;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import pg.autyzm.graprzyjazneemocje.api.entities.Picture;
+import pg.autyzm.graprzyjazneemocje.api.entities.PictureMovementType;
+import pg.autyzm.graprzyjazneemocje.api.exceptions.EmptyInternalStorageException;
 
 
 public class ExternalAnimationManager implements AnimationManagement {

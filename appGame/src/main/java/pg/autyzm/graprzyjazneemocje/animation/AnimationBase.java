@@ -2,14 +2,20 @@ package pg.autyzm.graprzyjazneemocje.animation;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import java.io.File;
+import java.util.List;
 import java.util.Random;
 
 import pg.autyzm.graprzyjazneemocje.R;
+import pg.autyzm.graprzyjazneemocje.api.entities.Picture;
 
 /**
  * Created by joagi on 13.01.2018.
@@ -36,13 +42,33 @@ abstract public class AnimationBase {
     abstract void createAnimation();
 
 
+
+    public void makeAnimation(List<Picture> pictureList, AnimationType[] animationTypes){
+
+        Random rand = new Random();
+        AnimationType animationType = animationTypes[rand.nextInt(animationTypes.length)];
+
+        switch (animationType) {
+            case STRAIGHT_FLY_UP_DOWN:
+                straightFlyUpDown(context, pictureList);
+                break;
+            case GO_LEFT_TO_RIGHT:
+                goLeftToRight(context, pictureList);
+                break;
+            case SPIRAL:
+                spiral(context, pictureList);
+                break;
+        }
+    }
+
+
     public RelativeLayout getLayout(Context context) {
         this.context=context;
         createAnimation();
         return layout;
     }
 
-    void goLeftToRight(Context context, int images[]) {
+    void goLeftToRight(Context context, List<Picture> images) {
 
         ImageView animImage;
 
@@ -52,7 +78,10 @@ abstract public class AnimationBase {
         for (int image : imagesNr) {
 
             animImage = (ImageView) activity.findViewById(image);
-            animImage.setImageResource(images[rand.nextInt(images.length)]);
+
+            Picture drawnPicture = images.get(rand.nextInt(images.size()));
+            loadPictureToAnimation(animImage, drawnPicture);
+
             anim = AnimationUtils.loadAnimation(context, R.anim.right);
             anim.setStartOffset(rand.nextInt(1500));
             anim.setDuration(rand.nextInt(1000) + 1500);
@@ -60,7 +89,17 @@ abstract public class AnimationBase {
         }
     }
 
-    void straightFlyUpDown(Context context, int images[]) {
+    private void loadPictureToAnimation(ImageView imageView, Picture picture){
+
+        File imgFile = new  File("/sdcard/Images/test_image.jpg");
+
+        if(imgFile.exists()){
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            imageView.setImageBitmap(myBitmap);
+        }
+    }
+
+    void straightFlyUpDown(Context context, List<Picture> images) {
         ImageView animImage;
 
         activity.setContentView(R.layout.activity_anim_straight);
@@ -70,7 +109,10 @@ abstract public class AnimationBase {
         for (int image : imagesNr) {
 
             animImage = (ImageView) activity.findViewById(image);
-            animImage.setImageResource(images[rand.nextInt(images.length)]);
+
+            Picture drawnPicture = images.get(rand.nextInt(images.size()));
+            loadPictureToAnimation(animImage, drawnPicture);
+
             if((n++)%2==0) {
                 animImage.setRotation(270);
                 anim = AnimationUtils.loadAnimation(context, R.anim.up);
@@ -82,18 +124,21 @@ abstract public class AnimationBase {
         }
     }
 
-    void spiral(Context context, int images[]) {
+    void spiral(Context context, List<Picture> images) {
         ImageView animImage;
 
         activity.setContentView(R.layout.activity_anim_spiral);
-
         animImage = (ImageView) activity.findViewById(R.id.image1);
-        animImage.setImageResource(images[rand.nextInt(images.length)]);
+        Picture drawnPicture = images.get(rand.nextInt(images.size()));
+        loadPictureToAnimation(animImage, drawnPicture);
+
         anim = AnimationUtils.loadAnimation(context, R.anim.spiral);
         animImage.startAnimation(anim);
 
         animImage = (ImageView) activity.findViewById(R.id.image2);
-        animImage.setImageResource(images[rand.nextInt(images.length)]);
+        drawnPicture = images.get(rand.nextInt(images.size()));
+        loadPictureToAnimation(animImage, drawnPicture);
+
         anim = AnimationUtils.loadAnimation(context, R.anim.spirall);
         animImage.startAnimation(anim);
 

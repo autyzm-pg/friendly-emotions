@@ -1,11 +1,12 @@
 package pg.autyzm.graprzyjazneemocje.api.managers;
 
 
-import com.example.pbirg.animationsmanagement.api.entities.Picture;
-import com.example.pbirg.animationsmanagement.api.entities.PictureMovementType;
-import com.example.pbirg.animationsmanagement.api.exceptions.EmptyInternalStorageException;
 
 import java.util.List;
+
+import pg.autyzm.graprzyjazneemocje.api.entities.Picture;
+import pg.autyzm.graprzyjazneemocje.api.entities.PictureMovementType;
+import pg.autyzm.graprzyjazneemocje.api.exceptions.EmptyInternalStorageException;
 
 
 public interface AnimationManagement {
