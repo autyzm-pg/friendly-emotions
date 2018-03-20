@@ -54,11 +54,15 @@ public class ExternalAnimationManager implements AnimationManagement {
         for (File directoryWithPictures : directoriesWithPictures) {
             if (!directoryWithPictures.getName().contains(".")) {
 
+                if(directoryWithPictures.getName().equals("suns")){
+                    continue;
+                }
+
                 PicturesContainer picturesContainer = new PicturesContainer((directoryWithPictures.getName()));
                 File[] pictureFilesInDirectory = directoryWithPictures.listFiles();
 
                 for(File pictureFile : pictureFilesInDirectory){
-                    picturesContainer.addPicture(new Picture(pictureFile.getName()));
+                    picturesContainer.addPicture(new Picture(pictureFile.getName(), pictureFile.getAbsolutePath()));
                 }
 
                 externalStorageAssets.add(picturesContainer);

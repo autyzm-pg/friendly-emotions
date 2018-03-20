@@ -106,8 +106,7 @@ public class AnimationBase {
 
     private void loadPictureToAnimation(ImageView imageView, Picture picture){
 
-        //TODO: Adding path to entity, using path (name + category?) here, exclude sun directory
-        File imgFile = new  File("/sdcard/Images/test_image.jpg");
+        File imgFile = new  File(picture.getPath());
 
         if(imgFile.exists()){
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
