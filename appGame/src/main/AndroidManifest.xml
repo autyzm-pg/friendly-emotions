@@ -25,7 +25,7 @@
             android:name=".animation.AnimationActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".AnimationEndActivity"
+            android:name=".animation.AnimationEndActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name=".EndActivity"

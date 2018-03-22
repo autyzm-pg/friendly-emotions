@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Random;
 
@@ -109,8 +113,22 @@ public class AnimationBase {
         File imgFile = new  File(picture.getPath());
 
         if(imgFile.exists()){
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            imageView.setImageBitmap(myBitmap);
+
+            try {
+                FileInputStream fileInputStream = new FileInputStream(imgFile);
+                Bitmap myBitmap = BitmapFactory.decodeStream(fileInputStream);
+                imageView.setImageBitmap(myBitmap);
+
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+
+            //Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            //imageView.setImageBitmap(myBitmap);
+            Log.i("Files", "Picture loaded from path: " + picture.getPath());
+
         }
     }
 
