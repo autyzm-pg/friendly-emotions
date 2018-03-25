@@ -1,4 +1,4 @@
-package pg.autyzm.przyjazneemocje.View;
+package pg.autyzm.przyjazneemocje;
 
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -25,7 +25,10 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 
-import pg.autyzm.przyjazneemocje.R;
+import pg.autyzm.przyjazneemocje.View.CheckboxGridAdapter;
+import pg.autyzm.przyjazneemocje.View.CheckboxGridBean;
+import pg.autyzm.przyjazneemocje.View.CheckboxImageAdapter;
+import pg.autyzm.przyjazneemocje.View.GridCheckboxImageBean;
 import pg.autyzm.przyjazneemocje.lib.entities.Level;
 import pg.autyzm.przyjazneemocje.lib.SqliteManager;
 
@@ -35,7 +38,7 @@ import static pg.autyzm.przyjazneemocje.lib.SqliteManager.getInstance;
  * Created by joagi on 26.12.2017.
  */
 
-public class LevelConfiguration extends AppCompatActivity {
+public class LevelConfigurationActivity extends AppCompatActivity {
 
     ArrayList praiseList = new ArrayList();
     private Level level = new Level();
@@ -165,12 +168,12 @@ public class LevelConfiguration extends AppCompatActivity {
         for (Object objectItem : praiseList) {
 
             CheckboxGridBean checkboxGridBean = (CheckboxGridBean) objectItem;
-            checkboxGridBean.checked = false;
+            checkboxGridBean.setChecked(false);
 
             for(int i = 0; i < praisesArray.length; i++) {
 
-                if (praisesArray[i].equals(checkboxGridBean.name)) {
-                    checkboxGridBean.checked = true;
+                if (praisesArray[i].equals(checkboxGridBean.getName())) {
+                    checkboxGridBean.setChecked(true);
                     praisesArray[i] = "default_praise";
                     break;
                 }
@@ -570,8 +573,8 @@ public class LevelConfiguration extends AppCompatActivity {
         for(Object objectItem : praiseList){
             CheckboxGridBean checkboxGridBean = (CheckboxGridBean) objectItem;
 
-            if(checkboxGridBean.checked){
-                level.addPraise(checkboxGridBean.name);
+            if(checkboxGridBean.isChecked()){
+                level.addPraise(checkboxGridBean.getName());
             }
 
         }
@@ -646,7 +649,7 @@ public class LevelConfiguration extends AppCompatActivity {
             convertView = inflater.inflate(R.layout.row_spinner, parent, false);
 
             Spinner spinner = (Spinner) convertView.findViewById(R.id.spinner_emotions);
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(LevelConfiguration.this,
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(LevelConfigurationActivity.this,
                     R.array.emotions_array, android.R.layout.simple_spinner_item);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(adapter);

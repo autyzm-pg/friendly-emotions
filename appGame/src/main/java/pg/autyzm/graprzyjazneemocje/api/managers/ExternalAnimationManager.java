@@ -7,6 +7,7 @@ import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import pg.autyzm.graprzyjazneemocje.api.entities.Picture;
@@ -16,6 +17,10 @@ import pg.autyzm.graprzyjazneemocje.api.exceptions.EmptyInternalStorageException
 
 
 public class ExternalAnimationManager implements AnimationManagement {
+
+
+    private File friendlyAppsDirectoryInExternalStorage;
+    private List<PicturesContainer> picturesFromExternalStorage;
 
 
     // singleton
@@ -38,8 +43,7 @@ public class ExternalAnimationManager implements AnimationManagement {
 
     //
 
-    private File friendlyAppsDirectoryInExternalStorage;
-    private List<PicturesContainer> picturesFromExternalStorage;
+
 
 
     @Override
@@ -103,30 +107,38 @@ public class ExternalAnimationManager implements AnimationManagement {
     }
 
     @Override
-    public PicturesContainer giveAllAnimationsFromStorageWithNameLike(String namePattern) {
+    public List<PicturesContainer> giveAllAnimationsFromStorageWithCategoriesProvided(String[] categories) {
 
-        PicturesContainer picturesWithNamePattern = null;
+        List<PicturesContainer> picturesContainerList = getAllAnimationsFromStorage();
+        Iterator<PicturesContainer> picturesContainerIterator = picturesContainerList.iterator();
 
-        for(PicturesContainer p : getPicturesFromExternalStorage()){
-            if(p.getCategoryName().equals(namePattern)){
-                picturesWithNamePattern = p;
+        label:
+        while (picturesContainerIterator.hasNext()) {
+
+            PicturesContainer picturesContainer = picturesContainerIterator.next();
+
+            for (String category : categories) {
+                if (picturesContainer.getCategoryName().equals(category)) {
+                    continue label;
+                }
             }
+
+            picturesContainerIterator.remove();
         }
 
-        return picturesWithNamePattern;
+        return picturesContainerList;
     }
 
 
     private void openAnimationsDirectoryInExternalStorage(){
 
-        String animationsFolder = "happyApplicationsAnimations";
 
-        friendlyAppsDirectoryInExternalStorage = new File(Environment.getExternalStorageDirectory(), animationsFolder);
+        friendlyAppsDirectoryInExternalStorage = new File(Environment.getExternalStorageDirectory(), storageAppMainDirectoryName);
         if (!friendlyAppsDirectoryInExternalStorage.exists()) {
-            Log.i("Files", animationsFolder + " does not exists. You need to run AnimationLoader first!");
+            Log.i("Files", storageAppMainDirectoryName + " does not exists. You need to run AnimationLoader first!");
         }
 
-        Log.i("Files", animationsFolder + " directory was opened");
+        Log.i("Files", storageAppMainDirectoryName + " directory was opened");
 
     }
 
@@ -141,9 +153,7 @@ public class ExternalAnimationManager implements AnimationManagement {
     }
 
 
-    public List<PicturesContainer> getPicturesFromExternalStorage() {
-        return picturesFromExternalStorage;
-    }
+
 
     public void setPicturesFromExternalStorage(List<PicturesContainer> picturesFromExternalStorage) {
         this.picturesFromExternalStorage = picturesFromExternalStorage;

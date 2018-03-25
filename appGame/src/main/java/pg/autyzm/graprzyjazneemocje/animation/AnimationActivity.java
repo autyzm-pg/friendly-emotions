@@ -41,7 +41,7 @@ public class AnimationActivity extends Activity implements Animation.AnimationLi
     private AnimationBase randomAward() {
 
         AnimationBase animation;
-        List<PicturesContainer> picturesContainers = ExternalAnimationManager.getInstance().getPicturesFromExternalStorage();
+        List<PicturesContainer> picturesContainers = ExternalAnimationManager.getInstance().getAllAnimationsFromStorage();
 
         if(picturesContainers.isEmpty()){
             // use internal storage, if there's nothing in the external one
@@ -50,8 +50,10 @@ public class AnimationActivity extends Activity implements Animation.AnimationLi
 
         }else {
 
-            if (selectedPrizes.length > 0)
-                filterOutCategoriesNotSelectedDuringConfiguration(picturesContainers);
+            if (selectedPrizes.length > 0) {
+                picturesContainers =
+                        ExternalAnimationManager.getInstance().giveAllAnimationsFromStorageWithCategoriesProvided(selectedPrizes);
+            }
 
             int pictureCategoriesAmount = picturesContainers.size();
             int pictureCategoriesIndexDrawn = new Random().nextInt(pictureCategoriesAmount);
@@ -64,25 +66,6 @@ public class AnimationActivity extends Activity implements Animation.AnimationLi
 
     }
 
-    private void filterOutCategoriesNotSelectedDuringConfiguration(List<PicturesContainer> picturesContainers) {
-
-        Iterator<PicturesContainer> picturesContainerIterator = picturesContainers.iterator();
-
-        label:
-        while (picturesContainerIterator.hasNext()) {
-
-            PicturesContainer picturesContainer = picturesContainerIterator.next();
-
-            for (String category : selectedPrizes) {
-                if (picturesContainer.getCategoryName().equals(category)) {
-                    continue label;
-                }
-            }
-
-            picturesContainerIterator.remove();
-        }
-
-    }
 
     private void createView() {
         animationView = randomAward();

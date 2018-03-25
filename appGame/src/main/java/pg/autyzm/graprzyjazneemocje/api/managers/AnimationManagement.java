@@ -24,7 +24,7 @@ public interface AnimationManagement {
 
     // not sure if necessary - maybe those files should be copied manually
     List<PictureMovementType> giveAllPictureMovementTypesFromStorage();
-    PicturesContainer giveAllAnimationsFromStorageWithNameLike(String namePattern);
+    List<PicturesContainer> giveAllAnimationsFromStorageWithCategoriesProvided(String[] categories);
 
     /*
     może gdzieś zrób: utwórz obraz na podstawie animacji (to ze Stacka, zeby sie ludzie nie meczyli)

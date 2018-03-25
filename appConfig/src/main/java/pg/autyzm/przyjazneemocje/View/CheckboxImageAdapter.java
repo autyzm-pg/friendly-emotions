@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import java.io.File;
 import java.util.List;
 
+import pg.autyzm.przyjazneemocje.LevelConfigurationActivity;
 import pg.autyzm.przyjazneemocje.R;
 import pg.autyzm.przyjazneemocje.lib.entities.Level;
 
@@ -99,7 +100,7 @@ public class CheckboxImageAdapter extends ArrayAdapter<GridCheckboxImageBean> {
                 boolean isChecked = ((CheckBox)arg0).isChecked();
                 if(isChecked) {
                     Integer photoId = object.getId();
-                    Level configuredLevel = ((LevelConfiguration) context).getLevel();
+                    Level configuredLevel = ((LevelConfigurationActivity) context).getLevel();
                     if(object.photoName.contains("prize")) {
 
                         String photoCategoryName = getPrizeCategoryName(object.photoName);
@@ -130,7 +131,7 @@ public class CheckboxImageAdapter extends ArrayAdapter<GridCheckboxImageBean> {
 
     boolean isPhotoInLevelYet(Integer photoId){
 
-        Level configuredLevel = ((LevelConfiguration) context).getLevel();
+        Level configuredLevel = ((LevelConfigurationActivity) context).getLevel();
         if(configuredLevel == null) return false;
 
         for(Integer photoInLevelId : configuredLevel.getPhotosOrVideosIdList()){
@@ -144,7 +145,7 @@ public class CheckboxImageAdapter extends ArrayAdapter<GridCheckboxImageBean> {
 
     boolean isPrizeInLevelYet(Integer photoId){
 
-        Level configuredLevel = ((LevelConfiguration) context).getLevel();
+        Level configuredLevel = ((LevelConfigurationActivity) context).getLevel();
         String[] prizesArray = configuredLevel.getPrizes().split(";");
 
         for(int i = 0; i < prizesArray.length; i++){

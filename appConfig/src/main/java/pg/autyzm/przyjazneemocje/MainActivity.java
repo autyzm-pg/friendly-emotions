@@ -17,7 +17,6 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-import pg.autyzm.przyjazneemocje.View.LevelConfiguration;
 import pg.autyzm.przyjazneemocje.lib.SqliteManager;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
@@ -181,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
     public void sendMessage(View view) {
         // Do something in response to button
 
-        Intent intent = new Intent(this, LevelConfiguration.class);
+        Intent intent = new Intent(this, LevelConfigurationActivity.class);
         //EditText editText = (EditText) findViewById(R.id.edit_message);
         String message = "String";
         intent.putExtra(EXTRA_MESSAGE, message);
