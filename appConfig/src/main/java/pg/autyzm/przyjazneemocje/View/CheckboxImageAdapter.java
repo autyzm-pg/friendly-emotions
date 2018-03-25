@@ -101,7 +101,10 @@ public class CheckboxImageAdapter extends ArrayAdapter<GridCheckboxImageBean> {
                     Integer photoId = object.getId();
                     Level configuredLevel = ((LevelConfiguration) context).getLevel();
                     if(object.photoName.contains("prize")) {
-                        configuredLevel.addPrize(photoId.toString());
+
+                        String photoCategoryName = getPrizeCategoryName(object.photoName);
+
+                        configuredLevel.addPrize(photoCategoryName);
                     }else{
                         if(object.photoName.contains(".mp4"))
                         {
@@ -115,6 +118,14 @@ public class CheckboxImageAdapter extends ArrayAdapter<GridCheckboxImageBean> {
         });
 
         return row;
+    }
+
+    String getPrizeCategoryName(String fullPhotoName){
+
+        String[] photoNameParts = fullPhotoName.split("\\.");
+        String[] photoNameParts2 = photoNameParts[0].split("_");
+        return photoNameParts2[1];
+
     }
 
     boolean isPhotoInLevelYet(Integer photoId){

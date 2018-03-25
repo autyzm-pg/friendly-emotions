@@ -409,13 +409,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     void showPraise(){
 
-        String[] prizesArray = l.getPraises().split(";");
+        String[] praisesArray = l.getPraises().split(";");
 
         Random rand = new Random();
-        int prizeDrawn = rand.nextInt(prizesArray.length);
+        int praiseDrawn = rand.nextInt(praisesArray.length);
 
-        final TextView textViewExistingOnlyForSettingPrizeText = (TextView) findViewById(R.id.saveMessage);
-        textViewExistingOnlyForSettingPrizeText.setText(prizesArray[prizeDrawn]);
+        final TextView textViewExistingOnlyForSettingPraiseText = (TextView) findViewById(R.id.saveMessage);
+        textViewExistingOnlyForSettingPraiseText.setText(praisesArray[praiseDrawn]);
 
 
         final TextView msg = (TextView) findViewById(R.id.saveMessage);
