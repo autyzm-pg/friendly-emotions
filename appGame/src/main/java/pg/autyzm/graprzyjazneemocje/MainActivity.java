@@ -98,16 +98,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         generateView(photosToUseInSublevel);
 
-        if(!videos && !l.isShouldQuestionBeReadAloud())
-        {
+
+        if (!videos && l.isShouldQuestionBeReadAloud()) {
             findViewById(R.id.matchEmotionsSpeakerButton).setVisibility(View.GONE);
-        }
 
-        if(!videos && l.isShouldQuestionBeReadAloud()) {
-
-            //JG
             speaker = Speaker.getInstance(MainActivity.this);
-
             final ImageButton speakerButton = (ImageButton) findViewById(R.id.matchEmotionsSpeakerButton);
             speakerButton.setOnClickListener(new View.OnClickListener() {
 
