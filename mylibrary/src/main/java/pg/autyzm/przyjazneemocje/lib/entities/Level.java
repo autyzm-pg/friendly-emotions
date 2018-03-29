@@ -213,7 +213,11 @@ public class Level {
     }
 
     public String getName() {
-        return name;
+        if (name != null) {
+            return name;
+        } else {
+            return generateDefaultName();
+        }
     }
 
     public void setName(String name) {
@@ -249,8 +253,9 @@ public class Level {
             }
         }
 
-        if(isNew)
+        if(isNew) {
             this.emotions.add(newEmotionId);
+        }
     }
 
     public void deleteEmotion(int i) {
@@ -284,8 +289,6 @@ public class Level {
     public void setShouldQuestionBeReadAloud(boolean shouldQuestionBeReadAloud) {
         this.shouldQuestionBeReadAloud = shouldQuestionBeReadAloud;
     }
-
-
 
     public void addPhoto(Integer photoId){
         photosOrVideosIdList.add(photoId);
@@ -322,6 +325,23 @@ public class Level {
 
         emotions = newEmotions;
 
+    }
+
+    private String generateDefaultName() {
+        String name = "";
+        for (int emotion : emotions) {
+            name += emotion + " ";
+        }
+        return name;
+    }
+
+    public static Level defaultLevel(){
+        Level level = new Level();
+
+        level.addEmotion(0);
+        level.addEmotion(1);
+
+        return level;
     }
 
 
