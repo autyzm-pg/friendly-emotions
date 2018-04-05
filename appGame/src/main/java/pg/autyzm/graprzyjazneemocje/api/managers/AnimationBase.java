@@ -1,4 +1,4 @@
-package pg.autyzm.graprzyjazneemocje.animation;
+package pg.autyzm.graprzyjazneemocje.api.managers;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,9 +8,7 @@ import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,30 +25,17 @@ import pg.autyzm.graprzyjazneemocje.api.entities.PicturesContainer;
 
 public class AnimationBase {
 
-    RelativeLayout layout;
-    Context context;
-    Random rand = new Random();
-    Animation anim;
+    private Animation animation;
+    private Activity activity;
+    private PicturesContainer picturesContainer;
 
 
-    Activity activity;
-    PicturesContainer picturesContainer;
-
-
-    public AnimationBase(PicturesContainer picturesContainer){
-        this.picturesContainer = picturesContainer;
-    }
-
-
-    public Animation getAnim() {
-        return anim;
-    }
-
-    public void setActivity(Activity activity) {
+    public AnimationBase(Activity activity){
         this.activity = activity;
     }
 
-    public void createAnimation(List<Picture> pictureList, AnimationType[] animationTypes){
+
+    private void createAnimation(List<Picture> pictureList, AnimationType[] animationTypes){
 
 
         Random rand = new Random();
@@ -58,36 +43,37 @@ public class AnimationBase {
 
         switch (animationType) {
             case STRAIGHT_FLY_UP_DOWN:
-                straightFlyUpDown(context, pictureList);
+                straightFlyUpDown(activity, pictureList);
                 break;
             case GO_LEFT_TO_RIGHT:
-                goLeftToRight(context, pictureList);
+                goLeftToRight(activity, pictureList);
                 break;
             case SPIRAL:
-                spiral(context, pictureList);
+                spiral(activity, pictureList);
                 break;
         }
     }
 
 
-    public RelativeLayout getLayout(Context context) {
-        this.context=context;
+    private void prepareLayout() {
+
+        AnimationType[] allowedAnimationTypes;
 
         if(picturesContainer.getCategoryName().equals("planes") || picturesContainer.getCategoryName().equals("ships")){
-            createAnimation(picturesContainer.getPicturesInCategory(),
-                    new AnimationType[]{AnimationType.SPIRAL, AnimationType.GO_LEFT_TO_RIGHT});
+            allowedAnimationTypes = new AnimationType[]{AnimationType.SPIRAL, AnimationType.GO_LEFT_TO_RIGHT};
         }
         else if(picturesContainer.getCategoryName().equals("trains")){
-            createAnimation(picturesContainer.getPicturesInCategory(), new AnimationType[]{AnimationType.GO_LEFT_TO_RIGHT});
+            allowedAnimationTypes = new AnimationType[]{AnimationType.GO_LEFT_TO_RIGHT};
         }
         else{
-            createAnimation(picturesContainer.getPicturesInCategory(), AnimationType.values());
+            allowedAnimationTypes = AnimationType.values();
         }
 
-        return layout;
+        createAnimation(picturesContainer.getPicturesInCategory(), allowedAnimationTypes);
+
     }
 
-    void goLeftToRight(Context context, List<Picture> images) {
+    private void goLeftToRight(Context context, List<Picture> images) {
 
         ImageView animImage;
 
@@ -98,13 +84,13 @@ public class AnimationBase {
 
             animImage = (ImageView) activity.findViewById(image);
 
-            Picture drawnPicture = images.get(rand.nextInt(images.size()));
+            Picture drawnPicture = images.get(new Random().nextInt(images.size()));
             loadPictureToAnimation(animImage, drawnPicture);
 
-            anim = AnimationUtils.loadAnimation(context, R.anim.right);
-            anim.setStartOffset(rand.nextInt(1500));
-            anim.setDuration(rand.nextInt(1000) + 1500);
-            animImage.startAnimation(anim);
+            animation = AnimationUtils.loadAnimation(context, R.anim.right);
+            animation.setStartOffset(new Random().nextInt(1500));
+            animation.setDuration(new Random().nextInt(1000) + 1500);
+            animImage.startAnimation(animation);
         }
     }
 
@@ -132,7 +118,7 @@ public class AnimationBase {
         }
     }
 
-    void straightFlyUpDown(Context context, List<Picture> images) {
+    private void straightFlyUpDown(Context context, List<Picture> images) {
         ImageView animImage;
 
         activity.setContentView(R.layout.activity_anim_straight);
@@ -143,50 +129,73 @@ public class AnimationBase {
 
             animImage = (ImageView) activity.findViewById(image);
 
-            Picture drawnPicture = images.get(rand.nextInt(images.size()));
+            Picture drawnPicture = images.get(new Random().nextInt(images.size()));
             loadPictureToAnimation(animImage, drawnPicture);
 
             if((n++)%2==0) {
                 animImage.setRotation(270);
-                anim = AnimationUtils.loadAnimation(context, R.anim.up);
+                animation = AnimationUtils.loadAnimation(context, R.anim.up);
             } else {
                 animImage.setRotation(90);
-                anim = AnimationUtils.loadAnimation(context, R.anim.down);
+                animation = AnimationUtils.loadAnimation(context, R.anim.down);
             }
-            animImage.startAnimation(anim);
+            animImage.startAnimation(animation);
         }
     }
 
-    void spiral(Context context, List<Picture> images) {
+    private void spiral(Context context, List<Picture> images) {
         ImageView animImage;
 
         activity.setContentView(R.layout.activity_anim_spiral);
         animImage = (ImageView) activity.findViewById(R.id.image1);
-        Picture drawnPicture = images.get(rand.nextInt(images.size()));
+        Picture drawnPicture = images.get(new Random().nextInt(images.size()));
         loadPictureToAnimation(animImage, drawnPicture);
 
-        anim = AnimationUtils.loadAnimation(context, R.anim.spiral);
-        animImage.startAnimation(anim);
+        animation = AnimationUtils.loadAnimation(context, R.anim.spiral);
+        animImage.startAnimation(animation);
 
         animImage = (ImageView) activity.findViewById(R.id.image2);
-        drawnPicture = images.get(rand.nextInt(images.size()));
+        drawnPicture = images.get(new Random().nextInt(images.size()));
         loadPictureToAnimation(animImage, drawnPicture);
 
-        anim = AnimationUtils.loadAnimation(context, R.anim.spirall);
-        animImage.startAnimation(anim);
+        animation = AnimationUtils.loadAnimation(context, R.anim.spirall);
+        animImage.startAnimation(animation);
 
     }
 
-    private ImageView initImage(int imageNumber) {
-        ImageView image;
+    private enum AnimationType {
 
-        image = new ImageView(context);
-        layout.addView(image);
-        image.setImageResource(imageNumber);
-        return image;
+        STRAIGHT_FLY_UP_DOWN, GO_LEFT_TO_RIGHT, SPIRAL
+
+
     }
 
-    int getBackground() {
-        return R.drawable.background_main_gradient;
+    public Animation prepareAndReturnRandomAward(String[] selectedPrizes) {
+
+        List<PicturesContainer> picturesContainers = ExternalAnimationManager.getInstance().getAllAnimationsFromStorage();
+
+        if(picturesContainers.isEmpty()){
+            // use internal storage, if there's nothing in the external one
+            throw new RuntimeException("This path is still not implemented");
+
+        }else {
+
+            if (selectedPrizes.length > 0) {
+                picturesContainers =
+                        ExternalAnimationManager.getInstance().giveAllAnimationsFromStorageWithCategoriesProvided(selectedPrizes);
+            }
+
+            int pictureCategoriesAmount = picturesContainers.size();
+            int pictureCategoriesIndexDrawn = new Random().nextInt(pictureCategoriesAmount);
+            picturesContainer = picturesContainers.get(pictureCategoriesIndexDrawn);
+
+
+            prepareLayout();
+            return animation;
+
+        }
+
+
     }
+
 }

@@ -4,15 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.animation.Animation;
-import android.widget.RelativeLayout;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-
-import pg.autyzm.graprzyjazneemocje.api.entities.Picture;
-import pg.autyzm.graprzyjazneemocje.api.entities.PicturesContainer;
-import pg.autyzm.graprzyjazneemocje.api.managers.ExternalAnimationManager;
+import pg.autyzm.graprzyjazneemocje.api.managers.AnimationBase;
 
 
 /**
@@ -24,53 +17,22 @@ public class AnimationActivity extends Activity implements Animation.AnimationLi
     protected Animation anim;
     private String[] selectedPrizes;
 
-    AnimationBase animationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        createView();
+        anim.setAnimationListener(this);
+    }
+
+    private void createView() {
 
         Bundle b = getIntent().getExtras();
         String selectedPrizesString = b.getString("prizes");
         selectedPrizes = selectedPrizesString.split(";");
 
-        createView();
-        anim.setAnimationListener(this);
-    }
-
-    private AnimationBase randomAward() {
-
-        AnimationBase animation;
-        List<PicturesContainer> picturesContainers = ExternalAnimationManager.getInstance().getAllAnimationsFromStorage();
-
-        if(picturesContainers.isEmpty()){
-            // use internal storage, if there's nothing in the external one
-            animation = null;
-            throw new RuntimeException("This path is still not implemented");
-
-        }else {
-
-            if (selectedPrizes.length > 0) {
-                picturesContainers =
-                        ExternalAnimationManager.getInstance().giveAllAnimationsFromStorageWithCategoriesProvided(selectedPrizes);
-            }
-
-            int pictureCategoriesAmount = picturesContainers.size();
-            int pictureCategoriesIndexDrawn = new Random().nextInt(pictureCategoriesAmount);
-            animation = new AnimationBase(picturesContainers.get(pictureCategoriesIndexDrawn));
-            animation.setActivity(this);
-
-        }
-
-        return animation;
-
-    }
-
-
-    private void createView() {
-        animationView = randomAward();
-        RelativeLayout layout = animationView.getLayout(getApplicationContext());
-        anim = animationView.getAnim();
+        AnimationBase animationBase = new AnimationBase(this);
+        anim = animationBase.prepareAndReturnRandomAward(selectedPrizes);
     }
 
     @Override
