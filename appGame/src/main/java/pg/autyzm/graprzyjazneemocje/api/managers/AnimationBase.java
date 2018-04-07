@@ -103,7 +103,8 @@ public class AnimationBase {
             try {
                 FileInputStream fileInputStream = new FileInputStream(imgFile);
                 Bitmap myBitmap = BitmapFactory.decodeStream(fileInputStream);
-                imageView.setImageBitmap(myBitmap);
+                Bitmap resized = Bitmap.createScaledBitmap(myBitmap, myBitmap.getWidth()*2, myBitmap.getHeight()*2, true);
+                imageView.setImageBitmap(resized);
 
 
             } catch (FileNotFoundException e) {
@@ -111,8 +112,6 @@ public class AnimationBase {
             }
 
 
-            //Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            //imageView.setImageBitmap(myBitmap);
             Log.i("Files", "Picture loaded from path: " + picture.getPath());
 
         }
