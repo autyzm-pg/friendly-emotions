@@ -37,7 +37,7 @@ import static pg.autyzm.przyjazneemocje.lib.SqliteManager.getInstance;
 public class LevelConfiguration extends AppCompatActivity {
 
     ArrayList praiseList = new ArrayList();
-    private Level level = new Level();
+    private Level level = Level.defaultLevel();
     String currentEmotionName;
 
 
@@ -46,7 +46,6 @@ public class LevelConfiguration extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tab_view);
 
-        initLevel();
         createTabMaterial();
         createTabLearningWays();
         createTabConsolidation();
@@ -207,14 +206,6 @@ public class LevelConfiguration extends AppCompatActivity {
 
     }
 
-
-
-
-    private void initLevel(){
-        getLevel().addEmotion(0);
-        getLevel().addEmotion(1);
-    }
-
     private void createTabSave() {
         createDefaultStepName();
         updateInfo();
@@ -254,6 +245,7 @@ public class LevelConfiguration extends AppCompatActivity {
 
     private void createDefaultStepName() {
         EditText editText = (EditText) findViewById(R.id.step_name);
+//        String name = level.getName();
         String name = "";
         for (int emotion : getLevel().getEmotions()) {
             name += getEmotionNameInLocalLanguage(emotion) + " ";

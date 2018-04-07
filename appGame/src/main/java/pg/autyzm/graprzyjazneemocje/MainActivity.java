@@ -59,7 +59,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     int timeoutSubLevel;
     String commandText;
     boolean animationEnds = true;
-    Level l;
+    Level level;
     CountDownTimer timer;
     public Speaker speaker;
     boolean videos = false; //TODO: Get from database
@@ -98,16 +98,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         generateView(photosToUseInSublevel);
 
-        if(!videos && !l.isShouldQuestionBeReadAloud())
-        {
+
+        if (!videos && level.isShouldQuestionBeReadAloud()) {
             findViewById(R.id.matchEmotionsSpeakerButton).setVisibility(View.GONE);
-        }
 
-        if(!videos && l.isShouldQuestionBeReadAloud()) {
-
-            //JG
             speaker = Speaker.getInstance(MainActivity.this);
-
             final ImageButton speakerButton = (ImageButton) findViewById(R.id.matchEmotionsSpeakerButton);
             speakerButton.setOnClickListener(new View.OnClickListener() {
 
@@ -150,7 +145,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         int levelId = 0;
         int photosPerLvL = 0;
-        l = null;
+        level = null;
 
         System.out.println(cur0.getCount());
 
@@ -161,36 +156,36 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Cursor cur3 = sqlm.givePhotosInLevel(levelId);
         Cursor cur4 = sqlm.giveEmotionsInLevel(levelId);
 
-        l = new Level(cur2, cur3, cur4);
+        level = new Level(cur2, cur3, cur4);
 
-        if(l.getPhotosOrVideosFlag().equals("videos")) {
+        if(level.getPhotosOrVideosFlag().equals("videos")) {
             videos = true;
         }
         else {
             videos = false;
         }
 
-        l.incrementEmotionIdsForGame();
+        level.incrementEmotionIdsForGame();
 
-        photosPerLvL = l.getPhotosOrVideosShowedForOneQuestion();
+        photosPerLvL = level.getPhotosOrVideosShowedForOneQuestion();
 
 
-        if (!l.isLevelActive()) return false;
+        if (!level.isLevelActive()) return false;
 
         // tworzymy tablice do permutowania
 
         if(!videos)
-            sublevelsLeft = l.getEmotions().size() * l.getSublevelsPerEachEmotion();
+            sublevelsLeft = level.getEmotions().size() * level.getSublevelsPerEachEmotion();
         else
             sublevelsLeft = videoCursor.getCount();
 
         sublevelsList = new ArrayList<Integer>();
 
-        for (int i = 0; i < l.getEmotions().size(); i++) {
+        for (int i = 0; i < level.getEmotions().size(); i++) {
 
-            for (int j = 0; j < l.getSublevelsPerEachEmotion(); j++) {
+            for (int j = 0; j < level.getSublevelsPerEachEmotion(); j++) {
 
-                sublevelsList.add(l.getEmotions().get(i));
+                sublevelsList.add(level.getEmotions().get(i));
 
             }
 
@@ -200,7 +195,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         generateSublevel(sublevelsList.get(sublevelsLeft - 1));
 
         // wylosuj emocje z wybranych emocji, odczytaj jej imie (bo mamy liste id)
-        //int emotionIndexInList = selectEmotionToChoose(l);
+        //int emotionIndexInList = selectEmotionToChoose(level);
 
         return true;
 
@@ -220,7 +215,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         photosToUseInSublevel = new ArrayList<String>();
 
 
-        for (int e : l.getPhotosOrVideosIdList()) {
+        for (int e : level.getPhotosOrVideosIdList()) {
 
             //System.out.println("Id zdjecia: " + e);
             Cursor curEmotion = sqlm.givePhotoWithId(e);
@@ -245,7 +240,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         // z listy b wybieramy zdjecia nieprawidlowe
 
-        selectPhotoWithNotSelectedEmotions(l.getPhotosOrVideosShowedForOneQuestion());
+        selectPhotoWithNotSelectedEmotions(level.getPhotosOrVideosShowedForOneQuestion());
 
         // laczymy dobra odpowiedz z reszta wybranych zdjec i przekazujemy to dalej
 
@@ -257,7 +252,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         // z tego co rozumiem w photosList powinny byc name wszystkich zdjec, jakie maja sie pojawic w lvl (czyli - 3 pozycje)
 
 
-        StartTimer(l);
+        StartTimer(level);
            /* final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -280,7 +275,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     }
                     timeout ++;
                 }
-            }, l.timeLimit * 1000);*/
+            }, level.timeLimit * 1000);*/
 
 
         // /birgiel
@@ -295,11 +290,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
             TextView txt = (TextView) findViewById(R.id.rightEmotion);
             String rightEmotionLang = getResources().getString(getResources().getIdentifier("emotion_" + rightEmotion, "string", getPackageName()));
 
-            if(l.getQuestionType().equals(Level.Question.SHOW_WHERE_IS_EMOTION_NAME))
+            if(level.getQuestionType().equals(Level.Question.SHOW_WHERE_IS_EMOTION_NAME))
                 commandText = getResources().getString(R.string.label_show_emotion) + " " + rightEmotionLang;
-            else if(l.getQuestionType().equals(Level.Question.SHOW_EMOTION_NAME))
+            else if(level.getQuestionType().equals(Level.Question.SHOW_EMOTION_NAME))
                 commandText = getResources().getString(R.string.label_show_emotion_short) + " " + rightEmotionLang;
-            else if(l.getQuestionType().equals(Level.Question.EMOTION_NAME))
+            else if(level.getQuestionType().equals(Level.Question.EMOTION_NAME))
                 commandText = rightEmotionLang;
 
             txt.setText(commandText);
@@ -400,7 +395,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     boolean checkCorrectness() {
-        if (wrongAnswersSublevel > l.getAmountOfAllowedTriesForEachEmotion()) {
+        if (wrongAnswersSublevel > level.getAmountOfAllowedTriesForEachEmotion()) {
             return false;
         }
         return true;
@@ -408,11 +403,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
     /*
-        int selectEmotionToChoose(Level l){
+        int selectEmotionToChoose(Level level){
 
             Random rand = new Random();
 
-            int emotionIndexInList = rand.nextInt(l.emotions.size());
+            int emotionIndexInList = rand.nextInt(level.emotions.size());
 
             return emotionIndexInList;
         }
@@ -468,7 +463,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                 java.util.Collections.shuffle(sublevelsList);
                 if(!videos)
-                    sublevelsLeft = l.getEmotions().size() * l.getSublevelsPerEachEmotion();
+                    sublevelsLeft = level.getEmotions().size() * level.getSublevelsPerEachEmotion();
                 else
                     sublevelsLeft = videoCursor.getCount();
 
@@ -487,8 +482,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
             speaker = Speaker.getInstance(MainActivity.this);
         }
         Intent i = new Intent(MainActivity.this, AnimationActivity.class);
-        i.putExtra("praises", l.getPraises());
-        i.putExtra("prizes", l.getPrizes());
+        i.putExtra("praises", level.getPraises());
+        i.putExtra("prizes", level.getPrizes());
         startActivityForResult(i, 1);
     }
 
