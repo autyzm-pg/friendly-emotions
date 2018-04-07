@@ -464,47 +464,31 @@ public class LevelConfiguration extends AppCompatActivity {
 
     }
 
-    void save(){
-
+    void save() {
         gatherInfoFromGUI();
         saveLevelToDatabaseAndShowLevelSavedText();
         getLevel().setId(0);
-
     }
 
-
-    void saveLevelToDatabaseAndShowLevelSavedText(){
-
+    void saveLevelToDatabaseAndShowLevelSavedText() {
         SqliteManager sqlm = getInstance(this);
-
-
         sqlm.saveLevelToDatabase(getLevel());
 
-        final TextView msg = (TextView) findViewById(R.id.saveMessage);
-        msg.setVisibility(View.VISIBLE);
-        msg.postDelayed(new Runnable() {
-            public void run() {
-                msg.setVisibility(View.INVISIBLE);
-            }
-        }, 2000);
+        final TextView msg = (TextView) findViewById(R.id.status_info);
+        msg.setText(R.string.save_message);
+        finish();
     }
 
 
-
-    void gatherInfoFromGUI(){
-
-
+    void gatherInfoFromGUI() {
         // 1 panel
-
         // save selected photos
 
         GridView listView = (GridView) findViewById(R.id.grid_photos);
         int size = listView.getChildCount();
 
-        for(int i = 0; i < size; i++){
-
+        for (int i = 0; i < size; i++) {
             listView.getChildAt(i);
-
         }
 
 

@@ -91,4 +91,13 @@
         android:onClick="prevTab"
         android:src="@drawable/icon_prev" />
 
+    <TextView
+        android:id="@+id/status_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/button_next"
+        android:layout_centerHorizontal="true"
+        android:text=""
+        android:textAppearance="@style/TitleStyle" />
+
 </RelativeLayout>
