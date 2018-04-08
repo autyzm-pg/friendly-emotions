@@ -480,8 +480,16 @@ public class LevelConfigurationActivity extends AppCompatActivity {
     void save(){
 
         gatherInfoFromGUI();
-        saveLevelToDatabaseAndShowLevelSavedText();
-        getLevel().setId(0);
+
+        LevelValidator.ERROR_TYPE result = new LevelValidator(level).validateLevel();
+
+        if(LevelValidator.ERROR_TYPE.OK.equals(result)) {
+            saveLevelToDatabaseAndShowLevelSavedText();
+            getLevel().setId(0);
+        }
+        else{
+            showTextInformation(result.toString());
+        }
 
     }
 
@@ -500,6 +508,20 @@ public class LevelConfigurationActivity extends AppCompatActivity {
                 msg.setVisibility(View.INVISIBLE);
             }
         }, 2000);
+    }
+
+    private void showTextInformation(String textMessage){
+
+        final TextView msg = (TextView) findViewById(R.id.saveMessage);
+        msg.setText(textMessage);
+        msg.setVisibility(View.VISIBLE);
+        msg.postDelayed(new Runnable() {
+            public void run() {
+                msg.setVisibility(View.INVISIBLE);
+            }
+        }, 2000);
+
+
     }
 
 
