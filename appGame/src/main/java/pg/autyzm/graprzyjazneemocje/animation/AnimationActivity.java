@@ -25,7 +25,7 @@ public class AnimationActivity extends Activity implements Animation.AnimationLi
         anim.setAnimationListener(this);
     }
 
-    private void createView() {
+    protected void createView() {
 
         Bundle b = getIntent().getExtras();
         String selectedPrizesString = b.getString("prizes");

@@ -15,7 +15,7 @@ import pg.autyzm.graprzyjazneemocje.R;
  * Created by Joanna on 2016-12-01.
  */
 
-public class AnimationEndActivity extends AnimationActivity{
+public class AnimationEndActivity extends Activity implements Animation.AnimationListener {
 
     protected ImageView animImage;
     protected Animation anim;
@@ -32,6 +32,10 @@ public class AnimationEndActivity extends AnimationActivity{
     }
 
     @Override
+    public void onAnimationStart(Animation animation) {
+
+    }
+
     public void onAnimationEnd(Animation animation) {
         Intent resultIntent = new Intent();
         setResult(Activity.RESULT_OK, resultIntent);
@@ -39,11 +43,8 @@ public class AnimationEndActivity extends AnimationActivity{
     }
 
     @Override
-    public void onAnimationStart(Animation animation) {
-    }
-
-    @Override
     public void onAnimationRepeat(Animation animation) {
+
     }
 
 
@@ -66,4 +67,5 @@ public class AnimationEndActivity extends AnimationActivity{
         animImage.startAnimation(anim);
 
     }
+
 }
