@@ -23,9 +23,6 @@ public class AnimationsDownloader extends AsyncTask<String, Void, Void> {
     private final String ACCESS_TOKEN = "bgHKRr_8uBAAAAAAAAAAB8hFqM9vKzHITfQo54V0G19VhQ0zAOvNs9Eo29XSE0Rf";
     private final String storageAppMainDirectoryName = "happyApplicationsAnimations";
     private final String picturesDirectoryName = "/pictures/";
-    private final String backgroundDirectoryName = "background";
-    private final String animationMovementsDirectoryName = "animationMovements";
-
 
     public AnimationsDownloader(){
         DbxRequestConfig requestConfig = DbxRequestConfig.newBuilder("FriendlyApplications").build();

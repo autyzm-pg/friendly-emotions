@@ -11,42 +11,35 @@ import java.util.Iterator;
 import java.util.List;
 
 import pg.autyzm.graprzyjazneemocje.api.entities.Picture;
-import pg.autyzm.graprzyjazneemocje.api.entities.PictureMovementType;
 import pg.autyzm.graprzyjazneemocje.api.entities.PicturesContainer;
-import pg.autyzm.graprzyjazneemocje.api.exceptions.EmptyInternalStorageException;
 
 
-public class ExternalAnimationManager implements AnimationManagement {
+public class StorageAnimationsManager {
 
+    private String storageAppMainDirectoryName = "happyApplicationsAnimations";
+    private String picturesDirectoryName = "pictures";
 
     private File friendlyAppsDirectoryInExternalStorage;
     private List<PicturesContainer> picturesFromExternalStorage;
 
-
     // singleton
 
-    private static ExternalAnimationManager instance = null;
+    private static StorageAnimationsManager instance = null;
 
-    protected ExternalAnimationManager() {
+    protected StorageAnimationsManager() {
 
         openAnimationsDirectoryInExternalStorage();
         setPicturesFromExternalStorage(getAllAnimationsFromStorage());
 
     }
 
-    public static ExternalAnimationManager getInstance() {
+    public static StorageAnimationsManager getInstance() {
         if(instance == null) {
-            instance = new ExternalAnimationManager();
+            instance = new StorageAnimationsManager();
         }
         return instance;
     }
 
-    //
-
-
-
-
-    @Override
     public List<PicturesContainer> getAllAnimationsFromStorage() {
 
         List<PicturesContainer> externalStorageAssets = new ArrayList<>();
@@ -79,34 +72,10 @@ public class ExternalAnimationManager implements AnimationManagement {
 
         }
 
-
         return externalStorageAssets;
     }
 
-    @Override
-    public boolean deleteAnimationFromStorage(Picture picture) {
 
-        boolean result = false;
-        File file = new File(friendlyAppsDirectoryInExternalStorage, picture.getName());
-        if (file.exists()){
-            result = file.delete();
-        }
-
-        return result;
-
-    }
-
-    @Override
-    public void deleteAllAnimationsFromStorage() {
-
-    }
-
-    @Override
-    public List<PictureMovementType> giveAllPictureMovementTypesFromStorage(){
-        return null;
-    }
-
-    @Override
     public List<PicturesContainer> giveAllAnimationsFromStorageWithCategoriesProvided(String[] categories) {
 
         List<PicturesContainer> picturesContainerList = getAllAnimationsFromStorage();
@@ -141,19 +110,6 @@ public class ExternalAnimationManager implements AnimationManagement {
         Log.i("Files", storageAppMainDirectoryName + " directory was opened");
 
     }
-
-    public void prepareInternalAnimations() throws EmptyInternalStorageException {
-
-        /*
-            1. Check internal/ directory. If it doesn't exists or it's empty, do next step.
-            2. Take first 3 animations from external storage and save them to internal.
-        */
-
-        throw new EmptyInternalStorageException("Internal storage is empty and it was impossible to copy animations from External storage to it.");
-    }
-
-
-
 
     public void setPicturesFromExternalStorage(List<PicturesContainer> picturesFromExternalStorage) {
         this.picturesFromExternalStorage = picturesFromExternalStorage;

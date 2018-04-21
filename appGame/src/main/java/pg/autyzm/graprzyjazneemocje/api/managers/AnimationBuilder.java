@@ -1,7 +1,6 @@
 package pg.autyzm.graprzyjazneemocje.api.managers;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -186,7 +185,7 @@ public class AnimationBuilder {
 
     public Animation prepareAndReturnRandomAward(String[] selectedPrizes) {
 
-        List<PicturesContainer> picturesContainers = ExternalAnimationManager.getInstance().getAllAnimationsFromStorage();
+        List<PicturesContainer> picturesContainers = StorageAnimationsManager.getInstance().getAllAnimationsFromStorage();
 
         if(picturesContainers.isEmpty()){
             // use internal storage, if there's nothing in the external one
@@ -197,7 +196,7 @@ public class AnimationBuilder {
         else {
 
             picturesContainers =
-                    ExternalAnimationManager.getInstance().giveAllAnimationsFromStorageWithCategoriesProvided(selectedPrizes);
+                    StorageAnimationsManager.getInstance().giveAllAnimationsFromStorageWithCategoriesProvided(selectedPrizes);
 
             int pictureCategoriesAmount = picturesContainers.size();
             int pictureCategoriesIndexDrawn = new Random().nextInt(pictureCategoriesAmount);
