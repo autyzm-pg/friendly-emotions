@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.animation.Animation;
 
-import pg.autyzm.graprzyjazneemocje.api.managers.AnimationBase;
+import pg.autyzm.graprzyjazneemocje.api.managers.AnimationBuilder;
 
 
 /**
@@ -31,8 +31,8 @@ public class AnimationActivity extends Activity implements Animation.AnimationLi
         String selectedPrizesString = b.getString("prizes");
         selectedPrizes = selectedPrizesString.split(";");
 
-        AnimationBase animationBase = new AnimationBase(this);
-        anim = animationBase.prepareAndReturnRandomAward(selectedPrizes);
+        anim = new AnimationBuilder(this).prepareAndReturnRandomAward(selectedPrizes);
+
     }
 
     @Override
