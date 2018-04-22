@@ -1,23 +1,17 @@
-package pg.autyzm.przyjazneemocje;
-
-import pg.autyzm.przyjazneemocje.lib.entities.Level;
+package pg.autyzm.przyjazneemocje.lib.entities;
 
 /**
  * Created by user on 26.08.2017.
  */
 
-public class LevelValidator {
-
+    public class LevelValidator {
     Level validatedLevel;
 
     public LevelValidator(Level l){
         validatedLevel = l;
     }
 
-
-
-
-    boolean validateLevel(){
+    public boolean validateLevel(){
 
         // sprawdzenie dlugosci nazwy poziomu
         if(validatedLevel.getName().length() == 0 || validatedLevel.getName().length() > 50) {
