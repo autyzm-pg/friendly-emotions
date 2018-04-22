@@ -472,16 +472,8 @@ public class LevelConfigurationActivity extends AppCompatActivity {
     void save(){
 
         gatherInfoFromGUI();
-
-        LevelValidator.ERROR_TYPE result = new LevelValidator(level).validateLevel();
-
-        if(LevelValidator.ERROR_TYPE.OK.equals(result)) {
-            saveLevelToDatabaseAndShowLevelSavedText();
-            getLevel().setId(0);
-        }
-        else{
-            showTextInformation(result.toString());
-        }
+        saveLevelToDatabaseAndShowLevelSavedText();
+        getLevel().setId(0);
 
     }
 
