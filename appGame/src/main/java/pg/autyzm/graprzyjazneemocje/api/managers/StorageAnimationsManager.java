@@ -16,7 +16,7 @@ import pg.autyzm.graprzyjazneemocje.api.entities.PicturesContainer;
 
 public class StorageAnimationsManager {
 
-    private String storageAppMainDirectoryName = "happyApplicationsAnimations";
+    private String storageAppMainDirectoryName = "animations";
     private String picturesDirectoryName = "pictures";
 
     private File friendlyAppsDirectoryInExternalStorage;
