@@ -190,12 +190,6 @@ public class LevelConfigurationActivity extends AppCompatActivity {
 
         updateGridPraise();
 
-        // prizes
-
-       // String[] prizesArray = level.getPrizes().split(";");
-
-
-
         // 4 panel
 
        // EditText correctness = (EditText) findViewById(R.id.number_try_test);
@@ -227,7 +221,6 @@ public class LevelConfigurationActivity extends AppCompatActivity {
     private void createTabConsolidation() {
         createGridPraise();
         activateAddPraiseButton();
-        createGridPrize();
     }
 
     private void createTabLearningWays() {
@@ -284,19 +277,10 @@ public class LevelConfigurationActivity extends AppCompatActivity {
         });
     }
 
-    private void createGridPrize() {
-        GridCheckboxImageBean[] tabPhotos = getEmotionPhotos("prize");
-
-        final GridView listView = (GridView) findViewById(R.id.gridPrize);
-        CheckboxImageAdapter adapter = new CheckboxImageAdapter(this, R.layout.grid_element_checkbox_image, tabPhotos);
-        listView.setAdapter(adapter);
-
-    }
-
     private void createGridPraise() {
         String[] praises = getResources().getStringArray(R.array.praise_array);
-        for (String prize : praises) {
-            praiseList.add(new CheckboxGridBean(prize, true));
+        for (String praise : praises) {
+            praiseList.add(new CheckboxGridBean(praise, true));
         }
         updateGridPraise();
     }

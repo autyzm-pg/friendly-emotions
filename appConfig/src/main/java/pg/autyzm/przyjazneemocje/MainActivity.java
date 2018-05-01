@@ -52,21 +52,12 @@ public class MainActivity extends AppCompatActivity {
         if (!createDir.exists()) {
             createDir.mkdir();
 
-            File createPrizesDir = new File(root + "FriendlyEmotions/Prizes" + File.separator);
-            if (!createPrizesDir.exists())
-                createPrizesDir.mkdir();
-
             Field[] drawables = pg.autyzm.przyjazneemocje.R.drawable.class.getFields();
             for (Field f : drawables) {
                 try {
                     if (ifConstainsEmotionName(f.getName()))
                     {
                         extractFromDrawable(f, "Photos", ".jpg", Bitmap.CompressFormat.JPEG);
-                    }
-                    else if (f.getName().contains("prize")) {
-
-                        extractFromDrawable(f, "Photos", ".png", Bitmap.CompressFormat.PNG);
-                        //extractFromDrawable(f, "Prizes", ".png", Bitmap.CompressFormat.PNG);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -106,8 +97,6 @@ public class MainActivity extends AppCompatActivity {
                         sqlm.addPhoto(resID, "scared", emotName);
                     else if (emotName.contains("sad"))
                         sqlm.addPhoto(resID, "sad", emotName);
-                    else if (emotName.contains("prize"))
-                        sqlm.addPhoto(resID, "prize", emotName);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -137,20 +126,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-
-        /*if(new File(root + "FriendlyEmotions/Prizes").list() != null) {
-
-            for (String prizeName : new File(root + "FriendlyEmotions/Prizes").list()) {
-
-                try {
-                    int resID = getResources().getIdentifier(prizeName, "drawable", getPackageName());
-                    sqlm.addPhoto(resID, "prize", prizeName);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }*/
-
     }
 
 

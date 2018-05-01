@@ -484,7 +484,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
         Intent i = new Intent(MainActivity.this, AnimationActivity.class);
         i.putExtra("praises", level.getPraises());
-        i.putExtra("prizes", level.getPrizes());
         startActivityForResult(i, 1);
     }
 

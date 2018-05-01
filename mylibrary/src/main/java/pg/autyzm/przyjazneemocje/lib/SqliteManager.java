@@ -104,7 +104,6 @@ public class SqliteManager extends SQLiteOpenHelper {
         values.put("question_type", level.getQuestionType().toString());
         values.put("hint_types_as_number", level.getHintTypesAsNumber());
         values.put("praises", level.getPraises());
-        values.put("prizes", level.getPrizes());
 
 
         if(level.getId() != 0) {
@@ -262,7 +261,7 @@ public class SqliteManager extends SQLiteOpenHelper {
         db.execSQL("create table photos(" + "id integer primary key autoincrement," + "path int," + "emotion text," + "name text);" + "");
         db.execSQL("create table emotions(" + "id integer primary key autoincrement," + "emotion text);" + "");
         db.execSQL("create table levels(" + "id integer primary key autoincrement, photos_or_videos text, photos_or_videos_per_level int, " +
-                "time_limit int, is_level_active int, name text, correctness int, sublevels_per_each_emotion int, is_for_tests int, question_type text, hint_types_as_number int, praises text, prizes text);" + "");
+                "time_limit int, is_level_active int, name text, correctness int, sublevels_per_each_emotion int, is_for_tests int, question_type text, hint_types_as_number int, praises text);" + "");
         db.execSQL("create table levels_photos(" + "id integer primary key autoincrement,"  + "levelid integer references levels(id)," + "photoid integer references photos(id));" + "");
         db.execSQL("create table levels_emotions(" + "id integer primary key autoincrement," + "levelid integer references levels(id),"  + "emotionid integer references emotions(id));" + "");
         db.execSQL("create table videos(" + "id integer primary key autoincrement," + "path int," + "emotion text," + "name text);" + "");

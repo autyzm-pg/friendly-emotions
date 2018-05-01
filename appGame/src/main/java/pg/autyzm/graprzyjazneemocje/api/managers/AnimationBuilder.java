@@ -11,7 +11,9 @@ import android.widget.ImageView;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -60,22 +62,22 @@ public class AnimationBuilder {
 
     private AnimationType[] getAllowedAnimationTypes() {
 
-        AnimationType[] allowedAnimationTypes;
+        List<AnimationType> animationTypesList = new ArrayList<>();
 
-        if(picturesContainer.getCategoryName().equals("planes") || picturesContainer.getCategoryName().equals("ships")){
-            allowedAnimationTypes = new AnimationType[]{AnimationType.SPIRAL, AnimationType.GO_LEFT_TO_RIGHT};
+        if(picturesContainer.getAnimationTypes().contains("LEFT_TO_RIGHT")){
+            animationTypesList.add(AnimationType.GO_LEFT_TO_RIGHT);
         }
-        else if(picturesContainer.getCategoryName().equals("trains")){
-            allowedAnimationTypes = new AnimationType[]{AnimationType.GO_LEFT_TO_RIGHT};
+        if(picturesContainer.getAnimationTypes().contains("SPIRAL")){
+            animationTypesList.add(AnimationType.SPIRAL);
         }
-        else{
-            allowedAnimationTypes = AnimationType.values();
+        if(picturesContainer.getAnimationTypes().contains("UP_DOWN")){
+            animationTypesList.add(AnimationType.STRAIGHT_FLY_UP_DOWN);
         }
+
+        AnimationType[] allowedAnimationTypes = new AnimationType[animationTypesList.size()];
+        allowedAnimationTypes = animationTypesList.toArray(allowedAnimationTypes);
 
         return allowedAnimationTypes;
-
-
-
     }
 
     private void loadPictureToAnimation(ImageView imageView, Picture picture){
@@ -183,7 +185,8 @@ public class AnimationBuilder {
 
     }
 
-    public Animation prepareAndReturnRandomAward(String[] selectedPrizes) {
+    public Animation prepareAndReturnRandomAward() {
+
 
         List<PicturesContainer> picturesContainers = StorageAnimationsManager.getInstance().getAllAnimationsFromStorage();
 
@@ -195,12 +198,37 @@ public class AnimationBuilder {
         }
         else {
 
-            picturesContainers =
-                    StorageAnimationsManager.getInstance().giveAllAnimationsFromStorageWithCategoriesProvided(selectedPrizes);
+            // get random picturescontainer from enabled picturescontainers
 
-            int pictureCategoriesAmount = picturesContainers.size();
+            List<PicturesContainer> storageStateFromDatabase = new ArrayList<>();
+
+            try {
+                storageStateFromDatabase = new DatabaseHelper(activity).getPictureContainerDao().queryForAll();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            Iterator<PicturesContainer> picturesContainerIterator = storageStateFromDatabase.iterator();
+            while (picturesContainerIterator.hasNext()) {
+                PicturesContainer picturesContainer = picturesContainerIterator.next();
+                if(picturesContainer.getEnabled() == 0){
+                    picturesContainerIterator.remove();
+                }
+            }
+
+            int pictureCategoriesAmount = storageStateFromDatabase.size();
             int pictureCategoriesIndexDrawn = new Random().nextInt(pictureCategoriesAmount);
-            picturesContainer = picturesContainers.get(pictureCategoriesIndexDrawn);
+            picturesContainer = storageStateFromDatabase.get(pictureCategoriesIndexDrawn);
+
+            // remove disabled pictures
+
+            Iterator<Picture> picturesIterator = picturesContainer.getPicturesInCategory().iterator();
+            while (picturesIterator.hasNext()) {
+                Picture picture = picturesIterator.next();
+                if(picture.getEnabled() == 0){
+                    picturesIterator.remove();
+                }
+            }
 
             createAnimation(new ArrayList<>(picturesContainer.getPicturesInCategory()));
         }

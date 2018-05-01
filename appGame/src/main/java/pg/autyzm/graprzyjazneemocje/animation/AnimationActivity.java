@@ -15,7 +15,6 @@ import pg.autyzm.graprzyjazneemocje.api.managers.AnimationBuilder;
 public class AnimationActivity extends Activity implements Animation.AnimationListener {
 
     protected Animation anim;
-    private String[] selectedPrizes;
 
 
     @Override
@@ -27,11 +26,7 @@ public class AnimationActivity extends Activity implements Animation.AnimationLi
 
     protected void createView() {
 
-        Bundle b = getIntent().getExtras();
-        String selectedPrizesString = b.getString("prizes");
-        selectedPrizes = selectedPrizesString.split(";");
-
-        anim = new AnimationBuilder(this).prepareAndReturnRandomAward(selectedPrizes);
+        anim = new AnimationBuilder(this).prepareAndReturnRandomAward();
 
     }
 

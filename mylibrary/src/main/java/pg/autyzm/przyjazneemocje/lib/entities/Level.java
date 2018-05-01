@@ -29,7 +29,6 @@ public class Level {
     private List<Integer> photosOrVideosIdList;
     private List<Integer> emotions = new ArrayList<>();
     private String praises = "";
-    private String prizes = "";
 
     private int secondsToHint;
     private boolean shouldQuestionBeReadAloud;
@@ -69,26 +68,6 @@ public class Level {
         }
     }
 
-
-    public String getPrizes() {
-        return prizes;
-    }
-
-    public void setPrizes(String praises) {
-        this.prizes = praises;
-    }
-
-    public void addPrize(String newPrize) {
-
-        if(this.prizes.equals("")){
-            this.prizes = newPrize;
-        }else {
-            this.prizes += ";" + newPrize;
-        }
-    }
-
-
-
     public int getHintTypesAsNumber() {
         return hintTypesAsNumber;
     }
@@ -122,7 +101,6 @@ public class Level {
             setPhotosOrVideosShowedForOneQuestion(cur.getInt(cur.getColumnIndex("photos_or_videos_per_level")));
             int active = cur.getInt(cur.getColumnIndex("is_level_active"));
             setPraises(cur.getString(cur.getColumnIndex("praises")));
-            setPrizes(cur.getString(cur.getColumnIndex("prizes")));
 
             int isLevelForTests = cur.getInt(cur.getColumnIndex("is_for_tests"));
             setForTests(isLevelForTests != 0);

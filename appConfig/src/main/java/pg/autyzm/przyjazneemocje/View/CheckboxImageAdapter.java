@@ -64,19 +64,10 @@ public class CheckboxImageAdapter extends ArrayAdapter<GridCheckboxImageBean> {
         final GridCheckboxImageBean object = data[position];
 
 
-        if(isPrizeInLevelYet(object.getId()) || isPhotoInLevelYet(object.getId())){
-            holder.checkBox.setChecked(true);
-        }
-        else{
-            holder.checkBox.setChecked(false);
-        }
-
         try {
             String root = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
 
             File fileOut;
-            //if(object.photoName.contains("prize"))
-            //    fileOut = new File(root + "FriendlyEmotions/Prize" + File.separator + object.photoName);
             Bitmap captureBmp;
             if(object.photoName.contains(".mp4"))
             {
@@ -101,32 +92,19 @@ public class CheckboxImageAdapter extends ArrayAdapter<GridCheckboxImageBean> {
                 if(isChecked) {
                     Integer photoId = object.getId();
                     Level configuredLevel = ((LevelConfigurationActivity) context).getLevel();
-                    if(object.photoName.contains("prize")) {
 
-                        String photoCategoryName = getPrizeCategoryName(object.photoName);
-
-                        configuredLevel.addPrize(photoCategoryName);
-                    }else{
-                        if(object.photoName.contains(".mp4"))
-                        {
-                            configuredLevel.setPhotosOrVideosFlag("videos");
-                        }
-                        else
-                            configuredLevel.addPhoto(photoId);
+                    if(object.photoName.contains(".mp4"))
+                    {
+                        configuredLevel.setPhotosOrVideosFlag("videos");
                     }
+                    else
+                        configuredLevel.addPhoto(photoId);
+
                 }
             }
         });
 
         return row;
-    }
-
-    String getPrizeCategoryName(String fullPhotoName){
-
-        String[] photoNameParts = fullPhotoName.split("\\.");
-        String[] photoNameParts2 = photoNameParts[0].split("_");
-        return photoNameParts2[1];
-
     }
 
     boolean isPhotoInLevelYet(Integer photoId){
@@ -143,21 +121,6 @@ public class CheckboxImageAdapter extends ArrayAdapter<GridCheckboxImageBean> {
         return false;
     }
 
-    boolean isPrizeInLevelYet(Integer photoId){
-
-        Level configuredLevel = ((LevelConfigurationActivity) context).getLevel();
-        String[] prizesArray = configuredLevel.getPrizes().split(";");
-
-        for(int i = 0; i < prizesArray.length; i++){
-            if(photoId.toString().equals(prizesArray[i])){
-                return true;
-            }
-        }
-
-        return false;
-
-
-    }
 
     static class RowBeanHolder {
         public ImageView imgIcon;
