@@ -4,7 +4,6 @@ package pg.autyzm.graprzyjazneemocje.api.managers;
 import android.os.Environment;
 import android.util.Log;
 
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,7 +15,7 @@ import pg.autyzm.graprzyjazneemocje.api.entities.PicturesContainer;
 
 public class StorageAnimationsManager {
 
-    private String storageAppMainDirectoryName = "animations";
+    private String storageAppMainDirectoryName = "happyApplicationsAnimations";
     private String picturesDirectoryName = "pictures";
 
     private File friendlyAppsDirectoryInExternalStorage;
@@ -62,7 +61,7 @@ public class StorageAnimationsManager {
                     File[] pictureFilesInDirectory = directoryWithPictures.listFiles();
 
                     for (File pictureFile : pictureFilesInDirectory) {
-                        picturesContainer.addPicture(new Picture(pictureFile.getName(), pictureFile.getAbsolutePath()));
+                        picturesContainer.addPicture(new Picture(pictureFile.getName(), pictureFile.getAbsolutePath(), picturesContainer));
                     }
 
                     externalStorageAssets.add(picturesContainer);
@@ -114,4 +113,57 @@ public class StorageAnimationsManager {
     public void setPicturesFromExternalStorage(List<PicturesContainer> picturesFromExternalStorage) {
         this.picturesFromExternalStorage = picturesFromExternalStorage;
     }
+
+    public void deletePictureFromStorage(Picture picture){
+
+        try{
+
+            File file = new File(picture.getPath());
+
+            if(file.delete()){
+                Log.i("Animations", file.getName() + " was deleted");
+                System.out.println(file.getName() + " is deleted!");
+            }else{
+                Log.i("Animations", file.getName() + " was not deleted");
+            }
+
+        }catch(Exception e){
+
+            e.printStackTrace();
+
+        }
+
+    }
+
+    public void deletePicturesContainerFromStorage(PicturesContainer picturesContainer) {
+
+        // delete pictures in the folder
+        for(Picture picture : picturesContainer.getPicturesInCategory()){
+            deletePictureFromStorage(picture);
+        }
+
+
+        // delete empty folder
+        try{
+
+            File file = new File(friendlyAppsDirectoryInExternalStorage,
+                    picturesDirectoryName + "/" + picturesContainer.getCategoryName());
+
+            if(file.delete()){
+                Log.i("Animations", file.getName() + " was deleted");
+                System.out.println(file.getName() + " is deleted!");
+            }else{
+                Log.i("Animations", file.getName() + " was not deleted");
+            }
+
+        }catch(Exception e){
+
+            e.printStackTrace();
+
+        }
+    }
+
+
+
+
 }

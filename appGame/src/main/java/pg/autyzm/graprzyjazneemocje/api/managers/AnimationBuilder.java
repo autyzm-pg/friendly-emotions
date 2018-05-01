@@ -202,7 +202,7 @@ public class AnimationBuilder {
             int pictureCategoriesIndexDrawn = new Random().nextInt(pictureCategoriesAmount);
             picturesContainer = picturesContainers.get(pictureCategoriesIndexDrawn);
 
-            createAnimation(picturesContainer.getPicturesInCategory());
+            createAnimation(new ArrayList<>(picturesContainer.getPicturesInCategory()));
         }
 
         return animation;

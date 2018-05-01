@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Random;
 
 import pg.autyzm.graprzyjazneemocje.animation.AnimationActivity;
-import pg.autyzm.graprzyjazneemocje.api.managers.AnimationsDownloader;
 import pg.autyzm.przyjazneemocje.lib.SqliteManager;
 import pg.autyzm.przyjazneemocje.lib.entities.Level;
 
@@ -70,7 +69,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        new AnimationsDownloader().execute();
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
