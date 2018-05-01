@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-/*
+
         File createDirV = new File(root + "FriendlyEmotions/Videos" + File.separator);
         if (!createDirV.exists()) {
             createDirV.mkdir();
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }*/
+        }
 
         if(new File(root + "FriendlyEmotions/Photos").list() != null) {
 
