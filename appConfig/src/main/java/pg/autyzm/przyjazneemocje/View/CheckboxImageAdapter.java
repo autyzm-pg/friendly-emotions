@@ -61,7 +61,7 @@ public class CheckboxImageAdapter extends ArrayAdapter<GridCheckboxImageBean> {
         }
 
 
-        final GridCheckboxImageBean object = data[position];
+        final GridCheckboxImageBean photoWithCheckBox = data[position];
 
 
         try {
@@ -69,15 +69,15 @@ public class CheckboxImageAdapter extends ArrayAdapter<GridCheckboxImageBean> {
 
             File fileOut;
             Bitmap captureBmp;
-            if(object.photoName.contains(".mp4"))
+            if(photoWithCheckBox.photoName.contains(".mp4"))
             {
-                fileOut = new File(root + "FriendlyEmotions/Videos" + File.separator + object.photoName);
+                fileOut = new File(root + "FriendlyEmotions/Videos" + File.separator + photoWithCheckBox.photoName);
                 captureBmp = ThumbnailUtils.createVideoThumbnail(fileOut.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
             }
             else
             {
-                fileOut = new File(root + "FriendlyEmotions/Photos" + File.separator + object.photoName);
-                captureBmp = MediaStore.Images.Media.getBitmap(object.cr, Uri.fromFile(fileOut));
+                fileOut = new File(root + "FriendlyEmotions/Photos" + File.separator + photoWithCheckBox.photoName);
+                captureBmp = MediaStore.Images.Media.getBitmap(photoWithCheckBox.cr, Uri.fromFile(fileOut));
             }
 
             holder.imgIcon.setImageBitmap(captureBmp);
@@ -85,42 +85,38 @@ public class CheckboxImageAdapter extends ArrayAdapter<GridCheckboxImageBean> {
             System.out.println(e);
         }
 
-        holder.checkBox.setOnClickListener(new View.OnClickListener() {
+
+        Level configuredLevel = ((LevelConfigurationActivity) context).getLevel();
+
+        final CheckBox checkBox = holder.checkBox;
+
+
+        checkBox.setChecked(configuredLevel.getPhotosOrVideosIdList().contains(photoWithCheckBox.getId()));
+
+        checkBox.setOnClickListener(new View.OnClickListener() {
+
+            Integer photoId = photoWithCheckBox.getId();
+            Level configuredLevel = ((LevelConfigurationActivity) context).getLevel();
+
             @Override
             public void onClick(View arg0) {
-                boolean isChecked = ((CheckBox)arg0).isChecked();
-                if(isChecked) {
-                    Integer photoId = object.getId();
-                    Level configuredLevel = ((LevelConfigurationActivity) context).getLevel();
+                if(checkBox.isChecked()) {
 
-                    if(object.photoName.contains(".mp4"))
-                    {
+                    if(photoWithCheckBox.photoName.contains(".mp4")){
                         configuredLevel.setPhotosOrVideosFlag("videos");
                     }
-                    else
+                    else {
                         configuredLevel.addPhoto(photoId);
-
+                    }
+                }
+                else{
+                    configuredLevel.removePhoto(photoId);
                 }
             }
         });
 
         return row;
     }
-
-    boolean isPhotoInLevelYet(Integer photoId){
-
-        Level configuredLevel = ((LevelConfigurationActivity) context).getLevel();
-        if(configuredLevel == null) return false;
-
-        for(Integer photoInLevelId : configuredLevel.getPhotosOrVideosIdList()){
-            if(photoInLevelId.equals(photoId)){
-                return true;
-            }
-        }
-
-        return false;
-    }
-
 
     static class RowBeanHolder {
         public ImageView imgIcon;

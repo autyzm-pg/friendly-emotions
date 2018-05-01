@@ -348,12 +348,12 @@ public class LevelConfigurationActivity extends AppCompatActivity {
 
         while (cursorVid.moveToNext()) {
 
-            tabPhotos[--n] = (new GridCheckboxImageBean(cursorVid.getString(3), cursorVid.getInt(1), true, getContentResolver(), cursorVid.getInt(0)));
+            tabPhotos[--n] = (new GridCheckboxImageBean(cursorVid.getString(3), cursorVid.getInt(1), getContentResolver(), cursorVid.getInt(0)));
         }
 
         while (cursor.moveToNext()) {
 
-            tabPhotos[--n] = (new GridCheckboxImageBean(cursor.getString(3), cursor.getInt(1), true, getContentResolver(), cursor.getInt(0)));
+            tabPhotos[--n] = (new GridCheckboxImageBean(cursor.getString(3), cursor.getInt(1), getContentResolver(), cursor.getInt(0)));
         }
 
         return tabPhotos;

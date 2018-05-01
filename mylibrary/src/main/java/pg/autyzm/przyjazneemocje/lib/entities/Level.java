@@ -284,6 +284,10 @@ public class Level {
         photosOrVideosIdList.add(photoId);
     }
 
+    public void removePhoto(Integer photoId){
+        photosOrVideosIdList.remove(photoId);
+    }
+
 
     public int getAllSublevelsInLevelAmount(){
         return emotions.size() * sublevelsPerEachEmotion;
