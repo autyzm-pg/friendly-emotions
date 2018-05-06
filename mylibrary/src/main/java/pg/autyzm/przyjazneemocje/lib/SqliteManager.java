@@ -107,7 +107,6 @@ public class SqliteManager extends SQLiteOpenHelper {
 
 
         if(level.getId() != 0) {
-            //values.put("id", level.id);
             db.update("levels", values, "id=" + level.getId(), null);
 
 

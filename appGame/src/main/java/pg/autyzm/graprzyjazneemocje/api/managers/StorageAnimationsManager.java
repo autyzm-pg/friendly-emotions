@@ -42,11 +42,8 @@ public class StorageAnimationsManager {
     public List<PicturesContainer> getAllAnimationsFromStorage() {
 
         List<PicturesContainer> externalStorageAssets = new ArrayList<>();
-
         File picturesDirectory = new File(friendlyAppsDirectoryInExternalStorage, picturesDirectoryName);
-
         File[] directoriesWithPictures = picturesDirectory.listFiles();
-
 
         if(directoriesWithPictures != null) {
 
@@ -65,7 +62,6 @@ public class StorageAnimationsManager {
                     }
 
                     externalStorageAssets.add(picturesContainer);
-
                 }
             }
 

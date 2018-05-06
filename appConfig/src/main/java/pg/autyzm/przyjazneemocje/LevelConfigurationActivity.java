@@ -203,9 +203,6 @@ public class LevelConfigurationActivity extends AppCompatActivity {
         EditText levelName = (EditText) findViewById(R.id.step_name);
         levelName.setText(getLevel().getName());
 
-        Switch switchIsForTests = (Switch) findViewById(R.id.is_for_tests);
-        switchIsForTests.setChecked(getLevel().isForTests());
-
     }
 
     private void createTabSave() {
@@ -571,8 +568,6 @@ public class LevelConfigurationActivity extends AppCompatActivity {
 
         // 4 panel
 
-        //EditText correctness = (EditText) findViewById(R.id.number_try_test);
-        //getLevel().setAmountOfAllowedTriesForEachEmotion(Integer.parseInt(correctness.getText() + ""));
 
         EditText timeLimit = (EditText) findViewById(R.id.number_time_test);
         getLevel().setSecondsToHint(Integer.parseInt(timeLimit.getText() + ""));
@@ -582,8 +577,6 @@ public class LevelConfigurationActivity extends AppCompatActivity {
         EditText levelName = (EditText) findViewById(R.id.step_name);
         getLevel().setName(levelName.getText() + "");
 
-        Switch switchIsForTests = (Switch) findViewById(R.id.is_for_tests);
-        getLevel().setForTests(switchIsForTests.isChecked());
 
 
     }
@@ -675,20 +668,6 @@ public class LevelConfigurationActivity extends AppCompatActivity {
     public void pictureClicked(View view){
 
         SqliteManager sqlm = getInstance(this);
-
-        //TODO: To slabo dziala. Jesli klikniesz w chechboxa ze zdjeciem (niewazne, czy zaznaczysz, czy odznaczysz,
-        // to zostanie ono dodane do poziomu. Ale np. domyslnie zaznaczone nie zostana dodane, jesli ich nie klikniemy.
-        /*
-
-
-        GridView listView = (GridView) findViewById(R.id.grid_photos);
-        int position = listView.getPositionForView(view);
-
-        int photoId = sqlm.getPhotoIdByName(currentEmotionName + "" + (position + 1) + ".jpg");
-        level.addPhoto(photoId);
-        */
-
-        // rozwiazanie tymczasowe: dodaj wszystkie zdjecia z danej emocji do poziomu
 
         Cursor cursor = sqlm.givePhotosWithEmotion(currentEmotionName);
 
