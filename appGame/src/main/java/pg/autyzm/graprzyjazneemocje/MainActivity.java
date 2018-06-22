@@ -69,6 +69,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -483,7 +484,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
         Intent i = new Intent(MainActivity.this, AnimationActivity.class);
         i.putExtra("praises", level.getPraises());
-        i.putExtra("prizes", level.getPrizes());
         startActivityForResult(i, 1);
     }
 

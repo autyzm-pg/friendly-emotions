@@ -4,9 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.animation.Animation;
-import android.widget.RelativeLayout;
 
-import java.util.Random;
+import pg.autyzm.graprzyjazneemocje.api.managers.AnimationBuilder;
 
 
 /**
@@ -17,7 +16,6 @@ public class AnimationActivity extends Activity implements Animation.AnimationLi
 
     protected Animation anim;
 
-    AnimationBase animationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,37 +24,10 @@ public class AnimationActivity extends Activity implements Animation.AnimationLi
         anim.setAnimationListener(this);
     }
 
-    private AnimationBase randomAward() {
-        AnimationBase animation;
-        Random random = new Random();
-        switch (random.nextInt(6)) {
-            case 0:
-                animation = new AnimationBalls();
-                break;
-            case 1:
-                animation = new AnimationButterflies();
-                break;
-            case 2:
-                animation = new AnimationCars();
-                break;
-            case 3:
-                animation = new AnimatonShips();
-                break;
-            case 4:
-                animation = new AnimatonTrains();
-                break;
-            default:
-                animation = new AnimatonPlanes();
-                break;
-        }
-        animation.setActivity(this);
-        return animation;
-    }
+    protected void createView() {
 
-    private void createView() {
-        animationView = randomAward();
-        RelativeLayout layout = animationView.getLayout(getApplicationContext());
-        anim = animationView.getAnim();
+        anim = new AnimationBuilder(this).prepareAndReturnRandomAward();
+
     }
 
     @Override

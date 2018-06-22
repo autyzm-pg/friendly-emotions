@@ -1,4 +1,4 @@
-package pg.autyzm.przyjazneemocje.View;
+package pg.autyzm.przyjazneemocje;
 
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -17,6 +17,7 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -24,7 +25,10 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 
-import pg.autyzm.przyjazneemocje.R;
+import pg.autyzm.przyjazneemocje.View.CheckboxGridAdapter;
+import pg.autyzm.przyjazneemocje.View.CheckboxGridBean;
+import pg.autyzm.przyjazneemocje.View.CheckboxImageAdapter;
+import pg.autyzm.przyjazneemocje.View.GridCheckboxImageBean;
 import pg.autyzm.przyjazneemocje.lib.entities.Level;
 import pg.autyzm.przyjazneemocje.lib.SqliteManager;
 
@@ -34,7 +38,7 @@ import static pg.autyzm.przyjazneemocje.lib.SqliteManager.getInstance;
  * Created by joagi on 26.12.2017.
  */
 
-public class LevelConfiguration extends AppCompatActivity {
+public class LevelConfigurationActivity extends AppCompatActivity {
 
     ArrayList praiseList = new ArrayList();
     private Level level = Level.defaultLevel();
@@ -163,37 +167,33 @@ public class LevelConfiguration extends AppCompatActivity {
         for (Object objectItem : praiseList) {
 
             CheckboxGridBean checkboxGridBean = (CheckboxGridBean) objectItem;
-
-            boolean isInTheLevel = false;
+            checkboxGridBean.setChecked(false);
 
             for(int i = 0; i < praisesArray.length; i++) {
 
-                if (praisesArray[i].equals(checkboxGridBean.name)) {
-                    isInTheLevel = true;
+                if (praisesArray[i].equals(checkboxGridBean.getName())) {
+                    checkboxGridBean.setChecked(true);
+                    praisesArray[i] = "default_praise";
                     break;
                 }
             }
+        }
 
-            if(isInTheLevel) {
-                checkboxGridBean.checked = true;
-            }
-            else{
-                checkboxGridBean.checked = false;
+        // find and add custom praises saved in level
+
+        for(int i = 0; i < praisesArray.length; i++) {
+
+            if(! praisesArray[i].equals("default_praise")){
+                praiseList.add(new CheckboxGridBean(praisesArray[i], true));
             }
         }
 
         updateGridPraise();
 
-        // prizes
-
-       // String[] prizesArray = level.getPrizes().split(";");
-
-
-
         // 4 panel
 
-        EditText correctness = (EditText) findViewById(R.id.number_try_test);
-        correctness.setText(getLevel().getAmountOfAllowedTriesForEachEmotion() + "");
+       // EditText correctness = (EditText) findViewById(R.id.number_try_test);
+       // correctness.setText(getLevel().getAmountOfAllowedTriesForEachEmotion() + "");
 
         EditText timeLimit = (EditText) findViewById(R.id.number_time_test);
         timeLimit.setText(getLevel().getTimeLimit() + "");
@@ -202,7 +202,6 @@ public class LevelConfiguration extends AppCompatActivity {
 
         EditText levelName = (EditText) findViewById(R.id.step_name);
         levelName.setText(getLevel().getName());
-
 
     }
 
@@ -213,14 +212,12 @@ public class LevelConfiguration extends AppCompatActivity {
 
     private void createTabTest() {
         createGridViewActiveInTest();
-        activateNumberTryTest();
         activateNumberTimeTest();
     }
 
     private void createTabConsolidation() {
         createGridPraise();
         activateAddPraiseButton();
-        createGridPrize();
     }
 
     private void createTabLearningWays() {
@@ -277,19 +274,10 @@ public class LevelConfiguration extends AppCompatActivity {
         });
     }
 
-    private void createGridPrize() {
-        GridCheckboxImageBean[] tabPhotos = getEmotionPhotos("prize");
-
-        final GridView listView = (GridView) findViewById(R.id.gridPrize);
-        CheckboxImageAdapter adapter = new CheckboxImageAdapter(this, R.layout.grid_element_checkbox_image, tabPhotos);
-        listView.setAdapter(adapter);
-
-    }
-
     private void createGridPraise() {
         String[] praises = getResources().getStringArray(R.array.praise_array);
-        for (String prize : praises) {
-            praiseList.add(new CheckboxGridBean(prize, true));
+        for (String praise : praises) {
+            praiseList.add(new CheckboxGridBean(praise, true));
         }
         updateGridPraise();
     }
@@ -300,9 +288,7 @@ public class LevelConfiguration extends AppCompatActivity {
         gridView.setAdapter(adapter);
     }
 
-    private void activateNumberTryTest() {
-        activePlusMinus((EditText) findViewById(R.id.number_try_test), (Button) findViewById(R.id.button_minus_try_test), (Button) findViewById(R.id.button_plus_try_test));
-    }
+
 
     private void activateNumberTimeTest() {
         activePlusMinus((EditText) findViewById(R.id.number_time_test), (Button) findViewById(R.id.button_minus_time_test), (Button) findViewById(R.id.button_plus_time_test));
@@ -359,12 +345,12 @@ public class LevelConfiguration extends AppCompatActivity {
 
         while (cursorVid.moveToNext()) {
 
-            tabPhotos[--n] = (new GridCheckboxImageBean(cursorVid.getString(3), cursorVid.getInt(1), true, getContentResolver(), cursorVid.getInt(0)));
+            tabPhotos[--n] = (new GridCheckboxImageBean(cursorVid.getString(3), cursorVid.getInt(1), getContentResolver(), cursorVid.getInt(0)));
         }
 
         while (cursor.moveToNext()) {
 
-            tabPhotos[--n] = (new GridCheckboxImageBean(cursor.getString(3), cursor.getInt(1), true, getContentResolver(), cursor.getInt(0)));
+            tabPhotos[--n] = (new GridCheckboxImageBean(cursor.getString(3), cursor.getInt(1), getContentResolver(), cursor.getInt(0)));
         }
 
         return tabPhotos;
@@ -489,6 +475,20 @@ public class LevelConfiguration extends AppCompatActivity {
         }, 2000);
     }
 
+    private void showTextInformation(String textMessage){
+
+        final TextView msg = (TextView) findViewById(R.id.saveMessage);
+        msg.setText(textMessage);
+        msg.setVisibility(View.VISIBLE);
+        msg.postDelayed(new Runnable() {
+            public void run() {
+                msg.setVisibility(View.INVISIBLE);
+            }
+        }, 2000);
+
+
+    }
+
 
 
     void gatherInfoFromGUI(){
@@ -498,14 +498,7 @@ public class LevelConfiguration extends AppCompatActivity {
 
         // save selected photos
 
-        GridView listView = (GridView) findViewById(R.id.grid_photos);
-        int size = listView.getChildCount();
 
-        for(int i = 0; i < size; i++){
-
-            listView.getChildAt(i);
-
-        }
 
 
         // 2 panel
@@ -567,16 +560,14 @@ public class LevelConfiguration extends AppCompatActivity {
         for(Object objectItem : praiseList){
             CheckboxGridBean checkboxGridBean = (CheckboxGridBean) objectItem;
 
-            if(checkboxGridBean.checked){
-                level.addPraise(checkboxGridBean.name);
+            if(checkboxGridBean.isChecked()){
+                level.addPraise(checkboxGridBean.getName());
             }
 
         }
 
         // 4 panel
 
-        EditText correctness = (EditText) findViewById(R.id.number_try_test);
-        getLevel().setAmountOfAllowedTriesForEachEmotion(Integer.parseInt(correctness.getText() + ""));
 
         EditText timeLimit = (EditText) findViewById(R.id.number_time_test);
         getLevel().setSecondsToHint(Integer.parseInt(timeLimit.getText() + ""));
@@ -585,6 +576,8 @@ public class LevelConfiguration extends AppCompatActivity {
 
         EditText levelName = (EditText) findViewById(R.id.step_name);
         getLevel().setName(levelName.getText() + "");
+
+
 
     }
 
@@ -602,7 +595,8 @@ public class LevelConfiguration extends AppCompatActivity {
     }
 
     private String getResourceString(String resourceName) {
-        return getString(getResource(resourceName, "string"));//return getResource(resourceName, "string") + "";
+       return getString(getResource(resourceName, "string"));
+       //return getResource(resourceName, "string") + "";
     }
 
     public Level getLevel() {
@@ -638,7 +632,7 @@ public class LevelConfiguration extends AppCompatActivity {
             convertView = inflater.inflate(R.layout.row_spinner, parent, false);
 
             Spinner spinner = (Spinner) convertView.findViewById(R.id.spinner_emotions);
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(LevelConfiguration.this,
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(LevelConfigurationActivity.this,
                     R.array.emotions_array, android.R.layout.simple_spinner_item);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(adapter);
@@ -674,20 +668,6 @@ public class LevelConfiguration extends AppCompatActivity {
     public void pictureClicked(View view){
 
         SqliteManager sqlm = getInstance(this);
-
-        //TODO: To slabo dziala. Jesli klikniesz w chechboxa ze zdjeciem (niewazne, czy zaznaczysz, czy odznaczysz,
-        // to zostanie ono dodane do poziomu. Ale np. domyslnie zaznaczone nie zostana dodane, jesli ich nie klikniemy.
-        /*
-
-
-        GridView listView = (GridView) findViewById(R.id.grid_photos);
-        int position = listView.getPositionForView(view);
-
-        int photoId = sqlm.getPhotoIdByName(currentEmotionName + "" + (position + 1) + ".jpg");
-        level.addPhoto(photoId);
-        */
-
-        // rozwiazanie tymczasowe: dodaj wszystkie zdjecia z danej emocji do poziomu
 
         Cursor cursor = sqlm.givePhotosWithEmotion(currentEmotionName);
 

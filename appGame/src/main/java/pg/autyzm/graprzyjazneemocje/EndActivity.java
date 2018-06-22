@@ -9,6 +9,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import pg.autyzm.graprzyjazneemocje.animation.AnimationEndActivity;
+
 /**
  * Created by Ann on 12.11.2016.
  */

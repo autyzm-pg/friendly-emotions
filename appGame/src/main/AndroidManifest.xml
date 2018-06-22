@@ -3,7 +3,9 @@
     package="pg.autyzm.graprzyjazneemocje"
     android:sharedUserId="autyzm.pg">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL"/>
 
     <application
@@ -25,7 +27,7 @@
             android:name=".animation.AnimationActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".AnimationEndActivity"
+            android:name=".animation.AnimationEndActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name=".EndActivity"

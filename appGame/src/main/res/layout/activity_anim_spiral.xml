@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    tools:context="pg.autyzm.graprzyjazneemocje.AnimationActivity">
+    tools:context="pg.autyzm.graprzyjazneemocje.animation.AnimationActivity">
     <!--<ImageView-->
         <!--android:id="@+id/sun_image"-->
         <!--android:layout_width="wrap_content"-->
@@ -19,14 +19,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/butterfly_red_up" />
 
     <ImageView
         android:id="@+id/image2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/butterfly_green_down" />
 
 
 </RelativeLayout>

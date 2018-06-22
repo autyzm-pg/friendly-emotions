@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import pg.autyzm.przyjazneemocje.View.LevelConfiguration;
 import pg.autyzm.przyjazneemocje.lib.entities.Level;
 import pg.autyzm.przyjazneemocje.lib.SqliteManager;
 
@@ -96,7 +95,7 @@ public class CustomList extends BaseAdapter implements ListAdapter {
                 //do something
 
 
-                Intent intent = new Intent(context, LevelConfiguration.class);
+                Intent intent = new Intent(context, LevelConfigurationActivity.class);
                 //intent.putExtra(EXTRA_MESSAGE, findLevelId(position));
 
                 Bundle b = new Bundle();
