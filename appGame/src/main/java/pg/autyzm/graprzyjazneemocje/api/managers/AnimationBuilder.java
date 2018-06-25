@@ -74,8 +74,15 @@ public class AnimationBuilder {
             animationTypesList.add(AnimationType.STRAIGHT_FLY_UP_DOWN);
         }
 
-        AnimationType[] allowedAnimationTypes = new AnimationType[animationTypesList.size()];
-        allowedAnimationTypes = animationTypesList.toArray(allowedAnimationTypes);
+        AnimationType[] allowedAnimationTypes;
+
+        if(animationTypesList.size() == 0){
+            allowedAnimationTypes = AnimationType.values();
+        }
+        else{
+            allowedAnimationTypes = new AnimationType[animationTypesList.size()];
+            allowedAnimationTypes = animationTypesList.toArray(allowedAnimationTypes);
+        }
 
         return allowedAnimationTypes;
     }
@@ -216,21 +223,27 @@ public class AnimationBuilder {
                 }
             }
 
+            List<Picture> picturesToBeUsed = new ArrayList<>();
             int pictureCategoriesAmount = storageStateFromDatabase.size();
-            int pictureCategoriesIndexDrawn = new Random().nextInt(pictureCategoriesAmount);
-            picturesContainer = storageStateFromDatabase.get(pictureCategoriesIndexDrawn);
 
-            // remove disabled pictures
+            if(pictureCategoriesAmount > 0) {
+                int pictureCategoriesIndexDrawn = new Random().nextInt(pictureCategoriesAmount);
+                picturesContainer = storageStateFromDatabase.get(pictureCategoriesIndexDrawn);
 
-            Iterator<Picture> picturesIterator = picturesContainer.getPicturesInCategory().iterator();
-            while (picturesIterator.hasNext()) {
-                Picture picture = picturesIterator.next();
-                if(picture.getEnabled() == 0){
-                    picturesIterator.remove();
+
+                // select enabled pictures
+
+                for (Picture picture : picturesContainer.getPicturesInCategory()) {
+                    if (picture.getEnabled() == 1) {
+                        picturesToBeUsed.add(picture);
+                    }
                 }
             }
+            else{
+                picturesContainer = new PicturesContainer();
+            }
 
-            createAnimation(new ArrayList<>(picturesContainer.getPicturesInCategory()));
+            createAnimation(picturesToBeUsed);
         }
 
         return animation;
