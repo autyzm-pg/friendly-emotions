@@ -192,8 +192,8 @@ public class LevelConfigurationActivity extends AppCompatActivity {
 
         // 4 panel
 
-        // EditText correctness = (EditText) findViewById(R.id.number_try_test);
-        // correctness.setText(getLevel().getAmountOfAllowedTriesForEachEmotion() + "");
+       // EditText correctness = (EditText) findViewById(R.id.number_try_test);
+       // correctness.setText(getLevel().getAmountOfAllowedTriesForEachEmotion() + "");
 
         EditText timeLimit = (EditText) findViewById(R.id.number_time_test);
         timeLimit.setText(getLevel().getTimeLimit() + "");
@@ -595,8 +595,8 @@ public class LevelConfigurationActivity extends AppCompatActivity {
     }
 
     private String getResourceString(String resourceName) {
-        return getString(getResource(resourceName, "string"));
-        //return getResource(resourceName, "string") + "";
+       return getString(getResource(resourceName, "string"));
+       //return getResource(resourceName, "string") + "";
     }
 
     public Level getLevel() {
@@ -618,7 +618,7 @@ public class LevelConfigurationActivity extends AppCompatActivity {
         @Override
         public Object getItem(int n) {
             return getLevel().getEmotions().get(n);
-        }
+    }
 
         @Override
         public long getItemId(int n) {

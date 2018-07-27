@@ -17,7 +17,6 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-import pg.autyzm.przyjazneemocje.View.LevelConfiguration;
 import pg.autyzm.przyjazneemocje.lib.SqliteManager;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
@@ -53,21 +52,12 @@ public class MainActivity extends AppCompatActivity {
         if (!createDir.exists()) {
             createDir.mkdir();
 
-            File createPrizesDir = new File(root + "FriendlyEmotions/Prizes" + File.separator);
-            if (!createPrizesDir.exists())
-                createPrizesDir.mkdir();
-
             Field[] drawables = pg.autyzm.przyjazneemocje.R.drawable.class.getFields();
             for (Field f : drawables) {
                 try {
-                    if (IfConstainsEmotionName(f.getName()))
+                    if (ifConstainsEmotionName(f.getName()))
                     {
-                        ExtractFromDrawable(f, "Photos", ".jpg", Bitmap.CompressFormat.JPEG);
-                    }
-                    else if (f.getName().contains("prize")) {
-
-                        ExtractFromDrawable(f, "Photos", ".png", Bitmap.CompressFormat.PNG);
-                        //ExtractFromDrawable(f, "Prizes", ".png", Bitmap.CompressFormat.PNG);
+                        extractFromDrawable(f, "Photos", ".jpg", Bitmap.CompressFormat.JPEG);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -82,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
             Field[] raw = pg.autyzm.przyjazneemocje.R.raw.class.getFields();
             for (Field f : raw) {
                 try {
-                    ExtractFromDrawable(f, "Videos", ".mp4", null);
+                    extractFromDrawable(f, "Videos", ".mp4", null);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -107,8 +97,6 @@ public class MainActivity extends AppCompatActivity {
                         sqlm.addPhoto(resID, "scared", emotName);
                     else if (emotName.contains("sad"))
                         sqlm.addPhoto(resID, "sad", emotName);
-                    else if (emotName.contains("prize"))
-                        sqlm.addPhoto(resID, "prize", emotName);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -138,20 +126,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-
-        /*if(new File(root + "FriendlyEmotions/Prizes").list() != null) {
-
-            for (String prizeName : new File(root + "FriendlyEmotions/Prizes").list()) {
-
-                try {
-                    int resID = getResources().getIdentifier(prizeName, "drawable", getPackageName());
-                    sqlm.addPhoto(resID, "prize", prizeName);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }*/
-
     }
 
 
@@ -166,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         
     }
 
-    public boolean IfConstainsEmotionName(String inputString)
+    public boolean ifConstainsEmotionName(String inputString)
     {
         Cursor cur = sqlm.giveAllEmotions();
         while(cur.moveToNext()) {
@@ -181,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
     public void sendMessage(View view) {
         // Do something in response to button
 
-        Intent intent = new Intent(this, LevelConfiguration.class);
+        Intent intent = new Intent(this, LevelConfigurationActivity.class);
         //EditText editText = (EditText) findViewById(R.id.edit_message);
         String message = "String";
         intent.putExtra(EXTRA_MESSAGE, message);
@@ -217,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void ExtractFromDrawable(Field field, String dir, String fileExt, Bitmap.CompressFormat format) throws IOException {
+    private void extractFromDrawable(Field field, String dir, String fileExt, Bitmap.CompressFormat format) throws IOException {
 
         String emotName = field.getName();
         int resID = getResources().getIdentifier(emotName, "drawable", getPackageName());

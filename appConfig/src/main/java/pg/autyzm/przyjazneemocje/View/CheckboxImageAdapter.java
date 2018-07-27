@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import java.io.File;
 import java.util.List;
 
+import pg.autyzm.przyjazneemocje.LevelConfigurationActivity;
 import pg.autyzm.przyjazneemocje.R;
 import pg.autyzm.przyjazneemocje.lib.entities.Level;
 
@@ -60,32 +61,23 @@ public class CheckboxImageAdapter extends ArrayAdapter<GridCheckboxImageBean> {
         }
 
 
-        final GridCheckboxImageBean object = data[position];
+        final GridCheckboxImageBean photoWithCheckBox = data[position];
 
-
-        if(isPrizeInLevelYet(object.getId()) || isPhotoInLevelYet(object.getId())){
-            holder.checkBox.setChecked(true);
-        }
-        else{
-            holder.checkBox.setChecked(false);
-        }
 
         try {
             String root = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
 
             File fileOut;
-            //if(object.photoName.contains("prize"))
-            //    fileOut = new File(root + "FriendlyEmotions/Prize" + File.separator + object.photoName);
             Bitmap captureBmp;
-            if(object.photoName.contains(".mp4"))
+            if(photoWithCheckBox.photoName.contains(".mp4"))
             {
-                fileOut = new File(root + "FriendlyEmotions/Videos" + File.separator + object.photoName);
+                fileOut = new File(root + "FriendlyEmotions/Videos" + File.separator + photoWithCheckBox.photoName);
                 captureBmp = ThumbnailUtils.createVideoThumbnail(fileOut.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
             }
             else
             {
-                fileOut = new File(root + "FriendlyEmotions/Photos" + File.separator + object.photoName);
-                captureBmp = MediaStore.Images.Media.getBitmap(object.cr, Uri.fromFile(fileOut));
+                fileOut = new File(root + "FriendlyEmotions/Photos" + File.separator + photoWithCheckBox.photoName);
+                captureBmp = MediaStore.Images.Media.getBitmap(photoWithCheckBox.cr, Uri.fromFile(fileOut));
             }
 
             holder.imgIcon.setImageBitmap(captureBmp);
@@ -93,58 +85,37 @@ public class CheckboxImageAdapter extends ArrayAdapter<GridCheckboxImageBean> {
             System.out.println(e);
         }
 
-        holder.checkBox.setOnClickListener(new View.OnClickListener() {
+
+        Level configuredLevel = ((LevelConfigurationActivity) context).getLevel();
+
+        final CheckBox checkBox = holder.checkBox;
+
+
+        checkBox.setChecked(configuredLevel.getPhotosOrVideosIdList().contains(photoWithCheckBox.getId()));
+
+        checkBox.setOnClickListener(new View.OnClickListener() {
+
+            Integer photoId = photoWithCheckBox.getId();
+            Level configuredLevel = ((LevelConfigurationActivity) context).getLevel();
+
             @Override
             public void onClick(View arg0) {
-                boolean isChecked = ((CheckBox)arg0).isChecked();
-                if(isChecked) {
-                    Integer photoId = object.getId();
-                    Level configuredLevel = ((LevelConfiguration) context).getLevel();
-                    if(object.photoName.contains("prize")) {
-                        configuredLevel.addPrize(photoId.toString());
-                    }else{
-                        if(object.photoName.contains(".mp4"))
-                        {
-                            configuredLevel.setPhotosOrVideosFlag("videos");
-                        }
-                        else
-                            configuredLevel.addPhoto(photoId);
+                if(checkBox.isChecked()) {
+
+                    if(photoWithCheckBox.photoName.contains(".mp4")){
+                        configuredLevel.setPhotosOrVideosFlag("videos");
                     }
+                    else {
+                        configuredLevel.addPhoto(photoId);
+                    }
+                }
+                else{
+                    configuredLevel.removePhoto(photoId);
                 }
             }
         });
 
         return row;
-    }
-
-    boolean isPhotoInLevelYet(Integer photoId){
-
-        Level configuredLevel = ((LevelConfiguration) context).getLevel();
-        if(configuredLevel == null) return false;
-
-        for(Integer photoInLevelId : configuredLevel.getPhotosOrVideosIdList()){
-            if(photoInLevelId.equals(photoId)){
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    boolean isPrizeInLevelYet(Integer photoId){
-
-        Level configuredLevel = ((LevelConfiguration) context).getLevel();
-        String[] prizesArray = configuredLevel.getPrizes().split(";");
-
-        for(int i = 0; i < prizesArray.length; i++){
-            if(photoId.toString().equals(prizesArray[i])){
-                return true;
-            }
-        }
-
-        return false;
-
-
     }
 
     static class RowBeanHolder {
