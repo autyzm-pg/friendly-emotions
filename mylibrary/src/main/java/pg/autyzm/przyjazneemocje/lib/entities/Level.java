@@ -31,7 +31,7 @@ public class Level {
     private String praises = "";
 
     private int secondsToHint;
-    private boolean shouldQuestionBeReadAloud;
+    private boolean shouldQuestionBeReadAloud = true;
 
     private Question questionType;
     private List<Hint> hintTypes = new ArrayList<>();
