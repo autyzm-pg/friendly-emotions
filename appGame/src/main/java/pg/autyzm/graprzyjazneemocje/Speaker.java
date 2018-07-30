@@ -41,7 +41,9 @@ public class Speaker {
         }
     }
 
-    public void speak(CharSequence text){
-        textToSpeech.speak(text.toString(), TextToSpeech.QUEUE_FLUSH, null);//TODO: change to not deprecated method!!!!
+    public void speak(CharSequence text) {
+        if (!textToSpeech.isSpeaking()) {
+            textToSpeech.speak(text.toString(), TextToSpeech.QUEUE_FLUSH, null);//TODO: change to not deprecated method!!!!
+        }
     }
 }
