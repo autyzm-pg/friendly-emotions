@@ -31,7 +31,7 @@ public class Level {
     private String praises = "";
 
     private int secondsToHint;
-    private boolean shouldQuestionBeReadAloud = true;
+    private boolean shouldQuestionBeReadAloud;
 
     private Question questionType;
     private List<Hint> hintTypes = new ArrayList<>();
@@ -101,6 +101,7 @@ public class Level {
             setPhotosOrVideosShowedForOneQuestion(cur.getInt(cur.getColumnIndex("photos_or_videos_per_level")));
             int active = cur.getInt(cur.getColumnIndex("is_level_active"));
             setPraises(cur.getString(cur.getColumnIndex("praises")));
+            setShouldQuestionBeReadAloud(cur.getInt(cur.getColumnIndex("shouldQuestionBeReadAloud")) != 0);
 
             int isLevelForTests = cur.getInt(cur.getColumnIndex("is_for_tests"));
             setForTests(isLevelForTests != 0);
