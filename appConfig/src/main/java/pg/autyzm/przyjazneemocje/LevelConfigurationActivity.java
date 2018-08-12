@@ -466,7 +466,8 @@ public class LevelConfigurationActivity extends AppCompatActivity {
 
         sqlm.saveLevelToDatabase(getLevel());
 
-        final TextView msg = (TextView) findViewById(R.id.saveMessage);
+        final TextView msg = (TextView) findViewById(R.id.status_info);
+        msg.setText(R.string.save_message);
         msg.setVisibility(View.VISIBLE);
         msg.postDelayed(new Runnable() {
             public void run() {
