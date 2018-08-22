@@ -463,21 +463,14 @@ public class LevelConfigurationActivity extends AppCompatActivity {
 
         SqliteManager sqlm = getInstance(this);
 
-
         sqlm.saveLevelToDatabase(getLevel());
-
-        final TextView msg = (TextView) findViewById(R.id.saveMessage);
-        msg.setVisibility(View.VISIBLE);
-        msg.postDelayed(new Runnable() {
-            public void run() {
-                msg.setVisibility(View.INVISIBLE);
-            }
-        }, 2000);
+        showTextInformation(getResources().getString(R.string.save_message));
+        finish();
     }
 
     private void showTextInformation(String textMessage){
 
-        final TextView msg = (TextView) findViewById(R.id.saveMessage);
+        final TextView msg = (TextView) findViewById(R.id.status_info);
         msg.setText(textMessage);
         msg.setVisibility(View.VISIBLE);
         msg.postDelayed(new Runnable() {
@@ -485,7 +478,6 @@ public class LevelConfigurationActivity extends AppCompatActivity {
                 msg.setVisibility(View.INVISIBLE);
             }
         }, 2000);
-
 
     }
 
