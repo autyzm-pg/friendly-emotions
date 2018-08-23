@@ -229,11 +229,15 @@ public class LevelConfigurationActivity extends AppCompatActivity {
 
     private void createTabMaterial() {
         createTabs();
+        selectAllPictures(0);
+        selectAllPictures(1);
+        showTextInformation(R.string.default_level_generate_message);
         activeNumberEmotionPlusMinus();
         createListOfSpinners();
     }
 
     private void updateInfo() {
+        gatherInfoFromGUI();
         TextView text = (TextView) findViewById(R.id.level_info);
         Map info = getLevel().getInfo();
         text.setText(info.toString());
@@ -383,7 +387,6 @@ public class LevelConfigurationActivity extends AppCompatActivity {
     private void updateSelectedEmotions(){
         createDefaultStepName();
         createGridViewActiveInTest();
-        updateInfo();
     }
 
     private void activeNumberEmotionPlusMinus() {
@@ -401,7 +404,9 @@ public class LevelConfigurationActivity extends AppCompatActivity {
         final Button plusButton = (Button) findViewById(R.id.button_plus);
         plusButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                getLevel().addEmotion(Integer.parseInt(nrEmotions.getText().toString()));
+                int newEmotionId=Integer.parseInt(nrEmotions.getText().toString());
+                getLevel().addEmotion(newEmotionId);
+                selectAllPictures(newEmotionId);
                 nrEmotions.setText(Integer.toString(getLevel().getEmotions().size()));
                 updateSelectedEmotions();
             }
@@ -420,6 +425,7 @@ public class LevelConfigurationActivity extends AppCompatActivity {
                 }
                 ImageButton button = (ImageButton) findViewById(R.id.button_next);
                 if ("tab5_save".equals(tab)) {
+                    updateInfo();
                     button.setImageResource(R.drawable.icon_save);
                 } else {
                     button.setImageResource(R.drawable.icon_next);
@@ -464,11 +470,15 @@ public class LevelConfigurationActivity extends AppCompatActivity {
         SqliteManager sqlm = getInstance(this);
 
         sqlm.saveLevelToDatabase(getLevel());
-        showTextInformation(getResources().getString(R.string.save_message));
+        showTextInformation(R.string.save_message);
         finish();
     }
 
-    private void showTextInformation(String textMessage){
+    private void showTextInformation(int intMessage){
+        showTextInformation(getResources().getString(intMessage));
+    }
+
+        private void showTextInformation(String textMessage){
 
         final TextView msg = (TextView) findViewById(R.id.status_info);
         msg.setText(textMessage);
@@ -656,19 +666,13 @@ public class LevelConfigurationActivity extends AppCompatActivity {
         }
     }
 
-    // klikniety checkbox przy zdjeciu emocji listener
-    public void pictureClicked(View view){
-
+    public void selectAllPictures(int newEmotionId){
         SqliteManager sqlm = getInstance(this);
-
-        Cursor cursor = sqlm.givePhotosWithEmotion(currentEmotionName);
+        Cursor cursor = sqlm.givePhotosWithEmotion(getEmotionName(newEmotionId));
 
         while (cursor.moveToNext()) {
             getLevel().addPhoto(cursor.getInt(0));
         }
-
-
     }
-
 
 }
