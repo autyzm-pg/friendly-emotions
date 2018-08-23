@@ -3,6 +3,7 @@
     <string name="label_choose_images">Wybierz</string>
     <string name="title_choose_img">Wybierz zdjęcia</string>
     <string name="default_message">Nie wybrano zdjęć</string>
+    <string name="default_level_generate_message">Wygenerowano domyślny poziom dla wesoły i smutny</string>
     <string name="save_message">Zapisano poziom</string>
     <string name="select">wybrano</string>
     <string name="pv_per_level">Zdjęcia na poziom</string>
